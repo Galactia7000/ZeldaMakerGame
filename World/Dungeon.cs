@@ -75,11 +75,12 @@ namespace ZeldaMakerGame.World
                 {
                     if ((int)currentTile.X + c >= columns || (int)currentTile.X + c < 0) continue;
                     if (c == 0 && r == 0) continue;
-                    foreach(int i in Tileset.fourBitUpdates[Tileset.VectorToString(new Vector2(c, r))])
+                    foreach (int i in Tileset.fourBitUpdates[Tileset.VectorToString(new Vector2(c, r))])
                     {
                         tiles[currentFloor, c + (int)currentTile.X, r + (int)currentTile.Y].bits[i] = selected.tileIndex;
                     }
                     UpdateSubIndex(tiles[currentFloor, c + (int)currentTile.X, r + (int)currentTile.Y]);
+                    if (tiles[currentFloor, c + (int)currentTile.X, r + (int)currentTile.Y].subIndex != 0 && selected.tileIndex != 0) tiles[currentFloor, c + (int)currentTile.X, r + (int)currentTile.Y].tileIndex = selected.tileIndex;
                 }
             }
         }
