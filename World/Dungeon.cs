@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
+using ZeldaMakerGame.Editor;
 using ZeldaMakerGame.Managers;
 
 namespace ZeldaMakerGame.World
@@ -46,15 +47,19 @@ namespace ZeldaMakerGame.World
 
         }
 
-        public void Update(Vector2 mouseGridPos)
+        public void UpdateEditor(Vector2 mouseGridPos, Tool tool)
         {
             if (InputManager.currentMouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
                 Tile selected = tiles[currentFloor, (int)mouseGridPos.X, (int)mouseGridPos.Y];
-                selected.tileIndex = 1;
-                selected.bits = new int[4] { 1, 1, 1, 1 };
-                UpdateSurrounding(mouseGridPos, selected);
-                UpdateSubIndex(selected);
+                if (tool is null) return;
+                if (tool.type == ToolType.Terrain)
+                {
+                    selected.tileIndex = tool.index;
+                    selected.bits = new int[4] { tool.index, tool.index, tool.index, tool.index };
+                    UpdateSurrounding(mouseGridPos, selected);
+                    UpdateSubIndex(selected);
+                }
             }
             else if (InputManager.currentMouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {

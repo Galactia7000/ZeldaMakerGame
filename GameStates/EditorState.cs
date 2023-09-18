@@ -7,6 +7,7 @@ using ZeldaMakerGame.World;
 using System;
 using System.Collections.Generic;
 using ZeldaMakerGame.Core;
+using ZeldaMakerGame.Editor;
 
 namespace ZeldaMakerGame.GameStates
 {
@@ -28,6 +29,8 @@ namespace ZeldaMakerGame.GameStates
         Panel tileSelectPanel;
 
         Camera editorCamera;
+
+        Tool currentTool;
 
         public override void LoadContent()
         {
@@ -90,7 +93,7 @@ namespace ZeldaMakerGame.GameStates
             
             Tile highlightedTile = currentDungeon.tiles[currentDungeon.currentFloor, (int)mouseGridPos.X, (int)mouseGridPos.Y];
             highlightRect = highlightedTile.Edge;
-            currentDungeon.Update(mouseGridPos);
+            currentDungeon.UpdateEditor(mouseGridPos, currentTool);
         }
 
         public override void LateUpdate(GameTime _gametime)
@@ -130,9 +133,15 @@ namespace ZeldaMakerGame.GameStates
             var newComps = new Dictionary<string, Component>(uiComponents);
 
             Panel newPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 50, (game.screenHeight / 2) - 100), new Vector2(50, 200), font, true, false);
-            newPanel.AddButton("FloorBtn", panelTexture, Vector2.Zero, new Vector2(50, 50), "Floor");
-            newPanel.AddButton("WaterBtn", panelTexture, new Vector2(0, 50), new Vector2(50, 50), "Water");
-            newPanel.AddButton("PitBtn", panelTexture, new Vector2(0, 100), new Vector2(50, 50), "Pit");
+            newPanel.AddToolButton("FloorBtn", panelTexture, Vector2.Zero, new Vector2(50, 50), "Floor", new Tool(1, ToolType.Terrain));
+            newPanel.AddToolButton("WaterBtn", panelTexture, new Vector2(0, 50), new Vector2(50, 50), "Water", new Tool(1, ToolType.Terrain));
+            newPanel.AddToolButton("PitBtn", panelTexture, new Vector2(0, 100), new Vector2(50, 50), "Pit", new Tool(1, ToolType.Terrain));
+            newPanel.AddToolButton("WallBtn", panelTexture, new Vector2(0, 150), new Vector2(50, 50), "Wall", new Tool(2, ToolType.Terrain));
+
+            foreach(var child in newPanel.GetChildren().Values)
+            {
+                ((ToolBtn)child).OnToolClick += ChangeTool;
+            }
 
             if (newComps.ContainsKey("TileSelectPanel")) newComps.Remove("TileSelectPanel");
             tileSelectPanel = newPanel;
@@ -184,6 +193,11 @@ namespace ZeldaMakerGame.GameStates
             uiComponents = newComps;
         }
 
+        public void ChangeTool(object sender, ToolEventArgs e)
+        {
+            currentTool = e.thisTool;
+        }
+
         private void SetUpTileRefs()
         {
             currentTileset.AddTileRef(contentManager.Load<Texture2D>("Textures/BlankTexture"), 0, 0, 0);
@@ -202,6 +216,22 @@ namespace ZeldaMakerGame.GameStates
             currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerBottomRight"), 1, 1, 13);
             currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerDiagonalTL"), 1, 1, 14);
             currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerDiagonalTR"), 1, 1, 15);
+
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTopLeft"), 5, 2, 1);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTop"), 5, 2, 2);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTopRight"), 5, 2, 3);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallLeft"), 5, 2, 4);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallCenter"), 5, 2, 5);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallRight"), 5, 2, 6);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottomLeft"), 5, 2, 7);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottom"), 5, 2, 8);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottomRight"), 5, 2, 9);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerTopLeft"), 5, 2, 10);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerTopRight"), 5, 2, 11);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerBottomLeft"), 5, 2, 12);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerBottomRight"), 5, 2, 13);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerDiagonalTL"), 5, 2, 14);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerDiagonalTR"), 5, 2, 15);
         }
 
     }

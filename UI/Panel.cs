@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ZeldaMakerGame.Core;
+using ZeldaMakerGame.Editor;
 using ZeldaMakerGame.Managers;
 
 namespace ZeldaMakerGame.UI
@@ -48,6 +49,12 @@ namespace ZeldaMakerGame.UI
         {
             RadioButton rbtn = new RadioButton(texture, position, size, this, text, font);
             children.Add(key, rbtn);
+        }
+
+        public void AddToolButton(string key, Texture2D texture, Vector2 position, Vector2 size, string text, Tool tool)
+        {
+            ToolBtn tbtn = new ToolBtn(texture, position, size, this, text, font, tool);
+            children.Add(key, tbtn);
         }
 
         public void AddSlider(string key, Texture2D backTexture, Texture2D nodeTexture, Vector2 pos, Vector2 size, int min, int max, int def, float delay)
