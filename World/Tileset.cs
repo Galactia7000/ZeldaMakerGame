@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ZeldaMakerGame.World
 {
-
+    [Serializable]
     public class Tileset
     {
         public static Dictionary<string, int> fourBitAutoTileSubIndicies = new Dictionary<string, int>()

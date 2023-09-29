@@ -1,13 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.Runtime.Serialization;
 using ZeldaMakerGame.UI;
+using System.IO;
 using ZeldaMakerGame.Managers;
 using ZeldaMakerGame.World;
 using System;
 using System.Collections.Generic;
 using ZeldaMakerGame.Core;
 using ZeldaMakerGame.Editor;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ZeldaMakerGame.GameStates
 {
@@ -27,6 +30,7 @@ namespace ZeldaMakerGame.GameStates
         Panel categorySelectPanel;
         Panel toolSelectPanel;
         Panel tileSelectPanel;
+        Button saveBtn;
 
         Camera editorCamera;
 
@@ -37,15 +41,18 @@ namespace ZeldaMakerGame.GameStates
             highlightTexture = contentManager.Load<Texture2D>("Textures/TileHighlight");
             currentTileset = new Tileset(16);
             SetUpTileRefs();
-            currentDungeon = new Dungeon(currentTileset, 2, 30, 30);
+            currentDungeon = new Dungeon(currentTileset, 2, 30, 30, "Test");
 
             panelTexture = contentManager.Load<Texture2D>("Textures/PanelTexture3");
             font = contentManager.Load<SpriteFont>("Fonts/UI");
             CreateCategoryPanel();
-            toolSelectPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 200, game.screenHeight - 100), new Vector2(200, 50), font, true, false);
+            saveBtn = new Button(panelTexture, new Vector2(0, 0), new Vector2(100, 50), null, "Save Dungeon", font);
+            saveBtn.OnClick += SaveDungeon;
+            toolSelectPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 200, game.screenHeight - 100), new Vector2(200, 50), font, true);
             tileSelectPanel = null;
 
             uiComponents.Add("CategorySelectPanel", categorySelectPanel);
+            uiComponents.Add("SaveBtn", saveBtn);
             uiComponents.Add("ToolSelectPanel", toolSelectPanel);
 
             editorCamera = new Camera();
@@ -115,7 +122,7 @@ namespace ZeldaMakerGame.GameStates
 
         private void CreateCategoryPanel()
         {
-            categorySelectPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 200, 50), new Vector2(200, 50), font, true, false);
+            categorySelectPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 200, 50), new Vector2(200, 50), font, true);
             categorySelectPanel.AddRadioButton("TerrainBtn", panelTexture, Vector2.Zero, new Vector2(50, 50), "Terrain");
             categorySelectPanel.AddRadioButton("EnemyBtn", panelTexture, new Vector2(50, 0), new Vector2(50, 50), "Enemy");
             categorySelectPanel.AddRadioButton("ItemBtn", panelTexture, new Vector2(100, 0), new Vector2(50, 50), "Item");
@@ -132,7 +139,7 @@ namespace ZeldaMakerGame.GameStates
         {
             var newComps = new Dictionary<string, Component>(uiComponents);
 
-            Panel newPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 50, (game.screenHeight / 2) - 100), new Vector2(50, 200), font, true, false);
+            Panel newPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 50, (game.screenHeight / 2) - 100), new Vector2(50, 200), font, true);
             newPanel.AddToolButton("FloorBtn", panelTexture, Vector2.Zero, new Vector2(50, 50), "Floor", new Tool(1, ToolType.Terrain));
             newPanel.AddToolButton("WaterBtn", panelTexture, new Vector2(0, 50), new Vector2(50, 50), "Water", new Tool(1, ToolType.Terrain));
             newPanel.AddToolButton("PitBtn", panelTexture, new Vector2(0, 100), new Vector2(50, 50), "Pit", new Tool(1, ToolType.Terrain));
@@ -153,7 +160,7 @@ namespace ZeldaMakerGame.GameStates
         {
             var newComps = new Dictionary<string, Component>(uiComponents);
 
-            Panel newPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 50, (game.screenHeight / 2) - 100), new Vector2(50, 200), font, true, false);
+            Panel newPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 50, (game.screenHeight / 2) - 100), new Vector2(50, 200), font, true);
             newPanel.AddButton("BirdBtn", panelTexture, Vector2.Zero, new Vector2(50, 50), "Bird");
             newPanel.AddButton("OctoRockBtn", panelTexture, new Vector2(0, 50), new Vector2(50, 50), "Octo");
             newPanel.AddButton("GibdosBtn", panelTexture, new Vector2(0, 100), new Vector2(50, 50), "Gibdos");
@@ -169,7 +176,7 @@ namespace ZeldaMakerGame.GameStates
         {
             var newComps = new Dictionary<string, Component>(uiComponents);
 
-            Panel newPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 50, (game.screenHeight / 2) - 100), new Vector2(50, 200), font, true, false);
+            Panel newPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 50, (game.screenHeight / 2) - 100), new Vector2(50, 200), font, true);
             newPanel.AddButton("ChestBtn", panelTexture, Vector2.Zero, new Vector2(50, 50), "Chest");
             newPanel.AddButton("KeyBtn", panelTexture, new Vector2(0, 50), new Vector2(50, 50), "Key");
 
@@ -196,6 +203,12 @@ namespace ZeldaMakerGame.GameStates
         public void ChangeTool(object sender, ToolEventArgs e)
         {
             currentTool = e.thisTool;
+        }
+
+        public void SaveDungeon(object sender, EventArgs e)
+        {
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream("", FileMode.Create);
         }
 
         private void SetUpTileRefs()

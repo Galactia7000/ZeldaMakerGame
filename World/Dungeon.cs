@@ -2,11 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using ZeldaMakerGame.Editor;
 using ZeldaMakerGame.Managers;
 
 namespace ZeldaMakerGame.World
 {
+    [Serializable]
     public class Dungeon
     { 
         // First: Floor
@@ -17,9 +19,10 @@ namespace ZeldaMakerGame.World
         public int floors;
         public int rows;
         public int columns;
+        public string name;
         Tileset tileset;
 
-        public Dungeon(Tileset Tiles, int floors, int rows, int cols)
+        public Dungeon(Tileset Tiles, int floors, int rows, int cols, string name)
         {
             tiles = new Tile[floors, cols, rows];
             this.floors = floors;
@@ -39,7 +42,8 @@ namespace ZeldaMakerGame.World
                     }
                 }
             }
-            
+
+            this.name = name;
         }
 
         public void Start()

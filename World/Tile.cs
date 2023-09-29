@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace ZeldaMakerGame.World
 {
+    [Serializable]
     public class Tile
     {
         public Vector2 Position { get; set; }

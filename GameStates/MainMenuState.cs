@@ -87,6 +87,7 @@ namespace ZeldaMakerGame.GameStates
             Dictionary<string, Component> newComps = new Dictionary<string, Component>(_components);
 
             newComps.Remove("MainMenu");
+            newComps.Remove("Logo");
             CreateDungeonPanel();
             newComps.Add("MainMenu", currentMenuPanel);
 
@@ -97,6 +98,7 @@ namespace ZeldaMakerGame.GameStates
             Dictionary<string, Component> newComps = new Dictionary<string, Component>(_components);
 
             newComps.Remove("MainMenu");
+            newComps.Remove("Logo");
             CreateSettingsPanel();
             newComps.Add("MainMenu", currentMenuPanel);
 
@@ -121,6 +123,7 @@ namespace ZeldaMakerGame.GameStates
             newComps.Remove("MainMenu");
             CreateMainPanel();
             newComps.Add("MainMenu", currentMenuPanel);
+            newComps.Add("Logo", new Picture(_logoTexture, new Vector2(75, game.screenHeight / 4), new Vector2(game.screenWidth / 2, game.screenHeight / 2)));
 
             _components = newComps;
         }
@@ -141,7 +144,7 @@ namespace ZeldaMakerGame.GameStates
 
         void CreateDungeonPanel()
         {
-            Panel thisPanel = new Panel(_panelTexture, new Vector2(3 * (game.screenWidth / 4) - 100, (game.screenHeight / 2) - 100), new Vector2(200, 200), _uiFont, true);
+            Panel thisPanel = new Panel(_panelTexture, new Vector2(75, game.screenHeight / 4), new Vector2(game.screenWidth - 150, game.screenHeight - 150), _uiFont, true);
             thisPanel.AddButton("NewDungeonBtn", _buttonTexture, new Vector2(10, 10), new Vector2(180, 50), "New");
             thisPanel.AddButton("TutorialBtn", _buttonTexture, new Vector2(10, 70), new Vector2(180, 50), "Tutorial");
             thisPanel.AddButton("BackBtn", _buttonTexture, new Vector2(10, 130), new Vector2(180, 50), "Back");
