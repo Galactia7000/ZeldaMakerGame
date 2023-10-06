@@ -11,7 +11,7 @@ namespace ZeldaMakerGame.UI
 {
     public class Panel : Component
     {
-        private Dictionary<string, Component> children;
+        protected Dictionary<string, Component> children;
         private const float controllerScrollDelay = 0.3f;
 
         public UITexture Texture { get; private set; }
