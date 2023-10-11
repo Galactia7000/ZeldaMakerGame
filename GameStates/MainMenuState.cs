@@ -6,6 +6,7 @@ using ZeldaMakerGame.Core;
 using ZeldaMakerGame.UI;
 using System;
 using System.Linq;
+using ZeldaMakerGame.World;
 
 namespace ZeldaMakerGame.GameStates
 {
@@ -39,6 +40,11 @@ namespace ZeldaMakerGame.GameStates
             _components.Add("Logo", new Picture(_logoTexture, new Vector2(75, game.screenHeight / 4), new Vector2(game.screenWidth / 2, game.screenHeight / 2)));
             _components.Add("MainMenu", currentMenuPanel);
             
+
+        }
+
+        Dungeon[] LoadDungeons()
+        {
 
         }
 

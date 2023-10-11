@@ -41,7 +41,6 @@ namespace ZeldaMakerGame.GameStates
             highlightTexture = contentManager.Load<Texture2D>("Textures/TileHighlight");
             currentTileset = new Tileset(16);
             SetUpTileRefs();
-            currentDungeon = new Dungeon(currentTileset, 2, 30, 30, "Test");
 
             panelTexture = contentManager.Load<Texture2D>("Textures/PanelTexture3");
             font = contentManager.Load<SpriteFont>("Fonts/UI");
@@ -92,15 +91,15 @@ namespace ZeldaMakerGame.GameStates
             Vector2 mousePos = InputManager.currentMouse.Position.ToVector2();
             Vector2 mouseWorldPos = editorCamera.ScreenToWorld(mousePos);
             Vector2 mouseGridPos = mouseWorldPos / currentTileset.tileSize;
-            if (mouseGridPos.X >= currentDungeon.columns || mouseGridPos.X < 0 || mouseGridPos.Y >= currentDungeon.rows || mouseGridPos.Y < 0) 
+            if (mouseGridPos.X >= game.currentDungeon.columns || mouseGridPos.X < 0 || mouseGridPos.Y >= game.currentDungeon.rows || mouseGridPos.Y < 0) 
             {
                 highlightRect = Rectangle.Empty;
                 return;
             }
             
-            Tile highlightedTile = currentDungeon.tiles[currentDungeon.currentFloor, (int)mouseGridPos.X, (int)mouseGridPos.Y];
+            Tile highlightedTile = game.currentDungeon.tiles[game.currentDungeon.currentFloor, (int)mouseGridPos.X, (int)mouseGridPos.Y];
             highlightRect = highlightedTile.Edge;
-            currentDungeon.UpdateEditor(mouseGridPos, currentTool);
+            game.currentDungeon.UpdateEditor(mouseGridPos, currentTool);
         }
 
         public override void LateUpdate(GameTime _gametime)
@@ -111,7 +110,7 @@ namespace ZeldaMakerGame.GameStates
         public override void Draw(GameTime _gametime, SpriteBatch _spritebatch)
         {
             _spritebatch.Begin(transformMatrix: editorCamera.Transform);
-            currentDungeon.Draw(_spritebatch);
+            game.currentDungeon.Draw(_spritebatch);
             if(highlightRect != Rectangle.Empty) _spritebatch.Draw(highlightTexture, highlightRect, Color.White);
             _spritebatch.End();
 
@@ -208,7 +207,7 @@ namespace ZeldaMakerGame.GameStates
         public void SaveDungeon(object sender, EventArgs e)
         {
             IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream("", FileMode.Create);
+            Stream stream = new FileStream(game.currentDungeon.name, FileMode.Create);
         }
 
         private void SetUpTileRefs()
