@@ -18,7 +18,6 @@ namespace ZeldaMakerGame.GameStates
     {
         public EditorState(ZeldaMaker game, ContentManager content) : base(game, content) { }
 
-        Dungeon currentDungeon;
         Tileset currentTileset;
         Texture2D highlightTexture;
         Rectangle highlightRect;
@@ -206,8 +205,10 @@ namespace ZeldaMakerGame.GameStates
 
         public void SaveDungeon(object sender, EventArgs e)
         {
-            IFormatter formatter = new BinaryFormatter();
-            Stream stream = new FileStream(game.currentDungeon.name, FileMode.Create);
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(game.DungeonsFilePath + @"\" + game.currentDungeon.name + ".bin", FileMode.Open, FileAccess.Write);
+            formatter.Serialize(stream, game.currentDungeon);
+            stream.Close();
         }
 
         private void SetUpTileRefs()

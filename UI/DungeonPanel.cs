@@ -19,10 +19,11 @@ namespace ZeldaMakerGame.UI
 
         public Dungeon thisDungeon;
 
-        public DungeonPanel(ContentManager contentM, Dungeon dungeon, Texture2D texture, Vector2 pos, Vector2 size, SpriteFont font, bool active = false) : base(texture, pos, size, font, active)
+        public DungeonPanel(ContentManager contentM, ZeldaMaker game, Dungeon dungeon, Texture2D texture, Vector2 pos, Vector2 size, SpriteFont font, bool active = false) : base(texture, pos, size, font, active)
         {
             thisDungeon = dungeon;
             contentManager = contentM;
+            this.game = game;
             children.Add("NameLbl", new Label(thisDungeon.name, font, Vector2.Zero, this));
             children.Add("PlayBtn", new Button(texture, new Vector2(0, 20), new Vector2(size.X, 20), this, "Play", font));
             children.Add("EditBtn", new Button(texture, new Vector2(0, 40), new Vector2(size.X, 20), this, "Edit", font));

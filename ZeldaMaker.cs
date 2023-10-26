@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SharpDX.DirectWrite;
+using System.IO;
+using System.Windows.Forms;
 using ZeldaMakerGame.GameStates;
 using ZeldaMakerGame.Managers;
 using ZeldaMakerGame.World;
@@ -21,6 +22,9 @@ namespace ZeldaMakerGame
 
         public Dungeon currentDungeon;
 
+        public string DungeonsFilePath;
+        public GameWindow gameWindow;
+
         public void ChangeState(State potentialState)
         {
             if (currentState == potentialState)
@@ -34,6 +38,7 @@ namespace ZeldaMakerGame
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            DungeonsFilePath = Application.StartupPath + @"\SavedDungeons";
         }
 
         protected override void Initialize()
@@ -44,6 +49,7 @@ namespace ZeldaMakerGame
             screenWidth = _graphics.PreferredBackBufferWidth;
             screenHeight = _graphics.PreferredBackBufferHeight;
 
+            gameWindow = Window;
             InputManager.Initialize();
 
             base.Initialize();

@@ -10,7 +10,7 @@ namespace ZeldaMakerGame.UI
 {
     public class UITexture // Textures that scale properly with UI elements
     {
-        private Texture2D baseTexture;
+        public Texture2D baseTexture;
         private Vector2 padding;
         private bool isHorizontal;
         private bool isVertical;    

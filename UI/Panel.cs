@@ -15,7 +15,7 @@ namespace ZeldaMakerGame.UI
         private const float controllerScrollDelay = 0.3f;
 
         public UITexture Texture { get; private set; }
-        private SpriteFont font;
+        protected SpriteFont font;
 
         private float timer;
 
@@ -38,6 +38,11 @@ namespace ZeldaMakerGame.UI
         }
 
         public Dictionary<string, Component> GetChildren() => children;
+
+        public void AddChild(string key, Component component)
+        {
+            children.Add(key, component);
+        }
 
         public void AddButton(string key, Texture2D texture, Vector2 position, Vector2 size, string Text)
         {
@@ -111,12 +116,18 @@ namespace ZeldaMakerGame.UI
 
                 }
             }
-           
+
+            UpdateChildren(gameTime);
+        }
+
+        protected virtual void UpdateChildren(GameTime gameTime)
+        {
             foreach (var child in children)
             {
                 child.Value.Update(gameTime, children.Values.ToList());
             }
         }
+
         public override void LateUpdate(GameTime gameTime)
         {
             foreach (var child in children)
