@@ -19,6 +19,7 @@ namespace ZeldaMakerGame.UI
             this.font = font;
             Position = pos;
             Parent = parent;
+            if(parent is not null) Position += parent.Position;
             Size = font.MeasureString(text); 
         }
 

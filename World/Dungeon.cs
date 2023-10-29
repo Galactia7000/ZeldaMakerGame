@@ -5,6 +5,8 @@ using System.Linq;
 using System;
 using ZeldaMakerGame.Editor;
 using ZeldaMakerGame.Managers;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ZeldaMakerGame.World
 {
@@ -20,9 +22,10 @@ namespace ZeldaMakerGame.World
         public int rows;
         public int columns;
         public string name;
-        Tileset tileset;
+        public Tileset tileset;
+        string filePath;
 
-        public Dungeon(Tileset Tiles, int floors, int rows, int cols, string name)
+        public Dungeon(Tileset Tiles, int floors, int rows, int cols, string name, string path)
         {
             tiles = new Tile[floors, cols, rows];
             this.floors = floors;
@@ -44,6 +47,7 @@ namespace ZeldaMakerGame.World
             }
 
             this.name = name;
+            filePath = path;
         }
 
         public void Start()
@@ -125,6 +129,19 @@ namespace ZeldaMakerGame.World
                     if (tiles[currentFloor, c, r] is not null) tiles[currentFloor, c, r].Draw(spriteBatch, GetTileTexture(tiles[currentFloor, c, r]));
                 }
             }
+        }
+
+        public void SaveDungeon(object sender, EventArgs e)
+        {
+            FileStream stream = new FileStream(filePath + @"\" + name + ".bin", FileMode.OpenOrCreate, FileAccess.Write);
+            BinaryWriter binaryWriter = new BinaryWriter(stream);
+            binaryWriter.Write(floors);
+            binaryWriter.Write(rows);
+            binaryWriter.Write(columns);
+            binaryWriter.Write(name);
+            binaryWriter.Write(filePath);
+            tileset.Serialize();
+            stream.Close();
         }
     }
 }

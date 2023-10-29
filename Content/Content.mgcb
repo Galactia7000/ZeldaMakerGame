@@ -284,6 +284,30 @@
 /processorParam:TextureFormat=Color
 /build:Textures/SliderNodeTexture2.png
 
+#begin Textures/TextBoxCursorTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/TextBoxCursorTexture.png
+
+#begin Textures/TextBoxTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/TextBoxTexture.png
+
 #begin Textures/TileHighlight.png
 /importer:TextureImporter
 /processor:TextureProcessor

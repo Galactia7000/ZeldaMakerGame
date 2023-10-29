@@ -88,8 +88,18 @@ namespace ZeldaMakerGame.World
         {
             tileList.Add(new TileReference(texture, height, tileSize, index, subIndex));
         }
+
+        public void Serialize()
+        {
+
+        }
+        public void Deserialize()
+        {
+
+        }
     }
 
+    [Serializable]
     public class TileReference
     {
         public Texture2D Texture;
@@ -105,6 +115,15 @@ namespace ZeldaMakerGame.World
             tileSize = size;
             this.tileIndex = tileIndex;
             this.tileSubIndex = tileSubIndex;
+        }
+
+        public void Serialize()
+        {
+
+        }
+        public void Deserialize()
+        {
+
         }
     }
 }

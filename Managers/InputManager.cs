@@ -24,6 +24,10 @@ namespace ZeldaMakerGame.Managers
         public static MouseState currentMouse;
         public static MouseState previousMouse;
         public static Rectangle mouseRectangle;
+        
+        // Global Keyboard state
+        public static KeyboardState currentKeyboardState;
+        public static KeyboardState previousKeyboardState;
 
         // Used for determining which input mode to use for menus
         public static bool isControllerActive;
@@ -77,6 +81,11 @@ namespace ZeldaMakerGame.Managers
             return binding.current == KeyState.Up && binding.previous == KeyState.Down;
         }
 
+        public static bool HasKeyJustBeenPressed(Keys key)
+        {
+            return currentKeyboardState.IsKeyDown(key) && !previousKeyboardState.IsKeyDown(key);
+        }
+
         public static bool IsKeyHeld(string key)
         {
             var binding = keyboardBindings[key];
@@ -106,6 +115,8 @@ namespace ZeldaMakerGame.Managers
         private static void GetMouseAndKeyboard()
         {
             isKeyBoardActive = false;
+            previousKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
             previousMouse = currentMouse;
             currentMouse = Mouse.GetState();
             mouseRectangle = new Rectangle(currentMouse.Position, new Point(1, 1));

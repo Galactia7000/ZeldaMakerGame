@@ -18,7 +18,6 @@ namespace ZeldaMakerGame.GameStates
     {
         public EditorState(ZeldaMaker game, ContentManager content) : base(game, content) { }
 
-        Tileset currentTileset;
         Texture2D highlightTexture;
         Rectangle highlightRect;
 
@@ -38,14 +37,12 @@ namespace ZeldaMakerGame.GameStates
         public override void LoadContent()
         {
             highlightTexture = contentManager.Load<Texture2D>("Textures/TileHighlight");
-            currentTileset = new Tileset(16);
-            SetUpTileRefs();
 
             panelTexture = contentManager.Load<Texture2D>("Textures/PanelTexture3");
             font = contentManager.Load<SpriteFont>("Fonts/UI");
             CreateCategoryPanel();
             saveBtn = new Button(panelTexture, new Vector2(0, 0), new Vector2(100, 50), null, "Save Dungeon", font);
-            saveBtn.OnClick += SaveDungeon;
+            saveBtn.OnClick += game.currentDungeon.SaveDungeon;
             toolSelectPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 200, game.screenHeight - 100), new Vector2(200, 50), font, true);
             tileSelectPanel = null;
 
@@ -89,7 +86,7 @@ namespace ZeldaMakerGame.GameStates
 
             Vector2 mousePos = InputManager.currentMouse.Position.ToVector2();
             Vector2 mouseWorldPos = editorCamera.ScreenToWorld(mousePos);
-            Vector2 mouseGridPos = mouseWorldPos / currentTileset.tileSize;
+            Vector2 mouseGridPos = mouseWorldPos / game.currentDungeon.tileset.tileSize;
             if (mouseGridPos.X >= game.currentDungeon.columns || mouseGridPos.X < 0 || mouseGridPos.Y >= game.currentDungeon.rows || mouseGridPos.Y < 0) 
             {
                 highlightRect = Rectangle.Empty;
@@ -201,50 +198,6 @@ namespace ZeldaMakerGame.GameStates
         public void ChangeTool(object sender, ToolEventArgs e)
         {
             currentTool = e.thisTool;
-        }
-
-        public void SaveDungeon(object sender, EventArgs e)
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream(game.DungeonsFilePath + @"\" + game.currentDungeon.name + ".bin", FileMode.Open, FileAccess.Write);
-            formatter.Serialize(stream, game.currentDungeon);
-            stream.Close();
-        }
-
-        private void SetUpTileRefs()
-        {
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Textures/BlankTexture"), 0, 0, 0);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorTopLeft"), 1, 1, 1);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorTop"), 1, 1, 2);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorTopRight"), 1, 1, 3);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorLeft"), 1, 1, 4);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorCenter"), 1, 1, 5);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorRight"), 1, 1, 6);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorBottomLeft"), 1, 1, 7);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorBottom"), 1, 1, 8);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorBottomRight"), 1, 1, 9);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerTopLeft"), 1, 1, 10);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerTopRight"), 1, 1, 11);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerBottomLeft"), 1, 1, 12);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerBottomRight"), 1, 1, 13);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerDiagonalTL"), 1, 1, 14);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerDiagonalTR"), 1, 1, 15);
-
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTopLeft"), 5, 2, 1);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTop"), 5, 2, 2);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTopRight"), 5, 2, 3);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallLeft"), 5, 2, 4);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallCenter"), 5, 2, 5);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallRight"), 5, 2, 6);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottomLeft"), 5, 2, 7);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottom"), 5, 2, 8);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottomRight"), 5, 2, 9);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerTopLeft"), 5, 2, 10);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerTopRight"), 5, 2, 11);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerBottomLeft"), 5, 2, 12);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerBottomRight"), 5, 2, 13);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerDiagonalTL"), 5, 2, 14);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerDiagonalTR"), 5, 2, 15);
         }
 
     }
