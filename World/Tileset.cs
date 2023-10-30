@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -89,14 +90,6 @@ namespace ZeldaMakerGame.World
             tileList.Add(new TileReference(texture, height, tileSize, index, subIndex));
         }
 
-        public void Serialize()
-        {
-
-        }
-        public void Deserialize()
-        {
-
-        }
     }
 
     [Serializable]
@@ -117,13 +110,5 @@ namespace ZeldaMakerGame.World
             this.tileSubIndex = tileSubIndex;
         }
 
-        public void Serialize()
-        {
-
-        }
-        public void Deserialize()
-        {
-
-        }
     }
 }

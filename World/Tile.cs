@@ -21,7 +21,7 @@ namespace ZeldaMakerGame.World
         private int tileSize;
 
         public int[] bits;
-
+        public Tile() { }
         public Tile(int tile, Vector2 GridPos, int size)
         {
             tileIndex = tile;
@@ -45,13 +45,23 @@ namespace ZeldaMakerGame.World
             binaryWriter.Write(tileSize);
             for(int i = 0; i < bits.Length; i++) binaryWriter.Write(bits[i]);
         }
-        public void Deserialize(BinaryReader binaryReader)
+        public static Tile Deserialize(BinaryReader binaryReader)
         {
-            Position = new Vector2(binaryReader.ReadSingle(), binaryReader.ReadSingle());
-            tileIndex = (int)binaryReader.ReadSingle();
-            subIndex = (int)binaryReader.ReadSingle();
-            tileSize = (int)binaryReader.ReadSingle();
-            for (int i = 0; i < bits.Length; i++) bits[i] = (int)binaryReader.ReadSingle();
+            Vector2 Position = new Vector2(binaryReader.ReadSingle(), binaryReader.ReadSingle());
+            int index = (int)binaryReader.ReadSingle();
+            int sIndex = (int)binaryReader.ReadSingle();
+            int size = (int)binaryReader.ReadSingle();
+            int[] newbits = new int[4];
+            for (int i = 0; i < newbits.Length; i++) newbits[i] = (int)binaryReader.ReadSingle();
+            Tile tile = new Tile
+            {
+                Position = Position,
+                tileIndex = index,
+                subIndex = sIndex,
+                tileSize = size,
+                bits = newbits
+            };
+            return tile;
         }
     }
 }

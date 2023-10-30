@@ -66,11 +66,10 @@ namespace ZeldaMakerGame.GameStates
             {
                 try
                 {
-                    FileStream stream = new FileStream(filePaths[i], FileMode.Open, FileAccess.Read);
-                    dungeons.Add((Dungeon)binaryFormatter.Deserialize(stream));
-                    stream.Close();
+                    dungeons.Add(Dungeon.LoadDungeon(filePaths[i]));
                 } catch { }
             }
+            foreach (Dungeon dungeon in dungeons) dungeon.tileset = defaultTileset;
             return dungeons.ToArray();
         }
 

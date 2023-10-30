@@ -6,7 +6,6 @@ using System;
 using ZeldaMakerGame.Editor;
 using ZeldaMakerGame.Managers;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ZeldaMakerGame.World
 {
@@ -24,7 +23,7 @@ namespace ZeldaMakerGame.World
         public string name;
         public Tileset tileset;
         string filePath;
-
+        public Dungeon() { }
         public Dungeon(Tileset Tiles, int floors, int rows, int cols, string name, string path)
         {
             tiles = new Tile[floors, cols, rows];
@@ -137,11 +136,53 @@ namespace ZeldaMakerGame.World
             BinaryWriter binaryWriter = new BinaryWriter(stream);
             binaryWriter.Write(floors);
             binaryWriter.Write(rows);
-            binaryWriter.Write(columns);
             binaryWriter.Write(name);
             binaryWriter.Write(filePath);
-            tileset.Serialize();
+            for(int f = 0; f < floors; f++)
+            {
+                for(int c = 0; c < columns; c++)
+                {
+                    for(int r = 0; r < rows; r++)
+                    {
+                        tiles[f, c, r].Serialize(binaryWriter);
+                    }
+                }
+            }
             stream.Close();
+        }
+
+        public static Dungeon LoadDungeon(string file)
+        {
+            FileStream stream = new FileStream(file, FileMode.Open, FileAccess.Read);
+            BinaryReader binaryReader = new BinaryReader(stream);
+            
+            int floors = (int)binaryReader.ReadSingle();
+            int rows = (int)binaryReader.ReadSingle();
+            int cols = rows;
+            string name = binaryReader.ReadString();
+            string filePath = binaryReader.ReadString();
+            Tile[,,] dungTiles = new Tile[floors, cols, rows];
+            for(int f = 0; f < floors; f++)
+            {
+                for(int c = 0; c < cols; c++)
+                {
+                    for(int r = 0; r < rows; r++)
+                    {
+                        dungTiles[f, c, r] = Tile.Deserialize(binaryReader);
+                    }
+                }
+            }
+            stream.Close();
+            Dungeon newDung = new Dungeon
+            {
+                floors = floors,
+                rows= rows,
+                columns = cols,
+                name = name,
+                filePath = filePath,
+                tiles = dungTiles
+            };
+            return newDung;
         }
     }
 }
