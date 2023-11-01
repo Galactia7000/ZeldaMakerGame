@@ -18,6 +18,7 @@ namespace ZeldaMakerGame.GameStates
 
         private Dictionary<string, Component> _components = new Dictionary<string, Component>();
         private Texture2D _panelTexture;
+        private Texture2D _dungeonPanelTexture;
         private Texture2D _buttonTexture;
         private Texture2D _logoTexture;
         private Texture2D _sliderNodeTexture;
@@ -41,6 +42,7 @@ namespace ZeldaMakerGame.GameStates
             _textBoxTexture = contentManager.Load<Texture2D>("Textures/TextBoxTexture");
             _textBoxCursorTexture = contentManager.Load<Texture2D>("Textures/TextBoxCursorTexture");
             _uiFont = contentManager.Load<SpriteFont>("Fonts/UI");
+            _dungeonPanelTexture = contentManager.Load<Texture2D>("Textures/DungeonPanelTexture");
 
             defaultTileset = new Tileset(16);
             SetUpTileRefs(defaultTileset);
@@ -118,13 +120,17 @@ namespace ZeldaMakerGame.GameStates
             Dictionary<string, Component> newComps = new Dictionary<string, Component>(_components);
             Button backBtn = null;
             Button newBtn = null;
+            Button leftBtn = null;
+            Button rightBtn = null;
 
             newComps.Remove("MainMenu");
             newComps.Remove("Logo");
-            DungeonsPanel(ref backBtn, ref newBtn);
+            DungeonsPanel(ref backBtn, ref newBtn, ref leftBtn, ref rightBtn);
             newComps.Add("MainMenu", currentMenuPanel);
             newComps.Add("BackBtn", backBtn);
             newComps.Add("NewDungeonBtn", newBtn);
+            newComps.Add("lastPageBtn", leftBtn);
+            newComps.Add("nextPageBtn", rightBtn);
 
             _components = newComps;
         }
@@ -152,6 +158,8 @@ namespace ZeldaMakerGame.GameStates
             ((Panel)newComps["MainMenu"]).isActive = false;
             ((Button)newComps["BackBtn"]).OnClick -= BackClicked;
             ((Button)newComps["NewDungeonBtn"]).OnClick -= NewDungeonClicked;
+            ((Button)newComps["lastPageBtn"]).OnClick -= ((MultiPageFlowPanel)newComps["MainMenu"]).PreviousPage;
+            ((Button)newComps["nextPageBtn"]).OnClick -= ((MultiPageFlowPanel)newComps["MainMenu"]).NextPage;
 
             _components = newComps;
         }
@@ -166,6 +174,8 @@ namespace ZeldaMakerGame.GameStates
             newComps.Remove("MainMenu");
             if (newComps.ContainsKey("BackBtn")) newComps.Remove("BackBtn");
             if (newComps.ContainsKey("NewDungeonBtn")) newComps.Remove("NewDungeonBtn");
+            if (newComps.ContainsKey("lastPageBtn")) newComps.Remove("lastPageBtn");
+            if (newComps.ContainsKey("nextPageBtn")) newComps.Remove("nextPageBtn");
             CreateMainPanel();
             newComps.Add("MainMenu", currentMenuPanel);
             newComps.Add("Logo", new Picture(_logoTexture, new Vector2(75, game.screenHeight / 4), new Vector2(game.screenWidth / 2, game.screenHeight / 2)));
@@ -181,6 +191,8 @@ namespace ZeldaMakerGame.GameStates
             ((Panel)newComps["MainMenu"]).isActive = true;
             ((Button)newComps["BackBtn"]).OnClick += BackClicked;
             ((Button)newComps["NewDungeonBtn"]).OnClick += NewDungeonClicked;
+            ((Button)newComps["lastPageBtn"]).OnClick += ((MultiPageFlowPanel)newComps["MainMenu"]).PreviousPage;
+            ((Button)newComps["nextPageBtn"]).OnClick += ((MultiPageFlowPanel)newComps["MainMenu"]).NextPage;
 
             _components = newComps;
         }
@@ -226,18 +238,23 @@ namespace ZeldaMakerGame.GameStates
             int size = Convert.ToInt32(((TextBox)children["EnterSizeTxt"]).Text.ToString());
             Dungeon newDungeon = new Dungeon(defaultTileset, floors, size, size, name, game.DungeonsFilePath);
             newDungeon.SaveDungeon(sender, e);
+            ((MultiPageFlowPanel)_components["MainMenu"]).AddValue(newDungeon);
             BackToDungeonsClicked(sender, e);
         }
 
-        void DungeonsPanel(ref Button backBtn, ref Button newDungeonBtn)
+        void DungeonsPanel(ref Button backBtn, ref Button newDungeonBtn, ref Button leftBtn, ref Button rightBtn)
         {
-            MultiPageFlowPanel thisPanel = new MultiPageFlowPanel(contentManager, game, _panelTexture, new Vector2(75, game.screenHeight / 4), new Vector2(game.screenWidth - 150, game.screenHeight - 150), _uiFont, true);
+            MultiPageFlowPanel thisPanel = new MultiPageFlowPanel(contentManager, game, _panelTexture, _dungeonPanelTexture, new Vector2(75, game.screenHeight / 4), new Vector2(game.screenWidth - 150, game.screenHeight - 150), _uiFont, true);
             thisPanel.LoadValues(LoadDungeons());
             thisPanel.Start();
             backBtn = new Button(_buttonTexture, new Vector2(75, 20), new Vector2(50, 50), null, "Back", _uiFont);
             backBtn.OnClick += BackClicked;
             newDungeonBtn = new Button(_buttonTexture, new Vector2(game.screenWidth - 75, 20), new Vector2(50, 50), null, "New", _uiFont);
             newDungeonBtn.OnClick += NewDungeonClicked;
+            leftBtn = new Button(_buttonTexture, new Vector2(20, (game.screenHeight - 40) / 2), new Vector2(50, 50), null, "<-", _uiFont);
+            leftBtn.OnClick += thisPanel.PreviousPage;
+            rightBtn = new Button(_buttonTexture, new Vector2(game.screenWidth - 70, (game.screenHeight - 40) / 2), new Vector2(50, 50), null, "->", _uiFont);
+            rightBtn.OnClick += thisPanel.NextPage;
             currentMenuPanel = thisPanel;
             currentMenuPanel.Initialize();
         }

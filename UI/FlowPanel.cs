@@ -17,13 +17,18 @@ namespace ZeldaMakerGame.UI
         List<List<string>> pages;
         int currentPage;
 
+        Texture2D dungTexture;
+        Vector2 dungeonPanelSize;
+
         ContentManager contentManager;
         ZeldaMaker game;
 
-        public MultiPageFlowPanel(ContentManager contentM, ZeldaMaker game, Texture2D texture, Vector2 pos, Vector2 size, SpriteFont font, bool active = false) : base(texture, pos, size, font, active)
+        public MultiPageFlowPanel(ContentManager contentM, ZeldaMaker game, Texture2D texture, Texture2D dungeonTexture, Vector2 pos, Vector2 size, SpriteFont font, bool active = false) : base(texture, pos, size, font, active)
         {
             pages = new List<List<string>>();
             contentManager = contentM;
+            dungTexture = dungeonTexture;
+            dungeonPanelSize = new Vector2(200, 250);
             this.game = game;
         }
 
@@ -32,8 +37,36 @@ namespace ZeldaMakerGame.UI
             if (dungeons is null) return;
             foreach (Dungeon dungeon in dungeons)
             {
-                children.Add(dungeon.name + "Pnl", new DungeonPanel(contentManager, game, dungeon, Texture.baseTexture, Vector2.Zero, new Vector2(), font));
+                children.Add(dungeon.name + "Pnl", new DungeonPanel(contentManager, game, dungeon, dungTexture, Vector2.Zero, dungeonPanelSize, font));
             }
+        }
+
+        public void AddValue(Dungeon dungeon)
+        {
+            int pageToAddTo = pages.Count - 1;
+            Vector2 currPosition;
+            if (children.Count > 0)
+            {
+                Component lastPanel = children.Values.Last();
+                currPosition = new Vector2(lastPanel.Position.X + lastPanel.Size.X, lastPanel.Position.Y);
+            }
+            else currPosition = Position;
+            DungeonPanel newPanel = new DungeonPanel(contentManager, game, dungeon, dungTexture, Vector2.Zero, dungeonPanelSize, font);
+            if (currPosition.X + newPanel.Size.X < Position.X + Size.X)
+            {
+                newPanel.Position = currPosition;
+                pages.Last().Add(dungeon.name + "Pnl");
+            }
+            else
+            {
+                currPosition = new Vector2(Position.X, currPosition.Y + newPanel.Size.Y);
+                if (currPosition.Y + newPanel.Size.Y > Position.Y + Size.Y)
+                {
+                    newPanel.Position = Position;
+                    pages.Add(new List<string> { dungeon.name + "Pnl" });
+                }
+            }
+            children.Add(dungeon.name + "Pnl", newPanel);
         }
 
         public void Start()

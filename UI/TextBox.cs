@@ -35,12 +35,12 @@ namespace ZeldaMakerGame.UI
             StringBuilder maxString = new StringBuilder();
             for (int i = 0; i < max; i++) maxString = maxString.Append("W");
             Size = spriteFont.MeasureString(maxString);
+            Position = pos;
+            Parent = parent;
+            if (parent != null) Position += Parent.Position;
             Texture = new UITexture(texture, new Vector2(8, 8), false, false);
             CursorTexture = new UITexture(cursorTexture, new Vector2(1, 1), false, false);
             CursorEdge = new Rectangle((int)Position.X + 2, (int)Position.Y + 2, 4, (int)Size.Y - 4);
-            Parent = parent;
-            Position = pos;
-            if (parent != null) Position += Parent.Position;
             isActive = false;
         }
         public override void Update(GameTime gameTime, List<Component> gameComponents)
@@ -110,7 +110,7 @@ namespace ZeldaMakerGame.UI
         {
             Texture.Draw(spriteBatch, Edge, Color.White);
             spriteBatch.DrawString(spriteFont, Text, Position, Color.Black);
-            if(isCursorVisable()) CursorTexture.Draw(spriteBatch, CursorEdge, Color.White);
+            if(isCursorVisable() && isActive) CursorTexture.Draw(spriteBatch, CursorEdge, Color.White);
         }
 
         public override void LateUpdate(GameTime gameTime)
