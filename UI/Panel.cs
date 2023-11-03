@@ -17,6 +17,7 @@ namespace ZeldaMakerGame.UI
         public UITexture Texture { get; private set; }
         protected SpriteFont font;
 
+        Component Parent;
         private float timer;
 
         public bool isControllerKeyboard;
@@ -25,10 +26,12 @@ namespace ZeldaMakerGame.UI
 
         public RadioButton activatedRadioBtn { get; set; }
 
-        public Panel(Texture2D texture, Vector2 pos, Vector2 size, SpriteFont font, bool active = false)
+        public Panel(Texture2D texture, Vector2 pos, Vector2 size, SpriteFont font, bool active = false, Component parent = null)
         {
             Texture = new UITexture(texture, new Vector2(8, 8), false, false);
             Position = pos;
+            Parent = parent;
+            if (Parent is not null) Position += Parent.Position;
             Size = size;
             children = new Dictionary<string, Component>();
             this.font = font;

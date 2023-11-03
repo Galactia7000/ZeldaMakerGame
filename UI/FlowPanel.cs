@@ -28,7 +28,7 @@ namespace ZeldaMakerGame.UI
             pages = new List<List<string>>();
             contentManager = contentM;
             dungTexture = dungeonTexture;
-            dungeonPanelSize = new Vector2(200, 250);
+            dungeonPanelSize = new Vector2(100, 150);
             this.game = game;
         }
 
@@ -37,13 +37,12 @@ namespace ZeldaMakerGame.UI
             if (dungeons is null) return;
             foreach (Dungeon dungeon in dungeons)
             {
-                children.Add(dungeon.name + "Pnl", new DungeonPanel(contentManager, game, dungeon, dungTexture, Vector2.Zero, dungeonPanelSize, font));
+                children.Add(dungeon.name + "Pnl", new DungeonPanel(contentManager, game, dungeon, dungTexture, Vector2.Zero, dungeonPanelSize, font, true, this));
             }
         }
 
         public void AddValue(Dungeon dungeon)
         {
-            int pageToAddTo = pages.Count - 1;
             Vector2 currPosition;
             if (children.Count > 0)
             {
@@ -51,7 +50,7 @@ namespace ZeldaMakerGame.UI
                 currPosition = new Vector2(lastPanel.Position.X + lastPanel.Size.X, lastPanel.Position.Y);
             }
             else currPosition = Position;
-            DungeonPanel newPanel = new DungeonPanel(contentManager, game, dungeon, dungTexture, Vector2.Zero, dungeonPanelSize, font);
+            DungeonPanel newPanel = new DungeonPanel(contentManager, game, dungeon, dungTexture, Vector2.Zero, dungeonPanelSize, font, true, this);
             if (currPosition.X + newPanel.Size.X < Position.X + Size.X)
             {
                 newPanel.Position = currPosition;
@@ -100,6 +99,7 @@ namespace ZeldaMakerGame.UI
                         pages[currentPage].Add(child.Key);
                     }
                 }
+                ((DungeonPanel)child.Value).Start();
             }
             currentPage = 0;
         }
