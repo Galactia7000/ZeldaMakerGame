@@ -47,7 +47,7 @@ namespace ZeldaMakerGame.World
         }
         public static Tile Deserialize(BinaryReader binaryReader)
         {
-            Vector2 Position = new Vector2(binaryReader.ReadSingle(), binaryReader.ReadSingle());
+            float x = binaryReader.ReadSingle(); float y = binaryReader.ReadSingle();
             int index = (int)binaryReader.ReadSingle();
             int sIndex = (int)binaryReader.ReadSingle();
             int size = (int)binaryReader.ReadSingle();
@@ -55,7 +55,7 @@ namespace ZeldaMakerGame.World
             for (int i = 0; i < newbits.Length; i++) newbits[i] = (int)binaryReader.ReadSingle();
             Tile tile = new Tile
             {
-                Position = Position,
+                Position = new Vector2(x, y),
                 tileIndex = index,
                 subIndex = sIndex,
                 tileSize = size,

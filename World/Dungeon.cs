@@ -23,7 +23,6 @@ namespace ZeldaMakerGame.World
         public string name;
         public Tileset tileset;
         string filePath;
-        public Dungeon() { }
         public Dungeon(Tileset Tiles, int floors, int rows, int cols, string name, string path)
         {
             tiles = new Tile[floors, cols, rows];
@@ -134,10 +133,12 @@ namespace ZeldaMakerGame.World
         {
             FileStream stream = new FileStream(filePath + @"\" + name + ".bin", FileMode.OpenOrCreate, FileAccess.Write);
             BinaryWriter binaryWriter = new BinaryWriter(stream);
+
             binaryWriter.Write(floors);
             binaryWriter.Write(rows);
             binaryWriter.Write(name);
             binaryWriter.Write(filePath);
+
             for(int f = 0; f < floors; f++)
             {
                 for(int c = 0; c < columns; c++)
@@ -151,7 +152,7 @@ namespace ZeldaMakerGame.World
             stream.Close();
         }
 
-        public static Dungeon LoadDungeon(string file)
+        public static Dungeon LoadDungeon(string file, Tileset tSet)
         {
             FileStream stream = new FileStream(file, FileMode.Open, FileAccess.Read);
             BinaryReader binaryReader = new BinaryReader(stream);
@@ -161,6 +162,7 @@ namespace ZeldaMakerGame.World
             int cols = rows;
             string name = binaryReader.ReadString();
             string filePath = binaryReader.ReadString();
+
             Tile[,,] dungTiles = new Tile[floors, cols, rows];
             for(int f = 0; f < floors; f++)
             {
@@ -173,15 +175,9 @@ namespace ZeldaMakerGame.World
                 }
             }
             stream.Close();
-            Dungeon newDung = new Dungeon
-            {
-                floors = floors,
-                rows= rows,
-                columns = cols,
-                name = name,
-                filePath = filePath,
-                tiles = dungTiles
-            };
+
+            Dungeon newDung = new Dungeon(tSet, floors, rows, cols, name, filePath);
+            newDung.tiles = dungTiles;
             return newDung;
         }
     }

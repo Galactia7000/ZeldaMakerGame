@@ -63,12 +63,12 @@ namespace ZeldaMakerGame.GameStates
             }
             string[] filePaths = Directory.GetFiles(game.DungeonsFilePath);
             List<Dungeon> dungeons = new List<Dungeon>();
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
             for (int i = 0; i < filePaths.Length; i++)
             {
                 try
                 {
-                    dungeons.Add(Dungeon.LoadDungeon(filePaths[i]));
+                    dungeons.Add(Dungeon.LoadDungeon(filePaths[i], defaultTileset));
+                    
                 } catch { }
             }
             foreach (Dungeon dungeon in dungeons) dungeon.tileset = defaultTileset;
@@ -238,8 +238,8 @@ namespace ZeldaMakerGame.GameStates
             int size = Convert.ToInt32(((TextBox)children["EnterSizeTxt"]).Text.ToString());
             Dungeon newDungeon = new Dungeon(defaultTileset, floors, size, size, name, game.DungeonsFilePath);
             newDungeon.SaveDungeon(sender, e);
-            ((MultiPageFlowPanel)_components["MainMenu"]).AddValue(newDungeon);
-            BackToDungeonsClicked(sender, e);
+            game.currentDungeon = newDungeon;
+            game.ChangeState(new EditorState(game, contentManager));
         }
 
         void DungeonsPanel(ref Button backBtn, ref Button newDungeonBtn, ref Button leftBtn, ref Button rightBtn)
@@ -273,38 +273,22 @@ namespace ZeldaMakerGame.GameStates
 
         private void SetUpTileRefs(Tileset currentTileset)
         {
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Textures/BlankTexture"), 0, 0, 0);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorTopLeft"), 1, 1, 1);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorTop"), 1, 1, 2);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorTopRight"), 1, 1, 3);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorLeft"), 1, 1, 4);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallCenter"), 0, 0, 0);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerBottomRight"), 5, 1, 1);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottom"), 5, 1, 2);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerBottomLeft"), 5, 1, 3);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallRight"), 5, 1, 4);
             currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorCenter"), 1, 1, 5);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorRight"), 1, 1, 6);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorBottomLeft"), 1, 1, 7);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorBottom"), 1, 1, 8);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorBottomRight"), 1, 1, 9);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerTopLeft"), 1, 1, 10);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerTopRight"), 1, 1, 11);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerBottomLeft"), 1, 1, 12);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerBottomRight"), 1, 1, 13);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerDiagonalTL"), 1, 1, 14);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorInnerDiagonalTR"), 1, 1, 15);
-
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTopLeft"), 5, 2, 1);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTop"), 5, 2, 2);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTopRight"), 5, 2, 3);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallLeft"), 5, 2, 4);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallCenter"), 5, 2, 5);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallRight"), 5, 2, 6);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottomLeft"), 5, 2, 7);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottom"), 5, 2, 8);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottomRight"), 5, 2, 9);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerTopLeft"), 5, 2, 10);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerTopRight"), 5, 2, 11);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerBottomLeft"), 5, 2, 12);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerBottomRight"), 5, 2, 13);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerDiagonalTL"), 5, 2, 14);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerDiagonalTR"), 5, 2, 15);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallLeft"), 5, 1, 6);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerTopRight"), 5, 1, 7);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTop"), 5, 1, 8);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerTopLeft"), 5, 1, 9);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottomRight"), 1, 1, 10);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottomLeft"), 5, 1, 11);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTopRight"), 5, 1, 12);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTopLeft"), 5, 1, 13);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerDiagonalTR"), 5, 1, 14);
+            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerDiagonalTL"), 5, 1, 15);
         }
         #endregion
 

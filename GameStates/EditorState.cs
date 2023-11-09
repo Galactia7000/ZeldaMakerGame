@@ -42,7 +42,7 @@ namespace ZeldaMakerGame.GameStates
             font = contentManager.Load<SpriteFont>("Fonts/UI");
             CreateCategoryPanel();
             saveBtn = new Button(panelTexture, new Vector2(0, 0), new Vector2(100, 50), null, "Save Dungeon", font);
-            saveBtn.OnClick += game.currentDungeon.SaveDungeon;
+            saveBtn.OnClick += Save;
             toolSelectPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 200, game.screenHeight - 100), new Vector2(200, 50), font, true);
             tileSelectPanel = null;
 
@@ -180,6 +180,12 @@ namespace ZeldaMakerGame.GameStates
             tileSelectPanel.Initialize();
             newComps.Add("TileSelectPanel", tileSelectPanel);
             uiComponents = newComps;
+        }
+
+        void Save(object sender, EventArgs eventArgs)
+        {
+            game.currentDungeon.SaveDungeon(sender, eventArgs);
+            game.ChangeState(new MainMenuState(game, contentManager));
         }
         private void CreatePuzzlePanel(object sender, EventArgs eventArgs)
         {
