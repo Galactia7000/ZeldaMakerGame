@@ -48,9 +48,9 @@ namespace ZeldaMakerGame.World
         public static Tile Deserialize(BinaryReader binaryReader)
         {
             float x = binaryReader.ReadSingle(); float y = binaryReader.ReadSingle();
-            int index = (int)binaryReader.ReadSingle();
-            int sIndex = (int)binaryReader.ReadSingle();
-            int size = (int)binaryReader.ReadSingle();
+            int index = binaryReader.ReadInt32();
+            int sIndex = binaryReader.ReadInt32();
+            int size = binaryReader.ReadInt32();
             int[] newbits = new int[4];
             for (int i = 0; i < newbits.Length; i++) newbits[i] = (int)binaryReader.ReadSingle();
             Tile tile = new Tile

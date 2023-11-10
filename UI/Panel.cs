@@ -17,7 +17,6 @@ namespace ZeldaMakerGame.UI
         public UITexture Texture { get; private set; }
         protected SpriteFont font;
 
-        Component Parent;
         private float timer;
 
         public bool isControllerKeyboard;

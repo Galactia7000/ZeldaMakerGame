@@ -157,27 +157,27 @@ namespace ZeldaMakerGame.World
             FileStream stream = new FileStream(file, FileMode.Open, FileAccess.Read);
             BinaryReader binaryReader = new BinaryReader(stream);
             
-            int floors = (int)binaryReader.ReadSingle();
-            int rows = (int)binaryReader.ReadSingle();
+            int floors = binaryReader.ReadInt32();
+            int rows = binaryReader.ReadInt32();
             int cols = rows;
             string name = binaryReader.ReadString();
-            string filePath = binaryReader.ReadString();
+            string filePath = binaryReader.ReadString();        
 
-            Tile[,,] dungTiles = new Tile[floors, cols, rows];
-            for(int f = 0; f < floors; f++)
+            Dungeon newDung = new Dungeon(tSet, floors, rows, cols, name, filePath);
+
+            for (int f = 0; f < floors; f++)
             {
-                for(int c = 0; c < cols; c++)
+                for (int c = 0; c < cols; c++)
                 {
-                    for(int r = 0; r < rows; r++)
+                    for (int r = 0; r < rows; r++)
                     {
-                        dungTiles[f, c, r] = Tile.Deserialize(binaryReader);
+                        Tile thisTile = Tile.Deserialize(binaryReader);
+                        newDung.tiles[f, c, r] = thisTile;
                     }
                 }
             }
-            stream.Close();
 
-            Dungeon newDung = new Dungeon(tSet, floors, rows, cols, name, filePath);
-            newDung.tiles = dungTiles;
+            stream.Close();
             return newDung;
         }
     }

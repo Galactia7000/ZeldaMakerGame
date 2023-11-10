@@ -92,7 +92,6 @@ namespace ZeldaMakerGame.World
 
     }
 
-    [Serializable]
     public class TileReference
     {
         public Texture2D Texture;

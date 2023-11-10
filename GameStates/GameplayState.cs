@@ -20,7 +20,7 @@ namespace ZeldaMakerGame.GameStates
 
         private Player thePlayer;
         private List<Component> entities;
-        private List<Component> uiComponents;
+      //  private List<Component> uiComponents;
 
         public override void LoadContent()
         {
