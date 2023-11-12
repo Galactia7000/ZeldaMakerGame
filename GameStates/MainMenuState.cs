@@ -44,7 +44,7 @@ namespace ZeldaMakerGame.GameStates
             _uiFont = contentManager.Load<SpriteFont>("Fonts/UI");
             _dungeonPanelTexture = contentManager.Load<Texture2D>("Textures/DungeonPanelTexture");
 
-            defaultTileset = new Tileset(16);
+            defaultTileset = new Tileset(24);
             SetUpTileRefs(defaultTileset);
 
 

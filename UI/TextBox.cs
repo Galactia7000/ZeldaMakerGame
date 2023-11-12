@@ -16,6 +16,7 @@ namespace ZeldaMakerGame.UI
         public StringBuilder Text { get; set; }
 
         float timer;
+        float deleteTimer;
         int maxLength;
         bool numbersOnly;
 
@@ -28,6 +29,7 @@ namespace ZeldaMakerGame.UI
         public TextBox(Texture2D texture, Texture2D cursorTexture, Vector2 pos, SpriteFont font, Component parent, int max, bool numbers)
         {
             timer = 0f;
+            deleteTimer = 0f;
             maxLength = max;
             numbersOnly = numbers;
             spriteFont = font;
@@ -46,17 +48,34 @@ namespace ZeldaMakerGame.UI
         public override void Update(GameTime gameTime, List<Component> gameComponents)
         {
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            
             if (InputManager.mouseRectangle.Intersects(Edge) && InputManager.IsLeftMouseClicked())
             {
                 isActive = !isActive;
+                Panel parent = (Panel)Parent;
+                if (isActive)
+                {
+                    var children = parent.GetChildren();
+                    var values = children.Values.ToList();
+                    if (parent.selectedChild != -1 && values[parent.selectedChild] is TextBox) ((TextBox)values[parent.selectedChild]).isActive = false;
+                    parent.selectedChild = values.IndexOf(this);
+                }
+                else parent.selectedChild = -1;
             }
             if (isActive)
             {
                 Keys[] keys = InputManager.currentKeyboardState.GetPressedKeys();
+                if (InputManager.currentKeyboardState.IsKeyUp(Keys.Back) && InputManager.currentKeyboardState.IsKeyUp(Keys.Delete)) deleteTimer = 0f;
                 if(keys.Length > 0)
                 {
                     if (keys.Length > 1) keys[0] = ExtractSingleCharacter(keys);
-                    AddText((char)keys[0]);
+                    if (InputManager.currentKeyboardState.IsKeyDown(Keys.Back) || InputManager.currentKeyboardState.IsKeyDown(Keys.Delete))
+                    {
+                        if (deleteTimer >= 0.5f) deleteTimer = 0f;
+                        if (deleteTimer == 0f) AddText('\b');
+                        deleteTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                    if (keys[0] != Keys.None && keys[0] != Keys.RightShift && keys[0] != Keys.LeftShift && keys[0] != Keys.CapsLock && InputManager.HasKeyJustBeenPressed(keys[0])) AddText((char)keys[0]);
                 }
             }
         }

@@ -33,12 +33,14 @@ namespace ZeldaMakerGame.GameStates
             };
             var octoRockAnimations = new Dictionary<string, Animation>()
             {
-                {"WalkDown" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/OctorockMovingDown"), 2, 0.02f, true)},
-                {"WalkUp" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/OctorockMovingUp"), 2, 0.02f, true)},
-                {"WalkLeft" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/OctorockMovingLeft"), 2, 0.02f, true)},
-                {"WalkRight" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/OctorockMovingRight"), 2, 0.02f, true)},
+                {"WalkDown" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/OctorockMovingDown"), 2, 0.05f, true)},
+                {"WalkUp" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/OctorockMovingUp"), 2, 0.05f, true)},
+                {"WalkLeft" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/OctorockMovingLeft"), 2, 0.05f, true)},
+                {"WalkRight" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/OctorockMovingRight"), 2, 0.05f, true)},
             };
 
+
+            GameManager.Initialize();
 
             thePlayer = new Player(playerAnimations, 100f);
             entities = new List<Component>()
@@ -47,10 +49,12 @@ namespace ZeldaMakerGame.GameStates
                 new Enemy(octoRockAnimations, 50f),
                 new Enemy(octoRockAnimations, 60f),
                 new Entity(contentManager.Load<Texture2D>("EntityAnimations/BirdIdle"), 0f),
+                new Chest(contentManager.Load<Texture2D>("EntityAnimations/ChestClosed"), contentManager.Load<Texture2D>("EntityAnimations/ChestOpen"), new Vector2(64, 64)),
             };
 
             ((Enemy)entities[1]).SetTarget(thePlayer);
-
+            ((Enemy)entities[2]).SetTarget(thePlayer);
+            ((Chest)entities[4]).itemContents = new Item(contentManager.Load<Texture2D>("Textures/BombSprite"), "Bomb", 3);
         }
 
         public override void UnloadContent()
@@ -72,10 +76,15 @@ namespace ZeldaMakerGame.GameStates
             {
                 entity.LateUpdate(_gametime);
             }
+
+            List<Component> newEntities = new List<Component>(entities);
+            GameManager.LateUpdate(newEntities);
+            entities = newEntities;
         }
         public override void Draw(GameTime _gametime, SpriteBatch _spritebatch)
         {
             _spritebatch.Begin();
+            game.currentDungeon.Draw(_spritebatch);
             foreach (var entity in entities)
             {
                 entity.Draw(_spritebatch);

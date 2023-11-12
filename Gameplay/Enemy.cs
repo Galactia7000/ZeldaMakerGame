@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using ZeldaMakerGame.Core;
+using ZeldaMakerGame.GameStates;
 using ZeldaMakerGame.Managers;
 
 namespace ZeldaMakerGame.Gameplay
@@ -35,18 +36,21 @@ namespace ZeldaMakerGame.Gameplay
 
         public override void Update(GameTime gameTime, List<Component> components)
         {
-            if(Target != null)
+            if(!IsAlive) GameManager.RemoveEntity(this);
+            if(Target is not null)
             {
                 // TEMP PATHFINDING
-                if (Target.Position.X > Position.X) new Vector2(1, Velocity.Y);
-                else if (Target.Position.X < Position.X) new Vector2(-1, Velocity.Y);
-                if (Target.Position.Y > Position.Y) new Vector2(Velocity.X, 1);
-                else if (Target.Position.Y < Position.Y) new Vector2(Velocity.X, -1);
+                if(Target.Position.X == Position.X) Velocity = new Vector2(0, 0);
+                else if (Target.Position.X > Position.X) Velocity =  new Vector2(1, 0);
+                else Velocity = new Vector2(-1, 0);
+                if (Target.Position.Y == Position.Y) Velocity = new Vector2(Velocity.X, 0);
+                else if (Target.Position.Y > Position.Y) Velocity = new Vector2(Velocity.X, 1);
+                else Velocity = new Vector2(Velocity.X, -1);
             }
             base.Update(gameTime, components);
         }
 
-        public override void Activate()
+        public override void Activate(Player activator)
         {
             IsAlive = false;
         }

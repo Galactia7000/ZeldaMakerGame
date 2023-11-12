@@ -44,6 +44,8 @@ namespace ZeldaMakerGame.World
                 }
             }
 
+            tiles[0, 1, 1].tileIndex = 1;
+            tiles[0, 1, 1].bits = new int[4] { 1, 1, 1, 1 };
             this.name = name;
             filePath = path;
         }
@@ -59,12 +61,29 @@ namespace ZeldaMakerGame.World
             {
                 Tile selected = tiles[currentFloor, (int)mouseGridPos.X, (int)mouseGridPos.Y];
                 if (tool is null) return;
-                if (tool.type == ToolType.Terrain)
+                switch (tool.type)
                 {
-                    selected.tileIndex = tool.index;
-                    selected.bits = new int[4] { tool.index, tool.index, tool.index, tool.index };
-                    UpdateSurrounding(mouseGridPos, selected);
-                    UpdateSubIndex(selected);
+                    case ToolType.SubTerrain:
+                        if (selected.tileIndex == 0) break;
+                        selected.tileIndex = tool.index;
+                        selected.bits = new int[4] { tool.index, tool.index, tool.index, tool.index };
+                        UpdateSurrounding(mouseGridPos, selected);
+                        UpdateSubIndex(selected);
+                        break;
+                    case ToolType.Terrain:
+                        selected.tileIndex = tool.index;
+                        selected.bits = new int[4] { tool.index, tool.index, tool.index, tool.index };
+                        UpdateSurrounding(mouseGridPos, selected);
+                        UpdateSubIndex(selected);
+                        break;
+                    case ToolType.Door:
+                        break;
+                    case ToolType.Entity:
+                        selected.tileEntity = tool.entity;
+                        break;
+                    case ToolType.Item:
+
+                        break;
                 }
             }
             else if (InputManager.currentMouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
@@ -72,6 +91,7 @@ namespace ZeldaMakerGame.World
                 Tile selected = tiles[currentFloor, (int)mouseGridPos.X, (int)mouseGridPos.Y];
                 selected.tileIndex = 0;
                 selected.bits = new int[4] { 0, 0, 0, 0 };
+                selected.tileEntity = null;
                 UpdateSurrounding(mouseGridPos, selected);
                 UpdateSubIndex(selected);
             }

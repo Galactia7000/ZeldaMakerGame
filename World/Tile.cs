@@ -7,12 +7,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZeldaMakerGame.Core;
 
 namespace ZeldaMakerGame.World
 {
     [Serializable]
     public class Tile
     {
+        public Entity tileEntity; 
         public Vector2 Position { get; set; }
         public Rectangle Edge { get { return new Rectangle(Position.ToPoint(), new Point(tileSize, tileSize)); } } 
         public int tileIndex { get; set; }
@@ -34,6 +36,7 @@ namespace ZeldaMakerGame.World
         public void Draw(SpriteBatch spriteBatch, Texture2D texture)
         {
             spriteBatch.Draw(texture, Edge, Color.White);
+            if(tileEntity is not null)tileEntity.Draw(spriteBatch);
         }
 
         public void Serialize(BinaryWriter binaryWriter)

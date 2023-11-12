@@ -46,9 +46,9 @@ namespace ZeldaMakerGame.Managers
                 {"Down", new KeyBinding(Keys.S) },
                 {"Right", new KeyBinding(Keys.D) },
                 {"Action", new KeyBinding(Keys.Space) },
-                {"Item1", new KeyBinding(Keys.NumPad1) },
-                {"Item2", new KeyBinding(Keys.NumPad2) },
-                {"Item3", new KeyBinding(Keys.NumPad3) },
+                {"Item1", new KeyBinding(Keys.D1) },
+                {"Item2", new KeyBinding(Keys.D2) },
+                {"Item3", new KeyBinding(Keys.D3) },
                 {"Pause", new KeyBinding(Keys.Escape) },
             };
             controllerBindings = new Dictionary<string, ButtonBinding>()

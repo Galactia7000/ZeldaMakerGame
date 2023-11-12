@@ -4,14 +4,16 @@ using SharpDX.DirectWrite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ZeldaMakerGame.Gameplay;
+using ZeldaMakerGame.GameStates;
 using ZeldaMakerGame.Managers;
+using ZeldaMakerGame.World;
 
 namespace ZeldaMakerGame.Core
 {
     public class Entity : Component
     {
+
         protected Vector2 Velocity { get; set; }
 
         protected Direction direction;
@@ -19,10 +21,12 @@ namespace ZeldaMakerGame.Core
         protected AnimationManager animationManager;
         protected Dictionary<string, Animation> animations;
 
+        public Item itemContents;
+
         public override Vector2 Position { get => base.Position; set { base.Position = value; if (animationManager != null) animationManager.Position = value; } }
 
         public float LinearSpeed { get; set; }
-        public Texture2D Texture { get; private set; }
+        public Texture2D Texture { get; protected set; }
 
         public Entity(Texture2D texture, float speed)
         {
@@ -41,6 +45,10 @@ namespace ZeldaMakerGame.Core
             Size = new Vector2(animations[animations.First().Key].frameWidth, animations[animations.First().Key].frameHeight);
             animationManager = new AnimationManager(animations.First().Value);
             direction = Direction.Down;
+        }
+
+        public Entity(Animation animation, float speed) : this(new Dictionary<string, Animation> { { "Idle", animation } }, speed)
+        {
         }
 
         public override void Update(GameTime gameTime, List<Component> components)
@@ -90,7 +98,10 @@ namespace ZeldaMakerGame.Core
             else if (Velocity.Y == 0) animationManager.Stop();
         }
 
-        public virtual void Activate()
+        public virtual void Activate(Player activator)
+        {
+        }
+        public virtual void Activate(Dungeon dungeon)
         {
         }
     }
