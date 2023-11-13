@@ -15,18 +15,34 @@ namespace ZeldaMakerGame.Managers
         static List<Component> entitiesToAdd;
         static List<Component> entitiesToDelete;
 
-        public static void Initialize() { entitiesToAdd = new List<Component>(); entitiesToDelete = new List<Component>(); }
+        public static void Initialize() 
+        { 
+            entitiesToAdd = new List<Component>(); 
+            entitiesToDelete = new List<Component>(); 
+        }
 
+        /// <summary>
+        /// Queues an entity to be added
+        /// </summary>
+        /// <param name="entity"></param>
         public static void AddEntity(Entity entity)
         {
             entitiesToAdd.Add(entity);
         }
 
+        /// <summary>
+        /// Queues an entity to be removed 
+        /// </summary>
+        /// <param name="entity"></param>
         public static void RemoveEntity(Entity entity)
         {
             entitiesToDelete.Remove(entity);
         }
 
+        /// <summary>
+        /// Updates the list of the entities
+        /// </summary>
+        /// <param name="existingEntities"></param>
         public static void LateUpdate(List<Component> existingEntities)
         {
             foreach (Component entity in entitiesToAdd) existingEntities.Add(entity);

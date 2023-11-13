@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.IO;
 using System.Windows.Forms;
 using ZeldaMakerGame.GameStates;
@@ -51,6 +52,8 @@ namespace ZeldaMakerGame
 
             gameWindow = Window;
             InputManager.Initialize();
+            UIManager.Initialize();
+            
 
             base.Initialize();
         }
@@ -61,7 +64,11 @@ namespace ZeldaMakerGame
 
             // TODO: use this.Content to load your game content here
             currentState.LoadContent();
+            CreateUITextures();
+            CreateFonts();
         }
+
+        
 
         protected override void Update(GameTime gameTime)
         {
@@ -88,6 +95,28 @@ namespace ZeldaMakerGame
             currentState.Draw(gameTime, _spriteBatch);
 
             base.Draw(gameTime);
+        }
+
+        private void CreateFonts()
+        {
+            UIManager.AddFont("Button", Content.Load<SpriteFont>("Button"));
+            UIManager.AddFont("Label", Content.Load<SpriteFont>("Label"));
+        }
+
+        private void CreateUITextures()
+        {
+            UIManager.AddTexture("DungeonPanel", Content.Load<Texture2D>("Textures/DungeonPanelTexture"));
+            UIManager.AddTexture("Panel", Content.Load<Texture2D>("Textures/PanelTexture3"));
+            UIManager.AddTexture("Button", Content.Load<Texture2D>("Textures/ButtonTexture3"));
+            UIManager.AddTexture("SliderNode", Content.Load<Texture2D>("Textures/SliderNodeTexture2"));
+            UIManager.AddTexture("SliderBack", Content.Load<Texture2D>("Textures/SliderBackTexture2"));
+            UIManager.AddTexture("TextBox", Content.Load<Texture2D>("Textures/TextBoxTexture"));
+            UIManager.AddTexture("TextBoxCursor", Content.Load<Texture2D>("Textures/TextBoxCursorTexture"));
+        }
+
+        private void CreateUIPanels()
+        {
+            // TO DO
         }
     }
 }

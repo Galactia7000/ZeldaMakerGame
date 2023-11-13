@@ -66,38 +66,66 @@ namespace ZeldaMakerGame.Managers
         }
 
         #region InputChecks
-
+        /// <summary>
+        /// Returns if left mouse button has been clicked, not held down
+        /// </summary>
+        /// <returns></returns>
         public static bool IsLeftMouseClicked()
         {
             return currentMouse.LeftButton == ButtonState.Released && previousMouse.LeftButton == ButtonState.Pressed;
         }
+        /// <summary>
+        /// Returns if right mouse button has been clicked, not held down
+        /// </summary>
+        /// <returns></returns>
         public static bool IsRightMouseClicked()
         {
             return currentMouse.RightButton == ButtonState.Released && previousMouse.RightButton == ButtonState.Pressed;
         }
+        /// <summary>
+        /// Returns if a keybinding has been pressed
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static bool IsKeyPressed(string key)
         {
             var binding = keyboardBindings[key];
             return binding.current == KeyState.Up && binding.previous == KeyState.Down;
         }
-
+        /// <summary>
+        /// Returns if any specific key has been pressed
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static bool HasKeyJustBeenPressed(Keys key)
         {
             return currentKeyboardState.IsKeyDown(key) && !previousKeyboardState.IsKeyDown(key);
         }
-
+        /// <summary>
+        /// Returns if a keybinding is held down
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static bool IsKeyHeld(string key)
         {
             var binding = keyboardBindings[key];
             return binding.current == KeyState.Down;
         }
-
+        /// <summary>
+        /// Returns if a controller button is pressed
+        /// </summary>
+        /// <param name="button"></param>
+        /// <returns></returns>
         public static bool IsButtonPressed(string button)
         {
             var binding = controllerBindings[button];
             return binding.current == ButtonState.Released && binding.previous == ButtonState.Pressed;
         }
-
+        /// <summary>
+        /// Returns if a controller button is held down
+        /// </summary>
+        /// <param name="button"></param>
+        /// <returns></returns>
         public static bool IsButtonHeld(string button)
         {
             var binding = controllerBindings[button];

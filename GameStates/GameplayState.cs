@@ -20,8 +20,9 @@ namespace ZeldaMakerGame.GameStates
 
         private Player thePlayer;
         private List<Component> entities;
-      //  private List<Component> uiComponents;
+        // private List<Component> uiComponents;
 
+        private bool isGamePaused;
         public override void LoadContent()
         {
             var playerAnimations = new Dictionary<string, Animation>()
@@ -42,7 +43,9 @@ namespace ZeldaMakerGame.GameStates
 
             GameManager.Initialize();
 
+            isGamePaused = false;
             thePlayer = new Player(playerAnimations, 100f);
+
             entities = new List<Component>()
             {
                 thePlayer,
@@ -64,11 +67,14 @@ namespace ZeldaMakerGame.GameStates
 
         public override void Update(GameTime _gametime)
         {
-            foreach (var entity in entities)
+            if (isGamePaused)
             {
-                entity.Update(_gametime, entities);
+                foreach (var entity in entities)
+                {
+                    entity.Update(_gametime, entities);
+                }
             }
-            if (InputManager.IsKeyPressed("Pause") || InputManager.IsButtonPressed("Pause")) game.Exit();
+            if (InputManager.IsKeyPressed("Pause") || InputManager.IsButtonPressed("Pause")) isGamePaused = !isGamePaused;
         }
         public override void LateUpdate(GameTime _gametime)
         {

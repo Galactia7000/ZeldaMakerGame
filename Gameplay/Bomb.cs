@@ -19,7 +19,7 @@ namespace ZeldaMakerGame.Gameplay
 
         public override bool Use(Player player)
         {
-            GameManager.AddEntity(new Bomb(GlobalAnimationManager.AllAnimations["BombExploding"], 0f));
+            GameManager.AddEntity(new Bomb(GlobalAnimationManager.GetAnimation("BombExploding"), 0f));
             return true;
         }
     }
@@ -44,6 +44,7 @@ namespace ZeldaMakerGame.Gameplay
             if (timer >= timeToDetonate) 
             {
                 GameManager.RemoveEntity(this);
-            }        }
+            }        
+        }
     }
 }

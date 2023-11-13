@@ -17,15 +17,7 @@ namespace ZeldaMakerGame.GameStates
         public MainMenuState(ZeldaMaker _game, ContentManager _contentManager) : base(_game, _contentManager) { }
 
         private Dictionary<string, Component> _components = new Dictionary<string, Component>();
-        private Texture2D _panelTexture;
-        private Texture2D _dungeonPanelTexture;
-        private Texture2D _buttonTexture;
         private Texture2D _logoTexture;
-        private Texture2D _sliderNodeTexture;
-        private Texture2D _sliderBackTexture;
-        private Texture2D _textBoxTexture;
-        private Texture2D _textBoxCursorTexture;
-        private SpriteFont _uiFont;
         Tileset defaultTileset;
 
         private Panel currentMenuPanel;
@@ -34,15 +26,7 @@ namespace ZeldaMakerGame.GameStates
 
         public override void LoadContent()
         {
-            _panelTexture = contentManager.Load<Texture2D>("Textures/PanelTexture3");
-            _buttonTexture = contentManager.Load<Texture2D>("Textures/ButtonTexture3");
             _logoTexture = contentManager.Load<Texture2D>("Textures/PlayHolderLogo2");
-            _sliderBackTexture = contentManager.Load<Texture2D>("Textures/SliderBackTexture-export");
-            _sliderNodeTexture = contentManager.Load<Texture2D>("Textures/SliderNodeTexture2");
-            _textBoxTexture = contentManager.Load<Texture2D>("Textures/TextBoxTexture");
-            _textBoxCursorTexture = contentManager.Load<Texture2D>("Textures/TextBoxCursorTexture");
-            _uiFont = contentManager.Load<SpriteFont>("Fonts/UI");
-            _dungeonPanelTexture = contentManager.Load<Texture2D>("Textures/DungeonPanelTexture");
 
             defaultTileset = new Tileset(24);
             SetUpTileRefs(defaultTileset);
