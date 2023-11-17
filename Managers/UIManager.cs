@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZeldaMakerGame.Core;
+using ZeldaMakerGame.UI;
 
 namespace ZeldaMakerGame.Managers
 {
@@ -43,6 +44,7 @@ namespace ZeldaMakerGame.Managers
         public static void AddUI(string tag, bool isCopy = false)
         {
             if(!activeUI.ContainsKey(tag)) activeUI.Add(tag, uiPresets[tag]);
+            if (uiPresets[tag] is Panel) ((Panel)activeUI[tag]).Initialize();
         }
 
         /// <summary>

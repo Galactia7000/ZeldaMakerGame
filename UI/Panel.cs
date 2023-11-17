@@ -15,7 +15,6 @@ namespace ZeldaMakerGame.UI
         private const float controllerScrollDelay = 0.3f;
 
         public UITexture Texture { get; private set; }
-        protected SpriteFont font;
 
         private float timer;
 
@@ -25,7 +24,7 @@ namespace ZeldaMakerGame.UI
 
         public RadioButton activatedRadioBtn { get; set; }
 
-        public Panel(Texture2D texture, Vector2 pos, Vector2 size, SpriteFont font, bool active = false, Component parent = null)
+        public Panel(Texture2D texture, Vector2 pos, Vector2 size, bool active = false, Component parent = null)
         {
             Texture = new UITexture(texture, new Vector2(8, 8), false, false);
             Position = pos;
@@ -33,7 +32,6 @@ namespace ZeldaMakerGame.UI
             if (Parent is not null) Position += Parent.Position;
             Size = size;
             children = new Dictionary<string, Component>();
-            this.font = font;
             isActive = active;
             activatedRadioBtn = null;
             selectedChild = -1;
@@ -46,29 +44,6 @@ namespace ZeldaMakerGame.UI
             children.Add(key, component);
         }
 
-        public void AddButton(string key, Texture2D texture, Vector2 position, Vector2 size, string Text)
-        {
-            Button btn = new Button(texture, position, size, this, Text, font);
-            children.Add(key, btn);
-        }
-
-        public void AddRadioButton(string key, Texture2D texture, Vector2 position, Vector2 size, string text)
-        {
-            RadioButton rbtn = new RadioButton(texture, position, size, this, text, font);
-            children.Add(key, rbtn);
-        }
-
-        public void AddToolButton(string key, Texture2D texture, Vector2 position, Vector2 size, string text, Tool tool)
-        {
-            ToolBtn tbtn = new ToolBtn(texture, position, size, this, text, font, tool);
-            children.Add(key, tbtn);
-        }
-
-        public void AddSlider(string key, Texture2D backTexture, Texture2D nodeTexture, Vector2 pos, Vector2 size, int min, int max, int def, float delay)
-        {
-            Slider sld = new Slider(backTexture, nodeTexture, pos, size, this, min, max, def, delay);
-            children.Add(key, sld);
-        }
 
         public void Initialize()
         {

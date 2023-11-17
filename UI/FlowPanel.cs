@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZeldaMakerGame.Core;
+using ZeldaMakerGame.Managers;
 using ZeldaMakerGame.World;
 
 namespace ZeldaMakerGame.UI
@@ -23,7 +24,7 @@ namespace ZeldaMakerGame.UI
         ContentManager contentManager;
         ZeldaMaker game;
 
-        public MultiPageFlowPanel(ContentManager contentM, ZeldaMaker game, Texture2D texture, Texture2D dungeonTexture, Vector2 pos, Vector2 size, SpriteFont font, bool active = false) : base(texture, pos, size, font, active)
+        public MultiPageFlowPanel(ContentManager contentM, ZeldaMaker game, Texture2D texture, Texture2D dungeonTexture, Vector2 pos, Vector2 size, bool active = false) : base(texture, pos, size, active)
         {
             pages = new List<List<string>>();
             contentManager = contentM;
@@ -37,7 +38,7 @@ namespace ZeldaMakerGame.UI
             if (dungeons is null) return;
             foreach (Dungeon dungeon in dungeons)
             {
-                children.Add(dungeon.name + "Pnl", new DungeonPanel(contentManager, game, dungeon, dungTexture, Vector2.Zero, dungeonPanelSize, font, true, this));
+                children.Add(dungeon.name + "Pnl", new DungeonPanel(contentManager, game, dungeon, UIManager.GetTexture("DungeonPanel"), Vector2.Zero, dungeonPanelSize, true, this));
             }
         }
 
@@ -50,7 +51,7 @@ namespace ZeldaMakerGame.UI
                 currPosition = new Vector2(lastPanel.Position.X + lastPanel.Size.X, lastPanel.Position.Y);
             }
             else currPosition = Position;
-            DungeonPanel newPanel = new DungeonPanel(contentManager, game, dungeon, dungTexture, Vector2.Zero, dungeonPanelSize, font, true, this);
+            DungeonPanel newPanel = new DungeonPanel(contentManager, game, dungeon, UIManager.GetTexture("DungeonPanel"), Vector2.Zero, dungeonPanelSize, true, this);
             if (currPosition.X + newPanel.Size.X < Position.X + Size.X)
             {
                 newPanel.Position = currPosition;

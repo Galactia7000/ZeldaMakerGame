@@ -9,6 +9,7 @@ using System.Linq;
 using System.IO;
 using ZeldaMakerGame.World;
 using System.Runtime.Serialization.Formatters.Binary;
+using ZeldaMakerGame.Managers;
 
 namespace ZeldaMakerGame.GameStates
 {
@@ -183,10 +184,10 @@ namespace ZeldaMakerGame.GameStates
 
         void CreateMainPanel()
         {
-            Panel thisPanel = new Panel(_panelTexture, new Vector2(3*(game.screenWidth / 4) - 100, (game.screenHeight / 2) - 100), new Vector2(200, 200), _uiFont, true);
-            thisPanel.AddButton("DungeonsBtn", _buttonTexture, new Vector2(10, 10), new Vector2(180, 50), "Dungeons");
-            thisPanel.AddButton("SettingsBtn", _buttonTexture, new Vector2(10, 70), new Vector2(180, 50), "Settings");
-            thisPanel.AddButton("QuitBtn", _buttonTexture, new Vector2(10, 130), new Vector2(180, 50), "Quit");
+            Panel thisPanel = new Panel(UIManager.GetTexture("Panel") , new Vector2(3*(game.screenWidth / 4) - 100, (game.screenHeight / 2) - 100), new Vector2(200, 200), true);
+            thisPanel.AddChild("DungeonsBtn", new Button(UIManager.GetTexture("Button"), new Vector2(10, 10), new Vector2(180, 50), thisPanel, "Dungeons", UIManager.GetFont("Button")));
+            thisPanel.AddChild("SettingsBtn", new Button(UIManager.GetTexture("Button"), new Vector2(10, 70), new Vector2(180, 50), thisPanel, "Settings", UIManager.GetFont("Button")));
+            thisPanel.AddChild("QuitBtn", new Button(UIManager.GetTexture("Button"), new Vector2(10, 130), new Vector2(180, 50), thisPanel, "Quit", UIManager.GetFont("Button")));
             var components = thisPanel.GetChildren();
             ((Button)components["DungeonsBtn"]).OnClick += DungeonsClicked;
             ((Button)components["SettingsBtn"]).OnClick += SettingsClicked;
@@ -197,15 +198,15 @@ namespace ZeldaMakerGame.GameStates
 
         Panel NewDungeonPanel()
         {
-            Panel newDungeonPanel = new Panel(_panelTexture, new Vector2(100, game.screenHeight / 6), new Vector2(game.screenWidth - 200, 2*game.screenHeight / 3), _uiFont, true);
-            newDungeonPanel.AddChild("EnterNameLbl", new Label("Enter Dungeon Name:", _uiFont, new Vector2(20, 20), newDungeonPanel));
-            newDungeonPanel.AddChild("EnterNameTxt", new TextBox(_textBoxTexture, _textBoxCursorTexture, new Vector2(20, 50), _uiFont, newDungeonPanel, 25, false));
-            newDungeonPanel.AddChild("EnterFloorsLbl", new Label("Enter the number of floors:", _uiFont, new Vector2(20, 80), newDungeonPanel));
-            newDungeonPanel.AddChild("EnterFloorsTxt", new TextBox(_textBoxTexture, _textBoxCursorTexture, new Vector2(220, 80), _uiFont, newDungeonPanel, 1, true));
-            newDungeonPanel.AddChild("EnterSizeLbl", new Label("Enter the size of each floor:", _uiFont, new Vector2(20, 130), newDungeonPanel));
-            newDungeonPanel.AddChild("EnterSizeTxt", new TextBox(_textBoxTexture, _textBoxCursorTexture, new Vector2(230, 130), _uiFont, newDungeonPanel, 2, true));
-            Button create = new Button(_buttonTexture, new Vector2(75, 200), new Vector2(100,25), newDungeonPanel, "Create", _uiFont);
-            Button back = new Button(_buttonTexture, new Vector2(20, 200), new Vector2(50, 25), newDungeonPanel, "<-", _uiFont);
+            Panel newDungeonPanel = new Panel(UIManager.GetTexture("Panel"), new Vector2(100, game.screenHeight / 6), new Vector2(game.screenWidth - 200, 2*game.screenHeight / 3), true);
+            newDungeonPanel.AddChild("EnterNameLbl", new Label("Enter Dungeon Name:", UIManager.GetFont("Label"), new Vector2(20, 20), newDungeonPanel));
+            newDungeonPanel.AddChild("EnterNameTxt", new TextBox(UIManager.GetTexture("TextBox"), UIManager.GetTexture("TextBoxCursor"), new Vector2(20, 50), UIManager.GetFont("Label"), newDungeonPanel, 25, false));
+            newDungeonPanel.AddChild("EnterFloorsLbl", new Label("Enter the number of floors:", UIManager.GetFont("Label"), new Vector2(20, 80), newDungeonPanel));
+            newDungeonPanel.AddChild("EnterFloorsTxt", new TextBox(UIManager.GetTexture("TextBox"), UIManager.GetTexture("TextBoxCursor"), new Vector2(220, 80), UIManager.GetFont("Label"), newDungeonPanel, 1, true));
+            newDungeonPanel.AddChild("EnterSizeLbl", new Label("Enter the size of each floor:", UIManager.GetFont("Label"), new Vector2(20, 130), newDungeonPanel));
+            newDungeonPanel.AddChild("EnterSizeTxt", new TextBox(UIManager.GetTexture("TextBox"), UIManager.GetTexture("TextBoxCursor"), new Vector2(230, 130), UIManager.GetFont("Label"), newDungeonPanel, 2, true));
+            Button create = new Button(UIManager.GetTexture("Button"), new Vector2(75, 200), new Vector2(100,25), newDungeonPanel, "Create", UIManager.GetFont("Button"));
+            Button back = new Button(UIManager.GetTexture("Button"), new Vector2(20, 200), new Vector2(50, 25), newDungeonPanel, "<-", UIManager.GetFont("Button"));
             create.OnClick += CreateDungeon;
             back.OnClick += BackToDungeonsClicked;
             newDungeonPanel.AddChild("CreateBtn", create);
@@ -228,16 +229,16 @@ namespace ZeldaMakerGame.GameStates
 
         void DungeonsPanel(ref Button backBtn, ref Button newDungeonBtn, ref Button leftBtn, ref Button rightBtn)
         {
-            MultiPageFlowPanel thisPanel = new MultiPageFlowPanel(contentManager, game, _panelTexture, _dungeonPanelTexture, new Vector2(75, game.screenHeight / 4), new Vector2(game.screenWidth - 150, game.screenHeight - 150), _uiFont, true);
+            MultiPageFlowPanel thisPanel = new MultiPageFlowPanel(contentManager, game, UIManager.GetTexture("Panel"), UIManager.GetTexture("DungeonPanel"), new Vector2(75, game.screenHeight / 4), new Vector2(game.screenWidth - 150, game.screenHeight - 150), true);
             thisPanel.LoadValues(LoadDungeons());
             thisPanel.Start();
-            backBtn = new Button(_buttonTexture, new Vector2(75, 20), new Vector2(50, 50), null, "Back", _uiFont);
+            backBtn = new Button(UIManager.GetTexture("Button"), new Vector2(75, 20), new Vector2(50, 50), null, "Back", UIManager.GetFont("Button"));
             backBtn.OnClick += BackClicked;
-            newDungeonBtn = new Button(_buttonTexture, new Vector2(game.screenWidth - 75, 20), new Vector2(50, 50), null, "New", _uiFont);
+            newDungeonBtn = new Button(UIManager.GetTexture("Button"), new Vector2(game.screenWidth - 75, 20), new Vector2(50, 50), null, "New", UIManager.GetFont("Button"));
             newDungeonBtn.OnClick += NewDungeonClicked;
-            leftBtn = new Button(_buttonTexture, new Vector2(20, (game.screenHeight - 40) / 2), new Vector2(50, 50), null, "<-", _uiFont);
+            leftBtn = new Button(UIManager.GetTexture("Button"), new Vector2(20, (game.screenHeight - 40) / 2), new Vector2(50, 50), null, "<-", UIManager.GetFont("Button"));
             leftBtn.OnClick += thisPanel.PreviousPage;
-            rightBtn = new Button(_buttonTexture, new Vector2(game.screenWidth - 70, (game.screenHeight - 40) / 2), new Vector2(50, 50), null, "->", _uiFont);
+            rightBtn = new Button(UIManager.GetTexture("Button"), new Vector2(game.screenWidth - 70, (game.screenHeight - 40) / 2), new Vector2(50, 50), null, "->", UIManager.GetFont("Button"));
             rightBtn.OnClick += thisPanel.NextPage;
             currentMenuPanel = thisPanel;
             currentMenuPanel.Initialize();
@@ -245,35 +246,17 @@ namespace ZeldaMakerGame.GameStates
 
         void CreateSettingsPanel()
         {
-            Panel thisPanel = new Panel(_panelTexture, new Vector2((game.screenWidth / 2) - 250, (game.screenHeight / 2) - 150), new Vector2(500, 300), _uiFont, true);
-            thisPanel.AddButton("BackBtn", _buttonTexture, new Vector2(10, 10), new Vector2(180, 50), "Back");
-            thisPanel.AddSlider("VolumeSlder", _sliderBackTexture, _sliderNodeTexture, new Vector2(10, 70), new Vector2(100, 30), 0, 100, 50, 0);
-            thisPanel.AddSlider("SpeedSlder", _sliderBackTexture, _sliderNodeTexture, new Vector2(10, 150), new Vector2(200, 50), 3, 18, 11, 0.1f);
+            Panel thisPanel = new Panel(UIManager.GetTexture("Panel"), new Vector2((game.screenWidth / 2) - 250, (game.screenHeight / 2) - 150), new Vector2(500, 300), true);
+            thisPanel.AddChild("BackBtn", new Button(UIManager.GetTexture("Button"), new Vector2(10, 10), new Vector2(180, 50), thisPanel, "Back", UIManager.GetFont("Button")));
+            thisPanel.AddChild("VolumeSlder", new Slider(UIManager.GetTexture("SliderBack"), UIManager.GetTexture("SliderNode"), new Vector2(10, 70), new Vector2(100, 30), thisPanel, 0, 100, 50, 0));
+            thisPanel.AddChild("SpeedSlder", new Slider(UIManager.GetTexture("SliderBack"), UIManager.GetTexture("SliderNode"), new Vector2(10, 150), new Vector2(200, 50), thisPanel, 3, 18, 11, 0.1f));
             var components = thisPanel.GetChildren();
             ((Button)components["BackBtn"]).OnClick += BackClicked;
             currentMenuPanel = thisPanel;
             currentMenuPanel.Initialize();
         }
 
-        private void SetUpTileRefs(Tileset currentTileset)
-        {
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallCenter"), 0, 0, 0);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerBottomRight"), 5, 1, 1);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottom"), 5, 1, 2);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerBottomLeft"), 5, 1, 3);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallRight"), 5, 1, 4);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/FloorCenter"), 1, 1, 5);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallLeft"), 5, 1, 6);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerTopRight"), 5, 1, 7);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTop"), 5, 1, 8);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerTopLeft"), 5, 1, 9);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottomRight"), 1, 1, 10);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallBottomLeft"), 5, 1, 11);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTopRight"), 5, 1, 12);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallTopLeft"), 5, 1, 13);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerDiagonalTR"), 5, 1, 14);
-            currentTileset.AddTileRef(contentManager.Load<Texture2D>("Tiles/WallInnerDiagonalTL"), 5, 1, 15);
-        }
+        
         #endregion
 
     }

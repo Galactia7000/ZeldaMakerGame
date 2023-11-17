@@ -6,6 +6,7 @@ using System;
 using System.Drawing;
 using ZeldaMakerGame.Core;
 using ZeldaMakerGame.GameStates;
+using ZeldaMakerGame.Managers;
 using ZeldaMakerGame.World;
 
 namespace ZeldaMakerGame.UI
@@ -17,7 +18,7 @@ namespace ZeldaMakerGame.UI
 
         public Dungeon thisDungeon;
 
-        public DungeonPanel(ContentManager contentM, ZeldaMaker game, Dungeon dungeon, Texture2D texture, Vector2 pos, Vector2 size, SpriteFont font, bool active = false, Component parent = null) : base(texture, pos, size, font, active, parent)
+        public DungeonPanel(ContentManager contentM, ZeldaMaker game, Dungeon dungeon, Texture2D texture, Vector2 pos, Vector2 size, bool active = false, Component parent = null) : base(texture, pos, size, active, parent)
         {
             thisDungeon = dungeon;
             contentManager = contentM;
@@ -26,10 +27,10 @@ namespace ZeldaMakerGame.UI
 
         public void Start()
         {
-            children.Add("NameLbl", new Label(thisDungeon.name, font, Vector2.Zero, this));
-            children.Add("PlayBtn", new Button(Texture.baseTexture, new Vector2(0, 20), new Vector2(Size.X, 20), this, "Play", font));
-            children.Add("EditBtn", new Button(Texture.baseTexture, new Vector2(0, 50), new Vector2(Size.X, 20), this, "Edit", font));
-            children.Add("DeleteBtn", new Button(Texture.baseTexture, new Vector2(0, 80), new Vector2(Size.X, 20), this, "Delete", font));
+            children.Add("NameLbl", new Label(thisDungeon.name, UIManager.GetFont("Label"), Vector2.Zero, this));
+            children.Add("PlayBtn", new Button(Texture.baseTexture, new Vector2(0, 20), new Vector2(Size.X, 20), this, "Play", UIManager.GetFont("Button")));
+            children.Add("EditBtn", new Button(Texture.baseTexture, new Vector2(0, 50), new Vector2(Size.X, 20), this, "Edit", UIManager.GetFont("Button")));
+            children.Add("DeleteBtn", new Button(Texture.baseTexture, new Vector2(0, 80), new Vector2(Size.X, 20), this, "Delete", UIManager.GetFont("Button")));
             ((Button)children["PlayBtn"]).OnClick += PlayDungeon;
             ((Button)children["EditBtn"]).OnClick += EditDungeon;
             ((Button)children["DeleteBtn"]).OnClick += DeleteDungeon;
