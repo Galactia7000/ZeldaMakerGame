@@ -164,6 +164,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/File.spritefont;Fonts/UI.spritefont
 
+#begin Fonts/Label.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/Label.spritefont
+
 #begin Textures/BlankTexture.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -22,9 +22,21 @@ namespace ZeldaMakerGame.Managers
             uiPresets = new Dictionary<string, Component>();
             activeUI = new Dictionary<string, Component>();
             textureAtlas = new Dictionary<string, Texture2D>();
+            fontAtlas = new Dictionary<string, SpriteFont>();
         }
 
         public static List<Component> GetCurrentUI() => activeUI.Values.ToList();
+        public static Component GetSpecificUI(string tag) => activeUI[tag];
+
+        public static bool IsHoveringUI(Rectangle Edge)
+        {
+            if (activeUI.Count == 0) return false;
+            foreach(Component component in activeUI.Values)
+            {
+                if(Edge.Intersects(component.Edge)) return true;
+            }
+            return false;
+        }
 
         /// <summary>
         /// Creates a new panel that can be toggled on/off

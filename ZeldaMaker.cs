@@ -10,6 +10,7 @@ using ZeldaMakerGame.World;
 using ZeldaMakerGame.UI;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using ZeldaMakerGame.Editor;
 
 namespace ZeldaMakerGame
 {
@@ -169,20 +170,80 @@ namespace ZeldaMakerGame
             newDungeonPanel.AddChild("CreateBtn", create);
             newDungeonPanel.AddChild("BackBtn", back);
             UIManager.CreateUIPreset(newDungeonPanel, "CreateDungeonSettings");
+
+            // Settings Panel
+            UI.Panel settingsPanel = new UI.Panel(UIManager.GetTexture("Panel"), new Vector2((screenWidth / 2) - 250, (screenHeight / 2) - 150), new Vector2(500, 300), true);
+            settingsPanel.AddChild("BackBtn", new UI.Button(UIManager.GetTexture("Button"), new Vector2(10, 10), new Vector2(180, 50), thisPanel, "Back", UIManager.GetFont("Button")));
+            settingsPanel.AddChild("VolumeSlder", new Slider(UIManager.GetTexture("SliderBack"), UIManager.GetTexture("SliderNode"), new Vector2(10, 70), new Vector2(100, 30), thisPanel, 0, 100, 50, 0));
+            settingsPanel.AddChild("SpeedSlder", new Slider(UIManager.GetTexture("SliderBack"), UIManager.GetTexture("SliderNode"), new Vector2(10, 150), new Vector2(200, 50), thisPanel, 3, 18, 11, 0.1f));
+            var settingComponents = settingsPanel.GetChildren();
+            ((UI.Button)settingComponents["BackBtn"]).OnClick += BackClicked;
+            UIManager.CreateUIPreset(settingsPanel, "Settings");
+
+            // EDITOR STATE
+            // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            // Categories
+
+            UI.Panel categorySelectPanel = new UI.Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 200, 50), new Vector2(200, 50));
+            categorySelectPanel.AddChild("TerrainBtn", new UI.RadioButton(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), categorySelectPanel, "Terrain", UIManager.GetFont("Button")));
+            categorySelectPanel.AddChild("EnemyBtn", new UI.RadioButton(UIManager.GetTexture("Panel"), new Vector2(50, 0), new Vector2(50, 50), categorySelectPanel, "Enemy", UIManager.GetFont("Button")));
+            categorySelectPanel.AddChild("TerrainBtn", new UI.RadioButton(UIManager.GetTexture("Panel"), new Vector2(100, 0), new Vector2(50, 50), categorySelectPanel, "Item", UIManager.GetFont("Button")));
+            categorySelectPanel.AddChild("PuzzleBtn", new UI.RadioButton(UIManager.GetTexture("Panel"), new Vector2(150, 0), new Vector2(50, 50), categorySelectPanel, "Puzzle", UIManager.GetFont("Button")));
+            var categoryComponents = categorySelectPanel.GetChildren();
+            ((UI.RadioButton)categoryComponents["TerrainBtn"]).OnClick += CreateTerrainPanel;
+            ((UI.RadioButton)categoryComponents["EnemyBtn"]).OnClick += CreateEnemyPanel;
+            ((UI.RadioButton)categoryComponents["ItemBtn"]).OnClick += CreateItemPanel;
+            ((UI.RadioButton)categoryComponents["PuzzleBtn"]).OnClick += CreatePuzzlePanel;
+            UIManager.CreateUIPreset(categorySelectPanel, "CategorySelect");
+
+            // TerrainBar
+            UI.Panel terrainPanel = new UI.Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 50, (screenHeight / 2) - 100), new Vector2(50, 200));
+            terrainPanel.AddChild("FloorBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), terrainPanel, "Floor", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            terrainPanel.AddChild("WaterBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), terrainPanel, "Water", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            terrainPanel.AddChild("PitBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 100), new Vector2(50, 50), terrainPanel, "Pit", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            UIManager.CreateUIPreset(terrainPanel, "Terrain");
+
+            // EnemyBar
+            UI.Panel enemyPanel = new UI.Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 50, (screenHeight / 2) - 100), new Vector2(50, 200));
+            enemyPanel.AddChild("ChuchuBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), terrainPanel, "ChuChu", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            enemyPanel.AddChild("OctorockBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), terrainPanel, "Octorock", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            enemyPanel.AddChild("GibdosBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 100), new Vector2(50, 50), terrainPanel, "Gibdos", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            enemyPanel.AddChild("KeeseBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 150), new Vector2(50, 50), terrainPanel, "Keese", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            UIManager.CreateUIPreset(enemyPanel, "Enemies");
+
+            // ItemBar
+            UI.Panel itemPanel = new UI.Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 50, (screenHeight / 2) - 100), new Vector2(50, 200));
+            itemPanel.AddChild("KeyBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), terrainPanel, "Key", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            itemPanel.AddChild("BombBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), terrainPanel, "Bomb", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            itemPanel.AddChild("ArrowsBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 100), new Vector2(50, 50), terrainPanel, "Arrow", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            itemPanel.AddChild("ChestBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 150), new Vector2(50, 50), terrainPanel, "Chest", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            UIManager.CreateUIPreset(itemPanel, "Items");
+
+            // PuzzleBar
+            UI.Panel puzzlePanel = new UI.Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 50, (screenHeight / 2) - 100), new Vector2(50, 200));
+            puzzlePanel.AddChild("LeverBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), terrainPanel, "Lever", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            puzzlePanel.AddChild("ButtonBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), terrainPanel, "Button", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            UIManager.CreateUIPreset(puzzlePanel, "Puzzle");
+
+            // Paused
+            UI.Panel pausePanel = new UI.Panel(UIManager.GetTexture("Panel"), new Vector2((screenWidth / 2) - 100, (screenHeight / 2) - 137), new Vector2(200, 275), true);
+            pausePanel.AddChild("ResumeBtn", new UI.Button(UIManager.GetTexture("Button"), new Vector2(25, 15), new Vector2(150, 50), thisPanel, "Resume", UIManager.GetFont("Button")));
+            pausePanel.AddChild("SettingsBtn", new UI.Button(UIManager.GetTexture("Button"), new Vector2(25, 80), new Vector2(150, 50), thisPanel, "Settings", UIManager.GetFont("Button")));
+            pausePanel.AddChild("SaveBtn", new UI.Button(UIManager.GetTexture("Button"), new Vector2(25, 145), new Vector2(150, 50), thisPanel, "Save", UIManager.GetFont("Button")));
+            pausePanel.AddChild("QuitBtn", new UI.Button(UIManager.GetTexture("Button"), new Vector2(25, 110), new Vector2(150, 50), thisPanel, "Quit", UIManager.GetFont("Button")));
+            var pauseComponents = pausePanel.GetChildren();
+            ((UI.Button)pauseComponents["SettingsBtn"]).OnClick += PauseSettingsClicked;
+            ((UI.Button)pauseComponents["SaveBtn"]).OnClick += SaveClicked;
+            ((UI.Button)pauseComponents["QuitBtn"]).OnClick += QuitToMenuClicked;
+            UIManager.CreateUIPreset(pausePanel, "PauseScreen");
+
+            UI.Button pauseBtn = new UI.Button(UIManager.GetTexture("Button"), new Vector2(screenWidth - 50, screenHeight - 50), new Vector2(50, 50), null, "||", UIManager.GetFont("Button"));
+            UIManager.CreateUIPreset(pauseBtn, "PauseButton")
+
         }
 
         #region Main Menu Methods
-        void NewDungeonClicked(object sender, EventArgs eventArgs)
-        {
-
-            UI.Panel newDung = NewDungeonPanel();
-            newComps.Add("NewDungeon", newDung);
-            ((Panel)newComps["MainMenu"]).isActive = false;
-            ((Button)newComps["BackBtn"]).OnClick -= BackClicked;
-            ((Button)newComps["NewDungeonBtn"]).OnClick -= NewDungeonClicked;
-            ((Button)newComps["lastPageBtn"]).OnClick -= ((MultiPageFlowPanel)newComps["MainMenu"]).PreviousPage;
-            ((Button)newComps["nextPageBtn"]).OnClick -= ((MultiPageFlowPanel)newComps["MainMenu"]).NextPage;
-        }
+        
         Dungeon[] LoadDungeons()
         {
             if (!Directory.Exists(DungeonsFilePath))
@@ -204,6 +265,18 @@ namespace ZeldaMakerGame
             }
             foreach (Dungeon dungeon in dungeons) dungeon.tileset = defaultTileset;
             return dungeons.ToArray();
+        }
+        private void CreateDungeon(object sender, EventArgs e)
+        {
+            UI.Panel currPanel = (UI.Panel)((UI.Button)sender).Parent;
+            var children = currPanel.GetChildren();
+            string name = ((UI.TextBox)children["EnterNameTxt"]).Text.ToString();
+            int floors = Convert.ToInt32(((UI.TextBox)children["EnterFloorsTxt"]).Text.ToString());
+            int size = Convert.ToInt32(((UI.TextBox)children["EnterSizeTxt"]).Text.ToString());
+            Dungeon newDungeon = new Dungeon(defaultTileset, floors, size, size, name, DungeonsFilePath);
+            newDungeon.SaveDungeon(sender, e);
+            currentDungeon = newDungeon;
+            ChangeState(new EditorState(this, Content));
         }
         private Tileset SetUpTileRefs()
         {
@@ -238,18 +311,58 @@ namespace ZeldaMakerGame
             UIManager.AddUI("NewDungeon");
         }
 
-        private void CreateDungeon(object sender, EventArgs e)
+        void NewDungeonClicked(object sender, EventArgs eventArgs)
         {
-            UI.Panel currPanel = (UI.Panel)((UI.Button)sender).Parent;
-            var children = currPanel.GetChildren();
-            string name = ((UI.TextBox)children["EnterNameTxt"]).Text.ToString();
-            int floors = Convert.ToInt32(((UI.TextBox)children["EnterFloorsTxt"]).Text.ToString());
-            int size = Convert.ToInt32(((UI.TextBox)children["EnterSizeTxt"]).Text.ToString());
-            Dungeon newDungeon = new Dungeon(defaultTileset, floors, size, size, name, DungeonsFilePath);
-            newDungeon.SaveDungeon(sender, e);
-            currentDungeon = newDungeon;
-            ChangeState(new EditorState(this, Content));
+
+            ((UI.Panel)UIManager.GetSpecificUI("Dungeons")).isActive = false;
+            ((UI.Button)UIManager.GetSpecificUI("BackToMainMenu")).isActive = false;
+            ((UI.Button)UIManager.GetSpecificUI("NewDungeon")).isActive = false;
+            ((UI.Button)UIManager.GetSpecificUI("NextPage")).isActive = false;
+            ((UI.Button)UIManager.GetSpecificUI("PreviousPage")).isActive = false;
+
+            UIManager.AddUI("CreateDungeonSettings");
+
         }
+
+        void BackClicked(object sender, EventArgs eventArgs)
+        {
+            UIManager.RemoveUI("Dungeons");
+            UIManager.RemoveUI("NextPage");
+            UIManager.RemoveUI("PreviousPage");
+            UIManager.RemoveUI("BackToMainMenu");
+            UIManager.RemoveUI("NewDungeon");
+            UIManager.AddUI("MainMenu");
+            UIManager.AddUI("Logo");
+        }
+
+        void BackToDungeonsClicked(object sender, EventArgs eventArgs)
+        {
+            ((UI.Panel)UIManager.GetSpecificUI("Dungeons")).isActive = true;
+            ((UI.Button)UIManager.GetSpecificUI("BackToMainMenu")).isActive = true;
+            ((UI.Button)UIManager.GetSpecificUI("NewDungeon")).isActive = true;
+            ((UI.Button)UIManager.GetSpecificUI("NextPage")).isActive = true;
+            ((UI.Button)UIManager.GetSpecificUI("PreviousPage")).isActive = true;
+
+            UIManager.RemoveUI("CreateDungeonSettings");
+        }
+        void SettingsClicked(object sender, EventArgs eventArgs)
+        {
+            UIManager.RemoveUI("MainMenu");
+            UIManager.RemoveUI("Logo");
+            UIManager.AddUI("Settings");
+        }
+        void QuitClicked(object sender, EventArgs eventArgs)
+        {
+            Exit();
+        }
+
+
+        #endregion
+
+        #region Editor Methods
+
+
+
         #endregion
     }
 }

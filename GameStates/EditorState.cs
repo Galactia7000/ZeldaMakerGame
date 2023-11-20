@@ -114,7 +114,7 @@ namespace ZeldaMakerGame.GameStates
             foreach (Component component in uiComponents.Values) component.Draw(_spritebatch);
             _spritebatch.End();
         }
-
+        /*
         private void CreateCategoryPanel()
         {
             categorySelectPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 200, 50), new Vector2(200, 50), font, true);
@@ -156,10 +156,10 @@ namespace ZeldaMakerGame.GameStates
             var newComps = new Dictionary<string, Component>(uiComponents);
 
             Panel newPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 50, (game.screenHeight / 2) - 100), new Vector2(50, 200), font, true);
-            newPanel.AddButton("BirdBtn", panelTexture, Vector2.Zero, new Vector2(50, 50), "Bird");
-            newPanel.AddButton("OctoRockBtn", panelTexture, new Vector2(0, 50), new Vector2(50, 50), "Octo");
-            newPanel.AddButton("GibdosBtn", panelTexture, new Vector2(0, 100), new Vector2(50, 50), "Gibdos");
-            newPanel.AddButton("KeeseBtn", panelTexture, new Vector2(0, 150), new Vector2(50, 50), "Keese");
+            newPanel.AddChild("BirdBtn", panelTexture, Vector2.Zero, new Vector2(50, 50), "Bird");
+            newPanel.AddChild("OctoRockBtn", panelTexture, new Vector2(0, 50), new Vector2(50, 50), "Octo");
+            newPanel.AddChild("GibdosBtn", panelTexture, new Vector2(0, 100), new Vector2(50, 50), "Gibdos");
+            newPanel.AddChild("KeeseBtn", panelTexture, new Vector2(0, 150), new Vector2(50, 50), "Keese");
 
             if (newComps.ContainsKey("TileSelectPanel")) newComps.Remove("TileSelectPanel");
             tileSelectPanel = newPanel;
@@ -205,6 +205,6 @@ namespace ZeldaMakerGame.GameStates
         {
             currentTool = e.thisTool;
         }
-
+        */
     }
 }

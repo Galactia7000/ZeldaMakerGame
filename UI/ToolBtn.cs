@@ -18,7 +18,7 @@ namespace ZeldaMakerGame.UI
         }
 
         public EventHandler<ToolEventArgs> OnToolClick;
-        private Tool thisTool;
+        public Tool thisTool;
 
         public override void Update(GameTime gameTime, List<Component> components)
         {
