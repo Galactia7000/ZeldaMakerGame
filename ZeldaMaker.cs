@@ -11,6 +11,7 @@ using ZeldaMakerGame.UI;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using ZeldaMakerGame.Editor;
+using System.Diagnostics.Tracing;
 
 namespace ZeldaMakerGame
 {
@@ -135,7 +136,7 @@ namespace ZeldaMakerGame
             ((UI.Button)components["SettingsBtn"]).OnClick += SettingsClicked;
             ((UI.Button)components["QuitBtn"]).OnClick += QuitClicked;
             UIManager.CreateUIPreset(thisPanel, "MainMenu");
-            UIManager.CreateUIPreset(new Picture(UIManager.GetTexture("Logo"), new Vector2(75, screenHeight / 4), new Vector2(screenWidth / 2, screenHeight / 2)), "MainMenu");
+            UIManager.CreateUIPreset(new Picture(UIManager.GetTexture("Logo"), new Vector2(75, screenHeight / 4), new Vector2(screenWidth / 2, screenHeight / 2)), "Logo");
 
             // Dungeons Panel
             MultiPageFlowPanel flowPanel = new MultiPageFlowPanel(Content, this, UIManager.GetTexture("Panel"), UIManager.GetTexture("DungeonPanel"), new Vector2(75, screenHeight / 4), new Vector2(screenWidth - 150, screenHeight - 150), true);
@@ -156,7 +157,7 @@ namespace ZeldaMakerGame
             UIManager.CreateUIPreset(flowPanel, "Dungeons");
 
             // New Dungeon Panel
-            UI.Panel newDungeonPanel = new UI.Panel(UIManager.GetTexture("Panel"), new Vector2(100, screenHeight / 6), new Vector2(screenWidth - 200, 2 * screenHeight / 3), true);
+            UI.Panel newDungeonPanel = new UI.Panel(UIManager.GetTexture("Panel"), new Vector2(100, screenHeight / 6), new Vector2(screenWidth - 200, 2 * screenHeight / 3), true, null);
             newDungeonPanel.AddChild("EnterNameLbl", new UI.Label("Enter Dungeon Name:", UIManager.GetFont("Label"), new Vector2(20, 20), newDungeonPanel));
             newDungeonPanel.AddChild("EnterNameTxt", new UI.TextBox(UIManager.GetTexture("TextBox"), UIManager.GetTexture("TextBoxCursor"), new Vector2(20, 50), UIManager.GetFont("Label"), newDungeonPanel, 25, false));
             newDungeonPanel.AddChild("EnterFloorsLbl", new UI.Label("Enter the number of floors:", UIManager.GetFont("Label"), new Vector2(20, 80), newDungeonPanel));
@@ -238,13 +239,13 @@ namespace ZeldaMakerGame
             UIManager.CreateUIPreset(pausePanel, "PauseScreen");
 
             UI.Button pauseBtn = new UI.Button(UIManager.GetTexture("Button"), new Vector2(screenWidth - 50, screenHeight - 50), new Vector2(50, 50), null, "||", UIManager.GetFont("Button"));
-            UIManager.CreateUIPreset(pauseBtn, "PauseButton")
+            UIManager.CreateUIPreset(pauseBtn, "PauseButton");
 
         }
 
         #region Main Menu Methods
         
-        Dungeon[] LoadDungeons()
+        private Dungeon[] LoadDungeons()
         {
             if (!Directory.Exists(DungeonsFilePath))
             {
@@ -300,7 +301,7 @@ namespace ZeldaMakerGame
             return currentTileset;
         }
 
-        void DungeonsClicked(object sender, EventArgs eventArgs)
+        private void DungeonsClicked(object sender, EventArgs eventArgs)
         {
             UIManager.RemoveUI("MainMenu");
             UIManager.RemoveUI("Logo");
@@ -311,7 +312,7 @@ namespace ZeldaMakerGame
             UIManager.AddUI("NewDungeon");
         }
 
-        void NewDungeonClicked(object sender, EventArgs eventArgs)
+        private void NewDungeonClicked(object sender, EventArgs eventArgs)
         {
 
             ((UI.Panel)UIManager.GetSpecificUI("Dungeons")).isActive = false;
@@ -324,18 +325,23 @@ namespace ZeldaMakerGame
 
         }
 
-        void BackClicked(object sender, EventArgs eventArgs)
+        private void BackClicked(object sender, EventArgs eventArgs)
         {
             UIManager.RemoveUI("Dungeons");
             UIManager.RemoveUI("NextPage");
             UIManager.RemoveUI("PreviousPage");
             UIManager.RemoveUI("BackToMainMenu");
             UIManager.RemoveUI("NewDungeon");
-            UIManager.AddUI("MainMenu");
-            UIManager.AddUI("Logo");
+            UIManager.RemoveUI("Settings");
+            if (currentState is MainMenuState)
+            {
+                UIManager.AddUI("MainMenu");
+                UIManager.AddUI("Logo");
+            }
+            else UIManager.AddUI("PauseScreen");
         }
 
-        void BackToDungeonsClicked(object sender, EventArgs eventArgs)
+        private void BackToDungeonsClicked(object sender, EventArgs eventArgs)
         {
             ((UI.Panel)UIManager.GetSpecificUI("Dungeons")).isActive = true;
             ((UI.Button)UIManager.GetSpecificUI("BackToMainMenu")).isActive = true;
@@ -345,13 +351,13 @@ namespace ZeldaMakerGame
 
             UIManager.RemoveUI("CreateDungeonSettings");
         }
-        void SettingsClicked(object sender, EventArgs eventArgs)
+        private void SettingsClicked(object sender, EventArgs eventArgs)
         {
             UIManager.RemoveUI("MainMenu");
             UIManager.RemoveUI("Logo");
             UIManager.AddUI("Settings");
         }
-        void QuitClicked(object sender, EventArgs eventArgs)
+        private void QuitClicked(object sender, EventArgs eventArgs)
         {
             Exit();
         }
@@ -361,8 +367,54 @@ namespace ZeldaMakerGame
 
         #region Editor Methods
 
+        private void CreateTerrainPanel(object sender, EventArgs e)
+        {
+            UIManager.AddUI("Terrain");
+            UIManager.RemoveUI("Enemies");
+            UIManager.RemoveUI("Items");
+            UIManager.RemoveUI("Puzzle");
+        }
 
+        private void CreateEnemyPanel(object sender, EventArgs e)
+        {
+            UIManager.RemoveUI("Terrain");
+            UIManager.AddUI("Enemies");
+            UIManager.RemoveUI("Items");
+            UIManager.RemoveUI("Puzzle");
+        }
 
+        private void CreateItemPanel(object sender, EventArgs e)
+        {
+            UIManager.RemoveUI("Terrain");
+            UIManager.RemoveUI("Enemies");
+            UIManager.AddUI("Items");
+            UIManager.RemoveUI("Puzzle");
+        }
+
+        private void CreatePuzzlePanel(object sender, EventArgs e)
+        {
+            UIManager.RemoveUI("Terrain");
+            UIManager.RemoveUI("Enemies");
+            UIManager.RemoveUI("Items");
+            UIManager.AddUI("Puzzle");
+        }
+
+        private void PauseSettingsClicked(object sender, EventArgs e)
+        {
+            UIManager.RemoveUI("PauseScreen");
+            UIManager.AddUI("Settings");
+        }
+
+        private void SaveClicked(object sender, EventArgs e)
+        {
+            currentDungeon.SaveDungeon(sender, e);
+            
+        }
+
+        private void QuitToMenuClicked(object sender, EventArgs e)
+        {
+            ChangeState(new MainMenuState(this, Content));
+        }
         #endregion
     }
 }

@@ -23,13 +23,6 @@ namespace ZeldaMakerGame.GameStates
 
         Dictionary<string, Component> uiComponents = new Dictionary<string, Component>();
 
-        SpriteFont font;
-        Texture2D panelTexture; 
-        Panel categorySelectPanel;
-        Panel toolSelectPanel;
-        Panel tileSelectPanel;
-        Button saveBtn;
-
         Camera editorCamera;
 
         Tool currentTool;
@@ -43,12 +36,11 @@ namespace ZeldaMakerGame.GameStates
             CreateCategoryPanel();
             saveBtn = new Button(panelTexture, new Vector2(0, 0), new Vector2(100, 50), null, "Save Dungeon", font);
             saveBtn.OnClick += Save;
-            toolSelectPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 200, game.screenHeight - 100), new Vector2(200, 50), font, true);
+
             tileSelectPanel = null;
 
             uiComponents.Add("CategorySelectPanel", categorySelectPanel);
             uiComponents.Add("SaveBtn", saveBtn);
-            uiComponents.Add("ToolSelectPanel", toolSelectPanel);
 
             editorCamera = new Camera();
         }
