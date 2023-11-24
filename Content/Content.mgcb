@@ -157,12 +157,12 @@
 /processorParam:TextureFormat=Color
 /build:EntityAnimations/OctorockMovingUp.png
 
-#begin Fonts/File.spritefont
+#begin Fonts/Button.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:Fonts/File.spritefont;Fonts/UI.spritefont
+/build:Fonts/Button.spritefont
 
 #begin Fonts/Label.spritefont
 /importer:FontDescriptionImporter
@@ -291,7 +291,7 @@
 /processorParam:TextureFormat=Color
 /build:Textures/PlaceholderLogo.png
 
-#begin Textures/PlayHolderLogo2.png
+#begin Textures/PlaceHolderLogo2.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -301,19 +301,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/PlayHolderLogo2.png
-
-#begin Textures/SliderBackTexture-export.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/SliderBackTexture-export.png
+/build:Textures/PlaceHolderLogo2.png
 
 #begin Textures/SliderBackTexture.png
 /importer:TextureImporter
@@ -327,6 +315,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/SliderBackTexture.png
 
+#begin Textures/SliderBackTexture2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/SliderBackTexture2.png
+
 #begin Textures/SliderNodeTexture.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -338,6 +338,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/SliderNodeTexture.png
+
+#begin Textures/SliderNodeTexture2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/SliderNodeTexture2.png
 
 #begin Textures/SliderNodeTexture2.png
 /importer:TextureImporter

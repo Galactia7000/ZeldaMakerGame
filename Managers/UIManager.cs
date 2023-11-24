@@ -27,13 +27,14 @@ namespace ZeldaMakerGame.Managers
 
         public static List<Component> GetCurrentUI() => activeUI.Values.ToList();
         public static Component GetSpecificUI(string tag) => activeUI[tag];
+        public static Component GetSpecificUIReference(string tag) => uiPresets[tag];
 
-        public static bool IsHoveringUI(Rectangle Edge)
+        public static bool IsHoveringUI()
         {
             if (activeUI.Count == 0) return false;
             foreach(Component component in activeUI.Values)
             {
-                if(Edge.Intersects(component.Edge)) return true;
+                if(InputManager.mouseRectangle.Intersects(component.Edge)) return true;
             }
             return false;
         }

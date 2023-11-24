@@ -23,6 +23,8 @@ namespace ZeldaMakerGame.GameStates
 
         Dictionary<string, Component> uiComponents = new Dictionary<string, Component>();
 
+        bool isPaused;
+
         Camera editorCamera;
 
         Tool currentTool;
@@ -31,16 +33,13 @@ namespace ZeldaMakerGame.GameStates
         {
             highlightTexture = contentManager.Load<Texture2D>("Textures/TileHighlight");
 
-            panelTexture = contentManager.Load<Texture2D>("Textures/PanelTexture3");
-            font = contentManager.Load<SpriteFont>("Fonts/UI");
-            CreateCategoryPanel();
-            saveBtn = new Button(panelTexture, new Vector2(0, 0), new Vector2(100, 50), null, "Save Dungeon", font);
-            saveBtn.OnClick += Save;
+            isPaused = false;
 
-            tileSelectPanel = null;
-
-            uiComponents.Add("CategorySelectPanel", categorySelectPanel);
-            uiComponents.Add("SaveBtn", saveBtn);
+            UIManager.AddUI("PauseButton");
+            ((Button)UIManager.GetSpecificUI("PauseButton")).OnClick += Pause;
+            var children = ((Panel)UIManager.GetSpecificUIReference("PauseScreen")).GetChildren();
+            ((Button)children["ResumeBtn"]).OnClick += UnPause;
+            UIManager.AddUI("CategorySelect");
 
             editorCamera = new Camera();
         }
@@ -53,6 +52,8 @@ namespace ZeldaMakerGame.GameStates
         public override void Update(GameTime _gametime)
         {
             foreach (Component component in uiComponents.Values) component.Update(_gametime, null);
+
+            if (isPaused) return;
 
             Vector2 cameraPos = Vector2.Zero;
 
@@ -84,7 +85,8 @@ namespace ZeldaMakerGame.GameStates
                 highlightRect = Rectangle.Empty;
                 return;
             }
-            
+
+            if (UIManager.IsHoveringUI()) return;
             Tile highlightedTile = game.currentDungeon.tiles[game.currentDungeon.currentFloor, (int)mouseGridPos.X, (int)mouseGridPos.Y];
             highlightRect = highlightedTile.Edge;
             game.currentDungeon.UpdateEditor(mouseGridPos, currentTool);
@@ -106,97 +108,17 @@ namespace ZeldaMakerGame.GameStates
             foreach (Component component in uiComponents.Values) component.Draw(_spritebatch);
             _spritebatch.End();
         }
-        /*
-        private void CreateCategoryPanel()
+
+        public void Pause(object sender, EventArgs e)
         {
-            categorySelectPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 200, 50), new Vector2(200, 50), font, true);
-            categorySelectPanel.AddRadioButton("TerrainBtn", panelTexture, Vector2.Zero, new Vector2(50, 50), "Terrain");
-            categorySelectPanel.AddRadioButton("EnemyBtn", panelTexture, new Vector2(50, 0), new Vector2(50, 50), "Enemy");
-            categorySelectPanel.AddRadioButton("ItemBtn", panelTexture, new Vector2(100, 0), new Vector2(50, 50), "Item");
-            categorySelectPanel.AddRadioButton("PuzzleBtn", panelTexture, new Vector2(150, 0), new Vector2(50, 50), "Puzzle");
-            var components = categorySelectPanel.GetChildren();
-            ((RadioButton)components["TerrainBtn"]).OnClick += CreateTerrainPanel;
-            ((RadioButton)components["EnemyBtn"]).OnClick += CreateEnemyPanel;
-            ((RadioButton)components["ItemBtn"]).OnClick += CreateItemPanel;
-            ((RadioButton)components["PuzzleBtn"]).OnClick += CreatePuzzlePanel;
-            categorySelectPanel.Initialize();
+            isPaused = true;
+            UIManager.AddUI("PauseScreen");
         }
 
-        private void CreateTerrainPanel(object sender, EventArgs eventArgs)
+        public void UnPause(object sender, EventArgs e)
         {
-            var newComps = new Dictionary<string, Component>(uiComponents);
-
-            Panel newPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 50, (game.screenHeight / 2) - 100), new Vector2(50, 200), font, true);
-            newPanel.AddToolButton("FloorBtn", panelTexture, Vector2.Zero, new Vector2(50, 50), "Floor", new Tool(1, ToolType.Terrain));
-            newPanel.AddToolButton("WaterBtn", panelTexture, new Vector2(0, 50), new Vector2(50, 50), "Water", new Tool(1, ToolType.Terrain));
-            newPanel.AddToolButton("PitBtn", panelTexture, new Vector2(0, 100), new Vector2(50, 50), "Pit", new Tool(1, ToolType.Terrain));
-            newPanel.AddToolButton("WallBtn", panelTexture, new Vector2(0, 150), new Vector2(50, 50), "Wall", new Tool(2, ToolType.Terrain));
-
-            foreach(var child in newPanel.GetChildren().Values)
-            {
-                ((ToolBtn)child).OnToolClick += ChangeTool;
-            }
-
-            if (newComps.ContainsKey("TileSelectPanel")) newComps.Remove("TileSelectPanel");
-            tileSelectPanel = newPanel;
-            tileSelectPanel.Initialize();
-            newComps.Add("TileSelectPanel", tileSelectPanel);
-            uiComponents = newComps;
+            isPaused = false;
+            UIManager.RemoveUI("PauseScreen");
         }
-        private void CreateEnemyPanel(object sender, EventArgs eventArgs)
-        {
-            var newComps = new Dictionary<string, Component>(uiComponents);
-
-            Panel newPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 50, (game.screenHeight / 2) - 100), new Vector2(50, 200), font, true);
-            newPanel.AddChild("BirdBtn", panelTexture, Vector2.Zero, new Vector2(50, 50), "Bird");
-            newPanel.AddChild("OctoRockBtn", panelTexture, new Vector2(0, 50), new Vector2(50, 50), "Octo");
-            newPanel.AddChild("GibdosBtn", panelTexture, new Vector2(0, 100), new Vector2(50, 50), "Gibdos");
-            newPanel.AddChild("KeeseBtn", panelTexture, new Vector2(0, 150), new Vector2(50, 50), "Keese");
-
-            if (newComps.ContainsKey("TileSelectPanel")) newComps.Remove("TileSelectPanel");
-            tileSelectPanel = newPanel;
-            tileSelectPanel.Initialize();
-            newComps.Add("TileSelectPanel", tileSelectPanel);
-            uiComponents = newComps;
-        }
-        private void CreateItemPanel(object sender, EventArgs eventArgs)
-        {
-            var newComps = new Dictionary<string, Component>(uiComponents);
-
-            Panel newPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 50, (game.screenHeight / 2) - 100), new Vector2(50, 200), font, true);
-            newPanel.AddButton("ChestBtn", panelTexture, Vector2.Zero, new Vector2(50, 50), "Chest");
-            newPanel.AddButton("KeyBtn", panelTexture, new Vector2(0, 50), new Vector2(50, 50), "Key");
-
-            if (newComps.ContainsKey("TileSelectPanel")) newComps.Remove("TileSelectPanel");
-            tileSelectPanel = newPanel;
-            tileSelectPanel.Initialize();
-            newComps.Add("TileSelectPanel", tileSelectPanel);
-            uiComponents = newComps;
-        }
-
-        void Save(object sender, EventArgs eventArgs)
-        {
-            game.currentDungeon.SaveDungeon(sender, eventArgs);
-            game.ChangeState(new MainMenuState(game, contentManager));
-        }
-        private void CreatePuzzlePanel(object sender, EventArgs eventArgs)
-        {
-            var newComps = new Dictionary<string, Component>(uiComponents);
-
-            Panel newPanel = new Panel(panelTexture, new Vector2(game.screenWidth - 50, (game.screenHeight / 2) - 100), new Vector2(50, 200), font, true);
-            newPanel.AddButton("LeverBtn", panelTexture, Vector2.Zero, new Vector2(50, 50), "Lever");
-
-            if (newComps.ContainsKey("TileSelectPanel")) newComps.Remove("TileSelectPanel");
-            tileSelectPanel = newPanel;
-            tileSelectPanel.Initialize();
-            newComps.Add("TileSelectPanel", tileSelectPanel);
-            uiComponents = newComps;
-        }
-
-        public void ChangeTool(object sender, ToolEventArgs e)
-        {
-            currentTool = e.thisTool;
-        }
-        */
     }
 }

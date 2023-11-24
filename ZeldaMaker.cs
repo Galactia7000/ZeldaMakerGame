@@ -70,9 +70,10 @@ namespace ZeldaMakerGame
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            currentState.LoadContent();
             CreateUITextures();
             CreateFonts();
+            CreateUIPanels();
+            currentState.LoadContent();
         }
 
         
@@ -106,8 +107,8 @@ namespace ZeldaMakerGame
 
         private void CreateFonts()
         {
-            UIManager.AddFont("Button", Content.Load<SpriteFont>("Button"));
-            UIManager.AddFont("Label", Content.Load<SpriteFont>("Label"));
+            UIManager.AddFont("Button", Content.Load<SpriteFont>("Fonts/Button"));
+            UIManager.AddFont("Label", Content.Load<SpriteFont>("Fonts/Label"));
         }
 
         private void CreateUITextures()
@@ -119,7 +120,7 @@ namespace ZeldaMakerGame
             UIManager.AddTexture("SliderBack", Content.Load<Texture2D>("Textures/SliderBackTexture2"));
             UIManager.AddTexture("TextBox", Content.Load<Texture2D>("Textures/TextBoxTexture"));
             UIManager.AddTexture("TextBoxCursor", Content.Load<Texture2D>("Textures/TextBoxCursorTexture"));
-            UIManager.AddTexture("Logo", Content.Load<Texture2D>("Textures/PlayHolderLogo2"));
+            UIManager.AddTexture("Logo", Content.Load<Texture2D>("Textures/PlaceHolderLogo2"));
         }
 
         private void CreateUIPanels()
@@ -188,7 +189,7 @@ namespace ZeldaMakerGame
             UI.Panel categorySelectPanel = new UI.Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 200, 50), new Vector2(200, 50));
             categorySelectPanel.AddChild("TerrainBtn", new UI.RadioButton(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), categorySelectPanel, "Terrain", UIManager.GetFont("Button")));
             categorySelectPanel.AddChild("EnemyBtn", new UI.RadioButton(UIManager.GetTexture("Panel"), new Vector2(50, 0), new Vector2(50, 50), categorySelectPanel, "Enemy", UIManager.GetFont("Button")));
-            categorySelectPanel.AddChild("TerrainBtn", new UI.RadioButton(UIManager.GetTexture("Panel"), new Vector2(100, 0), new Vector2(50, 50), categorySelectPanel, "Item", UIManager.GetFont("Button")));
+            categorySelectPanel.AddChild("ItemBtn", new UI.RadioButton(UIManager.GetTexture("Panel"), new Vector2(100, 0), new Vector2(50, 50), categorySelectPanel, "Item", UIManager.GetFont("Button")));
             categorySelectPanel.AddChild("PuzzleBtn", new UI.RadioButton(UIManager.GetTexture("Panel"), new Vector2(150, 0), new Vector2(50, 50), categorySelectPanel, "Puzzle", UIManager.GetFont("Button")));
             var categoryComponents = categorySelectPanel.GetChildren();
             ((UI.RadioButton)categoryComponents["TerrainBtn"]).OnClick += CreateTerrainPanel;
