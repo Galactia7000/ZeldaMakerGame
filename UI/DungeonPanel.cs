@@ -48,7 +48,7 @@ namespace ZeldaMakerGame.UI
         }
         void DeleteDungeon(object sender, EventArgs eventArgs)
         {
-
+            ((MultiPageFlowPanel)Parent).RemoveValue(this);
         }
     }
 }

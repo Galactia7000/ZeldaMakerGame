@@ -11,7 +11,7 @@ namespace ZeldaMakerGame.UI
 {
     public class Label : Component
     {
-        string text;
+        public string text;
         SpriteFont font;
         public Label(string text, SpriteFont font, Vector2 pos, Component parent)
         {

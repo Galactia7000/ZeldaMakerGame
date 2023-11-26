@@ -26,7 +26,11 @@ namespace ZeldaMakerGame.Managers
         }
 
         public static List<Component> GetCurrentUI() => activeUI.Values.ToList();
-        public static Component GetSpecificUI(string tag) => activeUI[tag];
+        public static Component GetSpecificUI(string tag)
+        { 
+            if (activeUI.ContainsKey(tag)) return activeUI[tag]; 
+            else return null;
+        }
         public static Component GetSpecificUIReference(string tag) => uiPresets[tag];
 
         public static bool IsHoveringUI()
@@ -37,6 +41,11 @@ namespace ZeldaMakerGame.Managers
                 if(InputManager.mouseRectangle.Intersects(component.Edge)) return true;
             }
             return false;
+        }
+
+        public static void ClearUI()
+        {
+            activeUI.Clear();
         }
 
         /// <summary>

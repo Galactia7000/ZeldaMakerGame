@@ -43,9 +43,7 @@ namespace ZeldaMakerGame.World
                     }
                 }
             }
-
-            tiles[0, 1, 1].tileIndex = 1;
-            tiles[0, 1, 1].bits = new int[4] { 1, 1, 1, 1 };
+            
             this.name = name;
             filePath = path;
         }
@@ -149,6 +147,19 @@ namespace ZeldaMakerGame.World
             }
         }
 
+        public void UpFloor(object sender, EventArgs e)
+        {
+            currentFloor++;
+            if (currentFloor == floors) currentFloor = 0;
+        }
+
+        public void DownFloor(object sender, EventArgs e)
+        {
+            currentFloor--;
+            if (currentFloor < 0) currentFloor = floors - 1;
+        }
+
+        #region File Related Methods
         public void SaveDungeon(object sender, EventArgs e)
         {
             FileStream stream = new FileStream(filePath + @"\" + name + ".bin", FileMode.OpenOrCreate, FileAccess.Write);
@@ -170,6 +181,11 @@ namespace ZeldaMakerGame.World
                 }
             }
             stream.Close();
+        }
+
+        public void DeleteDungeon()
+        {
+            File.Delete(filePath + @"\" + name + ".bin");
         }
 
         public static Dungeon LoadDungeon(string file, Tileset tSet)
@@ -200,5 +216,6 @@ namespace ZeldaMakerGame.World
             stream.Close();
             return newDung;
         }
+        #endregion
     }
 }

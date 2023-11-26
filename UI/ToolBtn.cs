@@ -16,23 +16,7 @@ namespace ZeldaMakerGame.UI
         {
             thisTool = tool;
         }
-
-        public EventHandler<ToolEventArgs> OnToolClick;
         public Tool thisTool;
 
-        public override void Update(GameTime gameTime, List<Component> components)
-        {
-            base.Update(gameTime, components);
-            if (isClicked) OnToolClick?.Invoke(this, new ToolEventArgs(thisTool));
-        }
-    }
-
-    public class ToolEventArgs : EventArgs
-    {
-        public Tool thisTool { get; set; }
-        public ToolEventArgs(Tool tool)
-        {
-            this.thisTool = tool;
-        }
     }
 }

@@ -21,7 +21,7 @@ namespace ZeldaMakerGame.GameStates
         Texture2D highlightTexture;
         Rectangle highlightRect;
 
-        Dictionary<string, Component> uiComponents = new Dictionary<string, Component>();
+        List<Component> uiComponents = new List<Component>();
 
         bool isPaused;
 
@@ -36,9 +36,16 @@ namespace ZeldaMakerGame.GameStates
             isPaused = false;
 
             UIManager.AddUI("PauseButton");
+            UIManager.AddUI("FloorControls");
+
             ((Button)UIManager.GetSpecificUI("PauseButton")).OnClick += Pause;
-            var children = ((Panel)UIManager.GetSpecificUIReference("PauseScreen")).GetChildren();
-            ((Button)children["ResumeBtn"]).OnClick += UnPause;
+            var children = ((Panel)UIManager.GetSpecificUI("FloorControls")).GetChildren();
+            ((Button)children["UpFloorBtn"]).OnClick += game.currentDungeon.UpFloor;
+            ((Button)children["DownFloorBtn"]).OnClick += game.currentDungeon.DownFloor;
+
+            var children2 = ((Panel)UIManager.GetSpecificUIReference("PauseScreen")).GetChildren();
+            ((Button)children2["ResumeBtn"]).OnClick += UnPause;
+
             UIManager.AddUI("CategorySelect");
 
             editorCamera = new Camera();
@@ -51,7 +58,9 @@ namespace ZeldaMakerGame.GameStates
 
         public override void Update(GameTime _gametime)
         {
-            foreach (Component component in uiComponents.Values) component.Update(_gametime, null);
+            uiComponents = UIManager.GetCurrentUI();
+            ((Label)((Panel)UIManager.GetSpecificUI("FloorControls")).GetChildren()["FloorLbl"]).text = "F" + game.currentDungeon.currentFloor;
+            foreach (Component component in uiComponents) component.Update(_gametime, null);
 
             if (isPaused) return;
 
@@ -76,7 +85,25 @@ namespace ZeldaMakerGame.GameStates
             
             editorCamera.Move(cameraPos);
 
+            if (UIManager.IsHoveringUI())
+            {
+                highlightRect = Rectangle.Empty;
+                return;
+            }
 
+            // Get current category
+            Panel currToolPanel = null;
+            string[] categories = {"Terrain", "Enemies", "Items", "Puzzle"};
+            foreach(string s in categories)
+            {
+                currToolPanel = (Panel)UIManager.GetSpecificUI(s);
+                if (currToolPanel is not null) break;
+            }
+
+            // Get current tool
+            if (currToolPanel is not null && currToolPanel.activatedRadioBtn is not null) currentTool = ((ToolBtn)currToolPanel.activatedRadioBtn).thisTool;
+
+            // Dungeon detection logic
             Vector2 mousePos = InputManager.currentMouse.Position.ToVector2();
             Vector2 mouseWorldPos = editorCamera.ScreenToWorld(mousePos);
             Vector2 mouseGridPos = mouseWorldPos / game.currentDungeon.tileset.tileSize;
@@ -85,8 +112,6 @@ namespace ZeldaMakerGame.GameStates
                 highlightRect = Rectangle.Empty;
                 return;
             }
-
-            if (UIManager.IsHoveringUI()) return;
             Tile highlightedTile = game.currentDungeon.tiles[game.currentDungeon.currentFloor, (int)mouseGridPos.X, (int)mouseGridPos.Y];
             highlightRect = highlightedTile.Edge;
             game.currentDungeon.UpdateEditor(mouseGridPos, currentTool);
@@ -105,7 +130,7 @@ namespace ZeldaMakerGame.GameStates
             _spritebatch.End();
 
             _spritebatch.Begin();
-            foreach (Component component in uiComponents.Values) component.Draw(_spritebatch);
+            foreach (Component component in uiComponents) component.Draw(_spritebatch);
             _spritebatch.End();
         }
 

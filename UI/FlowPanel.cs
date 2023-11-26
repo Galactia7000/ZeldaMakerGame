@@ -69,6 +69,12 @@ namespace ZeldaMakerGame.UI
             children.Add(dungeon.name + "Pnl", newPanel);
         }
 
+        public void RemoveValue(DungeonPanel dungeon)
+        {
+            dungeon.thisDungeon.DeleteDungeon();
+            children.Remove(dungeon.thisDungeon.name + "Pnl");
+        }
+
         public void Start()
         {
             Vector2 current = Position;
