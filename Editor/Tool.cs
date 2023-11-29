@@ -24,7 +24,8 @@ namespace ZeldaMakerGame.Editor
     {
         Terrain,
         SubTerrain,
-        Door,
+        Ladder,
+        Pit,
         Entity,
         Item
     }

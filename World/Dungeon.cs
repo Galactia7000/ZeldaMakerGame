@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using ZeldaMakerGame.Core;
 using ZeldaMakerGame.Editor;
 using ZeldaMakerGame.Managers;
 using System.IO;
@@ -74,7 +75,11 @@ namespace ZeldaMakerGame.World
                         UpdateSurrounding(mouseGridPos, selected);
                         UpdateSubIndex(selected);
                         break;
-                    case ToolType.Door:
+                    case ToolType.Ladder:
+                        selected.tileEntity = new Entity();
+                        break;
+                    case ToolType.Pit:
+                        selected.tileEntity = null;
                         break;
                     case ToolType.Entity:
                         selected.tileEntity = tool.entity;
