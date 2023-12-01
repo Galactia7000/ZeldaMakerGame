@@ -100,47 +100,27 @@ namespace ZeldaMakerGame.World
             }
         }
 
-        private void UpdateSurrounding(Vector2 currentTilePos, Tile currentTile)
+        public void UpdateTile(Tile T, Vector2 GridPos)
         {
-            for(int r = -1; r < 2; r++)
+
+            bool currentTile = T.isGround;
+            short currentBit = 1;
+            for(int c = (int)GridPos.X - 1; c <  (int)GridPos.X + 1; c++)
             {
-                if ((int)currentTilePos.Y + r >= rows || (int)currentTilePos.Y + r < 0) continue;
-                for (int c = -1; c < 2; c++)
+                for (int r = (int)GridPos.Y - 1; r < (int)GridPos.Y + 1; r++)
                 {
-                    if ((int)currentTilePos.X + c >= columns || (int)currentTilePos.X + c < 0) continue;
-                    if (c == 0 && r == 0) continue;
-                    foreach (int i in Tileset.fourBitUpdates[Tileset.VectorToString(new Vector2(c, r))])
-                    {
-                        tiles[currentFloor, c + (int)currentTilePos.X, r + (int)currentTilePos.Y].bits[i] = currentTile.tileIndex;
-                    }
-                    int prevIndex = tiles[currentFloor, c + (int)currentTilePos.X, r + (int)currentTilePos.Y].subIndex;
-                    UpdateSubIndex(tiles[currentFloor, c + (int)currentTilePos.X, r + (int)currentTilePos.Y]);
-                    if (tiles[currentFloor, c + (int)currentTilePos.X, r + (int)currentTilePos.Y].subIndex != 0 && currentTile.tileIndex != 0) tiles[currentFloor, c + (int)currentTilePos.X, r + (int)currentTilePos.Y].tileIndex = currentTile.tileIndex;
-                    
+                    if (GridPos == new Vector2(c, r)) continue;
+                    if (currentTile == tiles[currentFloor, c, r].isGround) T.tileBits |= (byte)currentBit;
+                    currentBit *= 2;
                 }
             }
-        }
+            if (!(((T.tileBits & 2) == 2) && ((T.tileBits & 8) == 8))) T.tileBits &= 254;
+            if (!(((T.tileBits & 2) == 2) && ((T.tileBits & 16) == 16))) T.tileBits &= 251;
+            if (!(((T.tileBits & 8) == 8) && ((T.tileBits & 64) == 64))) T.tileBits &= 223;
+            if (!(((T.tileBits & 16) == 16) && ((T.tileBits & 64) == 64))) T.tileBits &= 127;
 
-        public void UpdateSubIndex(Tile thisTile)
-        {
-            bool[] bools = new bool[4] { thisTile.bits[0] == thisTile.tileIndex, thisTile.bits[1] == thisTile.tileIndex, thisTile.bits[2] == thisTile.tileIndex, thisTile.bits[3] == thisTile.tileIndex };
-            thisTile.subIndex = Tileset.fourBitAutoTileSubIndicies[Tileset.BoolArrayToString(bools)];
-        }
+            tileset.GetIndex(T.tileBits, T.isGround);
 
-        public Texture2D GetTileTexture(Tile thisTile)
-        {
-            List<TileReference> potentialTiles = tileset.tileList.Where(t => t.tileIndex == thisTile.tileIndex).ToList();
-            foreach (TileReference tileRef in potentialTiles)
-            {
-                if (tileRef.tileSubIndex == 0) return tileRef.Texture;
-                if (thisTile.subIndex == 0)
-                {
-                    thisTile.tileIndex = 0;
-                    return GetTileTexture(thisTile);
-                }
-                if (tileRef.tileSubIndex == thisTile.subIndex) return tileRef.Texture;
-            }
-            return null;
         }
 
         public void Draw(SpriteBatch spriteBatch)

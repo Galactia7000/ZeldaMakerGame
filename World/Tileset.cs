@@ -12,102 +12,38 @@ namespace ZeldaMakerGame.World
     [Serializable]
     public class Tileset
     {
-        public static Dictionary<string, int> fourBitAutoTileSubIndicies = new Dictionary<string, int>()
-        {
-            { "Blank", 0}, // Blank
-            { "TL", 1}, // TL
-            { "TM", 2}, // TM
-            { "TR", 3}, // TR
-            { "ML", 4}, // ML
-            { "M", 5}, // M
-            { "MR", 6}, // MR
-            { "BL", 7}, // BL
-            { "BM", 8}, // BM
-            { "BR", 9}, // BR
-            { "ITL", 10}, // INNER TL
-            { "ITR", 11}, // INNER TR
-            { "IBL", 12}, // INNER BL
-            { "IBR", 13}, // INNER BR
-            { "IDTL", 14}, // INNER TL/BR
-            { "IDTR", 15}, // INNER TR/BL
-        };
 
-        public static string BoolArrayToString(bool[] bools)
-        {
-            if (bools.SequenceEqual(new bool[4] { false, false, false, true })) return "TL";
-            if (bools.SequenceEqual(new bool[4] { false, false, true, true })) return "TM";
-            if (bools.SequenceEqual(new bool[4] { false, false, true, false })) return "TR";
-            if (bools.SequenceEqual(new bool[4] { false, true, false, true })) return "ML";
-            if (bools.SequenceEqual(new bool[4] { true, true, true, true })) return "M";
-            if (bools.SequenceEqual(new bool[4] { true, false, true, false })) return "MR";
-            if (bools.SequenceEqual(new bool[4] { false, true, false, false })) return "BL";
-            if (bools.SequenceEqual(new bool[4] { true, true, false, false })) return "BM";
-            if (bools.SequenceEqual(new bool[4] { true, false, false, false })) return "BR";
-            if (bools.SequenceEqual(new bool[4] { false, true, true, true })) return "ITL";
-            if (bools.SequenceEqual(new bool[4] { true, false, true, true })) return "ITR";
-            if (bools.SequenceEqual(new bool[4] { true, true, false, true })) return "IBL";
-            if (bools.SequenceEqual(new bool[4] { true, true, true, false })) return "IBR";
-            if (bools.SequenceEqual(new bool[4] { false, true, true, false })) return "IDTL";
-            if (bools.SequenceEqual(new bool[4] { true, false, false, true })) return "IDTR";
-            else return "Blank";
-        }
-
-        public static Dictionary<string, int[]> fourBitUpdates = new Dictionary<string, int[]>()
-        {
-            {"TL", new int[1] {3 } },
-            {"TM", new int[2] {2, 3 } },
-            {"TR", new int[1] {2 } },
-            {"L", new int[2] {1, 3 } },
-            {"R", new int[2] {0, 2 } },
-            {"BL", new int[1] {1 } },
-            {"BM", new int[2] {0, 1 } },
-            {"BR", new int[1] {0 } },
-        };
-
-        public static string VectorToString(Vector2 vector)
-        {
-            if (vector == new Vector2(-1, -1)) return "TL";
-            if (vector == new Vector2(0, -1)) return "TM";
-            if (vector == new Vector2(1, -1)) return "TR";
-            if (vector == new Vector2(-1, 0)) return "L";
-            if (vector == new Vector2(1, 0)) return "R";
-            if (vector == new Vector2(-1, 1)) return "BL";
-            if (vector == new Vector2(0, 1)) return "BM";
-            if (vector == new Vector2(1, 1)) return "BR";
-            else return "Blank";
-        }
-
-        public List<TileReference> tileList;
-        public int tileSize;
-        public Tileset(int Size)
-        {
-            tileList = new List<TileReference>();
-            tileSize = Size;
-        }
-
-        public void AddTileRef(Texture2D texture, int height, int index, int subIndex)
-        {
-            tileList.Add(new TileReference(texture, height, tileSize, index, subIndex));
-        }
-
-    }
-
-    public class TileReference
-    {
-        public Texture2D Texture;
-        public int tileIndex;
-        public int tileSubIndex;
-        public int height;
+        public Dictionary<int, int> bitValToIndexDict;
+        public Texture2D tilesetTexture;
         public int tileSize;
 
-        public TileReference(Texture2D texture, int height, int size, int tileIndex, int tileSubIndex)
+        public Tileset(int tileSize, Texture2D texture)
         {
-            Texture = texture;
-            this.height = height;
-            tileSize = size;
-            this.tileIndex = tileIndex;
-            this.tileSubIndex = tileSubIndex;
+            bitValToIndexDict = new Dictionary<int, int> 
+            { 
+                { 2, 1 }, { 8, 2 }, { 10, 3 }, { 11, 4 }, { 16, 5 }, { 18, 6 }, { 22, 7 }, { 24, 8 },
+                { 26, 9 }, { 27, 10 }, { 30, 11 }, { 31, 12 }, { 64, 13 }, { 66, 14 }, { 72, 15 }, { 74, 16 },
+                { 75, 17 }, { 80, 18 }, { 82, 19 }, { 86, 20 }, { 88, 21 }, { 90, 22 }, { 91, 23 }, { 94, 24 },
+                { 95, 25 }, { 104, 26 }, { 106, 27 }, { 107, 28 }, { 120, 29 }, { 122, 30 }, { 123, 31 }, { 126, 32 },
+                { 127, 33 }, { 208, 34 }, { 210, 35 }, { 214, 36 }, { 216, 37 }, { 218, 38 }, { 219, 39 }, { 222, 40 },
+                { 223, 41 }, { 248, 42 }, { 250, 43 }, { 251, 44 }, { 254, 45 }, { 255, 46 }, { 0, 47 } 
+            };
+            this.tileSize = tileSize;
+            tilesetTexture = texture;
         }
 
+        public int GetIndex(byte bits, bool isGround)
+        {
+            int index = bitValToIndexDict[bits];
+            if (isGround) index += 48;
+            return index;
+        }
+
+        public Rectangle GetSourceReectangle(int index)
+        {
+            int row = index / 8;
+            int col = index % 8;
+            return new Rectangle(col * tileSize, row * tileSize, tileSize, tileSize);
+        }
     }
 }
