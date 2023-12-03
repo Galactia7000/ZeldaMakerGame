@@ -65,7 +65,8 @@ namespace ZeldaMakerGame.Managers
         /// <param name="isCopy">Determines whether the UI should be a new instance of the preset or not.</param>
         public static void AddUI(string tag, bool isCopy = false)
         {
-            if(!activeUI.ContainsKey(tag)) activeUI.Add(tag, uiPresets[tag]);
+            if (!activeUI.ContainsKey(tag)) activeUI.Add(tag, uiPresets[tag]);
+            else return;
             if (uiPresets[tag] is Panel) ((Panel)activeUI[tag]).Initialize();
         }
 

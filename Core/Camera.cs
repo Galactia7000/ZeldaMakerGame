@@ -29,12 +29,18 @@ namespace ZeldaMakerGame.Core
 
         private Vector2 Position;
 
-        private float Zoom = 1.5f;
+        private float Zoom = 2.5f;
         private float Speed = 5f;
 
         public void Move(Vector2 Offset)
         {
             Position += Offset * Speed;
+        }
+
+        public void ChangeZoom(float offset)
+        {
+            Zoom += offset;
+            Zoom = MathHelper.Clamp(Zoom, 1f, 5f);
         }
 
         public void Follow(Entity target)

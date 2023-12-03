@@ -9,13 +9,13 @@ namespace ZeldaMakerGame.Editor
 {
     public class Tool
     {
-        public int index;
+        public string tag;
         public Entity entity;
         public ToolType type;
 
-        public Tool(int i, ToolType tool)
+        public Tool(string t, ToolType tool)
         {
-            index = i;
+            tag = t;
             type = tool;
         }
     }
@@ -23,7 +23,6 @@ namespace ZeldaMakerGame.Editor
     public enum ToolType 
     {
         Terrain,
-        SubTerrain,
         Ladder,
         Pit,
         Entity,

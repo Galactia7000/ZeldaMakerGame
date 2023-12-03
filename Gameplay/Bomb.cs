@@ -12,14 +12,13 @@ namespace ZeldaMakerGame.Gameplay
 {
     public class BombItem : Item
     {
-        int blastRadius;
         public BombItem(Texture2D texture, string name, int amount) : base(texture, name, amount)
         {
         }
 
         public override bool Use(Player player)
         {
-            GameManager.AddEntity(new Bomb(GlobalAnimationManager.GetAnimation("BombExploding"), 0f));
+            GameManager.AddEntity(new Bomb(EntityReferences.GetAnimation("BombExploding"), 0f));
             return true;
         }
     }

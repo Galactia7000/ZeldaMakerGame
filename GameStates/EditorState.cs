@@ -1,16 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System.Runtime.Serialization;
 using ZeldaMakerGame.UI;
-using System.IO;
 using ZeldaMakerGame.Managers;
 using ZeldaMakerGame.World;
 using System;
 using System.Collections.Generic;
 using ZeldaMakerGame.Core;
 using ZeldaMakerGame.Editor;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ZeldaMakerGame.GameStates
 {
@@ -22,6 +19,7 @@ namespace ZeldaMakerGame.GameStates
         Rectangle highlightRect;
 
         List<Component> uiComponents = new List<Component>();
+        Queue<Editor.Action> actionsToPreform = new Queue<Editor.Action>();
 
         bool isPaused;
 
@@ -82,6 +80,7 @@ namespace ZeldaMakerGame.GameStates
             {
                 cameraPos.X--;
             }
+            editorCamera.ChangeZoom((InputManager.currentMouse.ScrollWheelValue - InputManager.previousMouse.ScrollWheelValue) / 100);
             
             editorCamera.Move(cameraPos);
 
@@ -110,16 +109,31 @@ namespace ZeldaMakerGame.GameStates
             if (mouseGridPos.X >= game.currentDungeon.columns || mouseGridPos.X < 0 || mouseGridPos.Y >= game.currentDungeon.rows || mouseGridPos.Y < 0) 
             {
                 highlightRect = Rectangle.Empty;
+                UIManager.RemoveUI("ItemHighlight");
                 return;
             }
+
             Tile highlightedTile = game.currentDungeon.tiles[game.currentDungeon.currentFloor, (int)mouseGridPos.X, (int)mouseGridPos.Y];
             highlightRect = highlightedTile.Edge;
-            game.currentDungeon.UpdateEditor(mouseGridPos, currentTool);
+            if (highlightedTile.GetEntity() is not null && highlightedTile.GetEntity().itemContents is not null)
+            {
+                UIManager.AddUI("ItemHighlight");
+                ((Picture)UIManager.GetSpecificUI("ItemHighlight")).Position = mousePos;
+                ((Picture)UIManager.GetSpecificUI("ItemHighlight")).ChangeIcon(highlightedTile.GetEntity().itemContents.Texture);
+            }
+            else UIManager.RemoveUI("ItemHighlight");
+            if (currentTool is null) return;
+            Editor.Action currentAction;
+            if (InputManager.IsLeftMouseHeld()) currentAction = new Editor.Action(new Vector3(mouseGridPos, game.currentDungeon.currentFloor), currentTool, true);
+            else if (InputManager.IsRightMouseHeld()) currentAction = new Editor.Action(new Vector3(mouseGridPos, game.currentDungeon.currentFloor), currentTool, false);
+            else return;
+            actionsToPreform.Enqueue(currentAction);
+            
         }
 
         public override void LateUpdate(GameTime _gametime)
         {
-
+            if (actionsToPreform.Count > 0) game.currentDungeon.UpdateEditor(actionsToPreform.Dequeue());
         }
 
         public override void Draw(GameTime _gametime, SpriteBatch _spritebatch)

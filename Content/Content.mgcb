@@ -49,6 +49,18 @@
 /processorParam:TextureFormat=Color
 /build:EntityAnimations/ChestClosed.png
 
+#begin EntityAnimations/ChestClosed.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:EntityAnimations/ChestClosed.png
+
 #begin EntityAnimations/ChestOpen.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -60,6 +72,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:EntityAnimations/ChestOpen.png
+
+#begin EntityAnimations/ChuChuWalking.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:EntityAnimations/ChuChuWalking.png
 
 #begin EntityAnimations/LinkWalkingDownAnimation.png
 /importer:TextureImporter
@@ -157,6 +181,18 @@
 /processorParam:TextureFormat=Color
 /build:EntityAnimations/OctorockMovingUp.png
 
+#begin EntityAnimations/SawBladeAnimation.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:EntityAnimations/SawBladeAnimation.png
+
 #begin Fonts/Button.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -242,6 +278,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/DungeonPanelTexture.png
+
+#begin Textures/ItemHighlight.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/ItemHighlight.png
 
 #begin Textures/PanelTexture.png
 /importer:TextureImporter
@@ -398,6 +446,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Tiles/DefaultTileset.png
+
+#begin Tiles/DownLadder.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Tiles/DownLadder.png
 
 #begin Tiles/Floor/FloorCenter.png
 /importer:TextureImporter

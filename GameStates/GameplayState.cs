@@ -27,10 +27,10 @@ namespace ZeldaMakerGame.GameStates
         {
             var playerAnimations = new Dictionary<string, Animation>()
             {
-                {"WalkDown" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/LinkWalkingDownAnimation"), 9, 0.05f, true)},
-                {"WalkUp" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/LinkWalkingUpAnimation"), 9, 0.05f, true)},
-                {"WalkLeft" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/LinkWalkingLeftAnimation"), 9, 0.05f, true)},
-                {"WalkRight" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/LinkWalkingRightAnimation"), 9, 0.05f, true)},
+                {"WalkDown", EntityReferences.GetAnimation("WalkDown") },
+                {"WalkUp", EntityReferences.GetAnimation("WalkUp") },
+                {"WalkLeft", EntityReferences.GetAnimation("WalkLeft") },
+                {"WalkRight", EntityReferences.GetAnimation("WalkRight") },
             };
             var octoRockAnimations = new Dictionary<string, Animation>()
             {

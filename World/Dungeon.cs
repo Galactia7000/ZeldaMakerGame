@@ -39,8 +39,7 @@ namespace ZeldaMakerGame.World
                 {
                     for (int r = 0; r < rows; r++)
                     {
-                        tiles[f, c, r] = new Tile(0, new Vector2(c, r), tileset.tileSize);
-                        tiles[f, c, r].bits = new int[4] { 0, 0, 0, 0 };
+                        tiles[f, c, r] = new Tile(new Vector2(c, r), tileset.tileSize, false);
                     }
                 }
             }
@@ -54,73 +53,118 @@ namespace ZeldaMakerGame.World
 
         }
 
-        public void UpdateEditor(Vector2 mouseGridPos, Tool tool)
+        public void UpdateEditor(Editor.Action currentAction)
         {
-            if (InputManager.currentMouse.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+            Tile selected = tiles[(int)currentAction.GridPosition.Z, (int)currentAction.GridPosition.X, (int)currentAction.GridPosition.Y];
+            if (currentAction.isLeftClick)
             {
-                Tile selected = tiles[currentFloor, (int)mouseGridPos.X, (int)mouseGridPos.Y];
-                if (tool is null) return;
-                switch (tool.type)
+                switch (currentAction.EquipedTool.type)
                 {
-                    case ToolType.SubTerrain:
-                        if (selected.tileIndex == 0) break;
-                        selected.tileIndex = tool.index;
-                        selected.bits = new int[4] { tool.index, tool.index, tool.index, tool.index };
-                        UpdateSurrounding(mouseGridPos, selected);
-                        UpdateSubIndex(selected);
-                        break;
                     case ToolType.Terrain:
-                        selected.tileIndex = tool.index;
-                        selected.bits = new int[4] { tool.index, tool.index, tool.index, tool.index };
-                        UpdateSurrounding(mouseGridPos, selected);
-                        UpdateSubIndex(selected);
+                        if(currentAction.GridPosition.X > 1 && currentAction.GridPosition.Y > 1 && currentAction.GridPosition.X < columns - 1 && currentAction.GridPosition.Y < rows - 1)
+                        {
+                            selected.isGround = true;
+                            UpdateTile(selected, currentAction.GridPosition, 1);
+                        }
                         break;
                     case ToolType.Ladder:
-                        selected.tileEntity = new Entity();
+                        int nextFloor;
+                        if (currentAction.GridPosition.Z == floors - 1) nextFloor = 0;
+                        else nextFloor = (int)currentAction.GridPosition.Z + 1;
+                        Tile above = tiles[nextFloor, (int)currentAction.GridPosition.X, (int)currentAction.GridPosition.Y];
+                        if (selected.isGround && above.isGround)
+                        {
+                            selected.ChangeEntity("UpLadder");
+                            above.ChangeEntity("DownLadder");
+                        }
                         break;
                     case ToolType.Pit:
-                        selected.tileEntity = null;
+                        int prevFloor;
+                        if (currentAction.GridPosition.Z == 0) prevFloor = floors - 1;
+                        else prevFloor = (int)currentAction.GridPosition.Z - 1;
+                        Tile below = tiles[prevFloor, (int)currentAction.GridPosition.X, (int)currentAction.GridPosition.Y];
+                        if (selected.isGround && below.isGround)
+                        {
+                            selected.ChangeEntity("DownLadder");
+                            below.ChangeEntity("UpLadder");
+                        }
                         break;
                     case ToolType.Entity:
-                        selected.tileEntity = tool.entity;
+                        if (selected.isGround)
+                        {
+                            selected.ChangeEntity(currentAction.EquipedTool.tag);
+                        }
                         break;
                     case ToolType.Item:
-
+                        if(selected.GetEntity() is not null)
+                        {
+                            selected.GetEntity().itemContents = EntityReferences.GetItemRef(currentAction.EquipedTool.tag);
+                        }
                         break;
                 }
             }
-            else if (InputManager.currentMouse.RightButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+            else
             {
-                Tile selected = tiles[currentFloor, (int)mouseGridPos.X, (int)mouseGridPos.Y];
-                selected.tileIndex = 0;
-                selected.bits = new int[4] { 0, 0, 0, 0 };
-                selected.tileEntity = null;
-                UpdateSurrounding(mouseGridPos, selected);
-                UpdateSubIndex(selected);
+                switch (currentAction.EquipedTool.type)
+                {
+                    case ToolType.Terrain:
+                        selected.isGround = false;
+                        UpdateTile(selected, currentAction.GridPosition, 1);
+                        selected.DeleteEntity();
+                        break;
+                    case ToolType.Ladder:
+                    case ToolType.Pit:
+                    case ToolType.Entity:
+                        selected.DeleteEntity();
+                        break;
+                    case ToolType.Item:
+                        break;
+                }
+                
             }
+
         }
 
-        public void UpdateTile(Tile T, Vector2 GridPos)
+        public void UpdateTile(Tile T, Vector3 GridPos, int loop)
         {
-
+            // Gets the byte corresponding to surrounding tiles
+            T.tileBits = 0;
             bool currentTile = T.isGround;
             short currentBit = 1;
-            for(int c = (int)GridPos.X - 1; c <  (int)GridPos.X + 1; c++)
+            for(int r = (int)GridPos.Y - 1; r <=  (int)GridPos.Y + 1; r++)
             {
-                for (int r = (int)GridPos.Y - 1; r < (int)GridPos.Y + 1; r++)
+                for (int c = (int)GridPos.X - 1; c <= (int)GridPos.X + 1; c++)
                 {
-                    if (GridPos == new Vector2(c, r)) continue;
-                    if (currentTile == tiles[currentFloor, c, r].isGround) T.tileBits |= (byte)currentBit;
+                    if (GridPos == new Vector3(c, r, GridPos.Z)) continue;
+                    if(c < 0 || c >= columns || r < 0 || r >= rows)
+                    {
+                        if(!currentTile) T.tileBits |= (byte)currentBit;
+                    }
+                    else if (currentTile == tiles[(int)GridPos.Z, c, r].isGround) T.tileBits |= (byte)currentBit;
                     currentBit *= 2;
                 }
             }
+
+            // Excludes corner tiles to prevent repeating patterns
             if (!(((T.tileBits & 2) == 2) && ((T.tileBits & 8) == 8))) T.tileBits &= 254;
             if (!(((T.tileBits & 2) == 2) && ((T.tileBits & 16) == 16))) T.tileBits &= 251;
             if (!(((T.tileBits & 8) == 8) && ((T.tileBits & 64) == 64))) T.tileBits &= 223;
             if (!(((T.tileBits & 16) == 16) && ((T.tileBits & 64) == 64))) T.tileBits &= 127;
 
-            tileset.GetIndex(T.tileBits, T.isGround);
+            // Convert byte pattern to index
+            T.index = tileset.GetIndex(T.tileBits, T.isGround);
 
+            // Updates immediate surrounding tiles as well
+            if (loop == 2) return;
+            for (int r = (int)GridPos.Y - 1; r <= (int)GridPos.Y + 1; r++)
+            {
+                for (int c = (int)GridPos.X - 1; c <= (int)GridPos.X + 1; c++)
+                {
+                    if (GridPos == new Vector3(c, r, GridPos.Z)) continue;
+                    if (c < 0 || c >= columns || r < 0 || r >= rows) continue;
+                    UpdateTile(tiles[currentFloor, c, r], new Vector3(c, r, GridPos.Z), loop + 1);
+                }
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -129,7 +173,7 @@ namespace ZeldaMakerGame.World
             {
                 for (int r = 0; r < rows; r++)
                 {
-                    if (tiles[currentFloor, c, r] is not null) tiles[currentFloor, c, r].Draw(spriteBatch, GetTileTexture(tiles[currentFloor, c, r]));
+                    if (tiles[currentFloor, c, r] is not null) tiles[currentFloor, c, r].Draw(spriteBatch, tileset);
                 }
             }
         }
@@ -137,7 +181,7 @@ namespace ZeldaMakerGame.World
         public void UpFloor(object sender, EventArgs e)
         {
             currentFloor++;
-            if (currentFloor == floors) currentFloor = 0;
+            if (currentFloor >= floors) currentFloor = 0;
         }
 
         public void DownFloor(object sender, EventArgs e)

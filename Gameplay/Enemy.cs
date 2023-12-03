@@ -54,5 +54,16 @@ namespace ZeldaMakerGame.Gameplay
         {
             IsAlive = false;
         }
+
+        public override Entity Clone()
+        {
+            Enemy copy;
+            if (animationManager is not null) copy = new Enemy(animations, LinearSpeed);
+            else copy = new Enemy(Texture, LinearSpeed);
+            copy.Health = Health;
+            copy.Damage = Damage;
+            copy.IsAlive = IsAlive;
+            return Clone(copy);
+        }
     }
 }

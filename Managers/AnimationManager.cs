@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using ZeldaMakerGame.Core;
 
 namespace ZeldaMakerGame.Managers
 {
@@ -15,10 +16,13 @@ namespace ZeldaMakerGame.Managers
         private float timer;
         public Vector2 Position;
         public float animationSpeedModifier;
+        bool paused;
         public Rectangle Edge { get => new Rectangle(Position.ToPoint(), new Point(currentAnimation.frameWidth, currentAnimation.frameHeight)); }
+        private AnimationManager() { }
         public AnimationManager(Animation animation)
         {
             currentAnimation = animation;
+            paused = false;
         }
 
         public void Play(Animation _animation)
@@ -27,16 +31,19 @@ namespace ZeldaMakerGame.Managers
             currentAnimation = _animation;
             currentAnimation.currentFrame = 0;
             timer = 0f;
+            paused = false;
         }
 
         public void Stop()
         {
             currentAnimation.currentFrame = 0;
             timer = 0f;
+            paused = true;
         }
 
         public void LateUpdate(GameTime gameTime)
         {
+            if(paused) return;
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             float animationSpeed = currentAnimation.frameSpeed / animationSpeedModifier;
             if(timer > animationSpeed)
@@ -48,9 +55,22 @@ namespace ZeldaMakerGame.Managers
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, Color col)
         {
-            spriteBatch.Draw(currentAnimation.animationTexture, Edge, new Rectangle(currentAnimation.currentFrame * currentAnimation.frameWidth, 0, currentAnimation.frameWidth, currentAnimation.frameHeight), Color.White);
+            spriteBatch.Draw(currentAnimation.animationTexture, Edge, new Rectangle(currentAnimation.currentFrame * currentAnimation.frameWidth, 0, currentAnimation.frameWidth, currentAnimation.frameHeight), col);
+        }
+
+        public AnimationManager Clone()
+        {
+            AnimationManager copy = new AnimationManager()
+            {
+                currentAnimation = currentAnimation,
+                paused = paused,
+                timer = timer,
+                animationSpeedModifier = animationSpeedModifier,
+                Position = Position
+            };
+            return copy;
         }
     }
 }

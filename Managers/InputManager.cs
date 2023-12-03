@@ -74,6 +74,10 @@ namespace ZeldaMakerGame.Managers
         {
             return currentMouse.LeftButton == ButtonState.Released && previousMouse.LeftButton == ButtonState.Pressed;
         }
+        public static bool IsLeftMouseHeld()
+        {
+            return currentMouse.LeftButton == ButtonState.Pressed;
+        }
         /// <summary>
         /// Returns if right mouse button has been clicked, not held down
         /// </summary>
@@ -81,6 +85,10 @@ namespace ZeldaMakerGame.Managers
         public static bool IsRightMouseClicked()
         {
             return currentMouse.RightButton == ButtonState.Released && previousMouse.RightButton == ButtonState.Pressed;
+        }
+        public static bool IsRightMouseHeld()
+        {
+            return currentMouse.RightButton == ButtonState.Pressed;
         }
         /// <summary>
         /// Returns if a keybinding has been pressed
@@ -131,7 +139,7 @@ namespace ZeldaMakerGame.Managers
             var binding = controllerBindings[button];
             return binding.current == ButtonState.Pressed;
         }
-
+        
         #endregion
 
         public static void Update()

@@ -25,5 +25,10 @@ namespace ZeldaMakerGame.Gameplay
             Texture = openTexture;
             if(itemContents is not null) activator.AddItem(itemContents);
         }
+        public override Entity Clone()
+        {
+            Chest copy = new Chest(Texture, openTexture, Position);
+            return Clone(copy);
+        }
     }
 }

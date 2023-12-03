@@ -60,7 +60,8 @@ namespace ZeldaMakerGame
             gameWindow = Window;
             InputManager.Initialize();
             UIManager.Initialize();
-            defaultTileset = SetUpTileRefs();
+            EntityReferences.Initialize(Content);
+            
 
 
             base.Initialize();
@@ -71,6 +72,7 @@ namespace ZeldaMakerGame
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            defaultTileset = new Tileset(16, Content.Load<Texture2D>("Tiles/DefaultTileset"));
             CreateUITextures();
             CreateFonts();
             CreateUIPanels();
@@ -122,6 +124,7 @@ namespace ZeldaMakerGame
             UIManager.AddTexture("TextBox", Content.Load<Texture2D>("Textures/TextBoxTexture"));
             UIManager.AddTexture("TextBoxCursor", Content.Load<Texture2D>("Textures/TextBoxCursorTexture"));
             UIManager.AddTexture("Logo", Content.Load<Texture2D>("Textures/PlaceHolderLogo2"));
+            UIManager.AddTexture("ItemHighlight", Content.Load<Texture2D>("Textures/ItemHighlight"));
         }
 
         private void CreateUIPanels()
@@ -201,31 +204,30 @@ namespace ZeldaMakerGame
 
             // TerrainBar
             UI.Panel terrainPanel = new UI.Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 50, (screenHeight / 2) - 100), new Vector2(50, 200), true);
-            terrainPanel.AddChild("FloorBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), terrainPanel, "Floor", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
-            terrainPanel.AddChild("PitBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 100), new Vector2(50, 50), terrainPanel, "Pit", UIManager.GetFont("Button"), new Tool(2, ToolType.SubTerrain)));
-            terrainPanel.AddChild("WaterBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), terrainPanel, "Water", UIManager.GetFont("Button"), new Tool(3, ToolType.SubTerrain)));
+            terrainPanel.AddChild("FloorBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), terrainPanel, "Floor", UIManager.GetFont("Button"), new Tool("Floor", ToolType.Terrain)));
+            terrainPanel.AddChild("UpLadderBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), terrainPanel, "UpLadder", UIManager.GetFont("Button"), new Tool("UpLadder", ToolType.Ladder)));
+            terrainPanel.AddChild("DownLadderBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 100), new Vector2(50, 50), terrainPanel, "DownLadder", UIManager.GetFont("Button"), new Tool("DownLadder", ToolType.Pit)));
             UIManager.CreateUIPreset(terrainPanel, "Terrain");
 
             // EnemyBar
             UI.Panel enemyPanel = new UI.Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 50, (screenHeight / 2) - 100), new Vector2(50, 200), true);
-            enemyPanel.AddChild("ChuchuBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), enemyPanel, "ChuChu", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
-            enemyPanel.AddChild("OctorockBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), enemyPanel, "Octorock", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
-            enemyPanel.AddChild("GibdosBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 100), new Vector2(50, 50), enemyPanel, "Gibdos", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
-            enemyPanel.AddChild("KeeseBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 150), new Vector2(50, 50), enemyPanel, "Keese", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            enemyPanel.AddChild("ChuchuBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), enemyPanel, "Chu Chu", UIManager.GetFont("Button"), new Tool("Chu Chu", ToolType.Entity)));
+            enemyPanel.AddChild("OctorockBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), enemyPanel, "Octorock", UIManager.GetFont("Button"), new Tool("Octorock", ToolType.Entity)));
+            enemyPanel.AddChild("SawbladeBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 100), new Vector2(50, 50), enemyPanel, "Saw Blade", UIManager.GetFont("Button"), new Tool("Sawblade", ToolType.Entity)));
             UIManager.CreateUIPreset(enemyPanel, "Enemies");
 
             // ItemBar
             UI.Panel itemPanel = new UI.Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 50, (screenHeight / 2) - 100), new Vector2(50, 200), true);
-            itemPanel.AddChild("KeyBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), itemPanel, "Key", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
-            itemPanel.AddChild("BombBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), itemPanel, "Bomb", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
-            itemPanel.AddChild("ArrowsBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 100), new Vector2(50, 50), itemPanel, "Arrow", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
-            itemPanel.AddChild("ChestBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 150), new Vector2(50, 50), itemPanel, "Chest", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            itemPanel.AddChild("KeyBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), itemPanel, "Key", UIManager.GetFont("Button"), new Tool("Key", ToolType.Item)));
+            itemPanel.AddChild("BombBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), itemPanel, "Bomb", UIManager.GetFont("Button"), new Tool("Bomb", ToolType.Item)));
+            itemPanel.AddChild("ArrowsBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 100), new Vector2(50, 50), itemPanel, "Arrow", UIManager.GetFont("Button"), new Tool("Floor", ToolType.Terrain)));
+            itemPanel.AddChild("ChestBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 150), new Vector2(50, 50), itemPanel, "Chest", UIManager.GetFont("Button"), new Tool("Chest", ToolType.Entity)));
             UIManager.CreateUIPreset(itemPanel, "Items");
 
             // PuzzleBar
             UI.Panel puzzlePanel = new UI.Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 50, (screenHeight / 2) - 100), new Vector2(50, 200), true);
-            puzzlePanel.AddChild("LeverBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), puzzlePanel, "Lever", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
-            puzzlePanel.AddChild("ButtonBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), puzzlePanel, "Button", UIManager.GetFont("Button"), new Tool(1, ToolType.Terrain)));
+            puzzlePanel.AddChild("LeverBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), puzzlePanel, "Lever", UIManager.GetFont("Button"), new Tool("Floor", ToolType.Terrain)));
+            puzzlePanel.AddChild("ButtonBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), puzzlePanel, "Button", UIManager.GetFont("Button"), new Tool("Floor", ToolType.Terrain)));
             UIManager.CreateUIPreset(puzzlePanel, "Puzzle");
 
             // Paused
@@ -249,6 +251,8 @@ namespace ZeldaMakerGame
             floorPanel.AddChild("UpFloorBtn", new UI.Button(UIManager.GetTexture("Button"), new Vector2(75, 40), new Vector2(50, 50), floorPanel, @"/\", UIManager.GetFont("Button")));
             floorPanel.AddChild("FloorLbl", new UI.Label("F", UIManager.GetFont("Label"), new Vector2(40, 10), floorPanel));
             UIManager.CreateUIPreset(floorPanel, "FloorControls");
+
+            UIManager.CreateUIPreset(new Picture(UIManager.GetTexture("ItemHighlight"), Vector2.Zero, new Vector2(64, 64)), "ItemHighlight");
         }
 
         #region Main Menu Methods
@@ -286,60 +290,6 @@ namespace ZeldaMakerGame
             newDungeon.SaveDungeon(sender, e);
             currentDungeon = newDungeon;
             ChangeState(new EditorState(this, Content));
-        }
-        private Tileset SetUpTileRefs()
-        {
-            Tileset currentTileset = new Tileset(24);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallCenter"), 5, 0, 0);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallInnerBottomRight"), 5, 1, 1);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallBottom"), 5, 1, 2);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallInnerBottomLeft"), 5, 1, 3);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallRight"), 5, 1, 4);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/FloorCenter"), 1, 1, 5);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallLeft"), 5, 1, 6);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallInnerTopRight"), 5, 1, 7);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallTop"), 5, 1, 8);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallInnerTopLeft"), 5, 1, 9);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallBottomRight"), 5, 1, 10);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallBottomLeft"), 5, 1, 11);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallTopRight"), 5, 1, 12);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallTopLeft"), 5, 1, 13);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallInnerDiagonalTR"), 5, 1, 14);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Floor/WallInnerDiagonalTL"), 5, 1, 15);
-
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/TopLeft"), -1, 2, 1);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/Top"), -1, 2, 2);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/TopRight"), -1, 2, 3);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/Left"), -1, 2, 4);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/Middle"), -1, 2, 5);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/Right"), -1, 2, 6);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/BottomLeft"), -1, 2, 7);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/Bottom"), -1, 2, 8);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/BottomRight"), -1, 2, 9);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/InnerTL"), -1, 2, 10);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/InnerTR"), -1, 2, 11);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/InnerBL"), -1, 2, 12);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/InnerBR"), -1, 2, 13);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/DiagonalTL"), -1, 2, 14);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Pits/DiagonalTR"), -1, 2, 15);
-
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/TopLeft"), 0, 3, 1);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/Top"), 0, 3, 2);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/TopRight"), 0, 3, 3);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/Left"), 0, 3, 4);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/Middle"), 0, 3, 5);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/Right"), 0, 3, 6);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/BottomLeft"), 0, 3, 7);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/Bottom"), 0, 3, 8);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/BottomRight"), 0, 3, 9);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/InnerTopLeft"), 0, 3, 10);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/InnerTopRight"), 0, 3, 11);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/InnerBottomLeft"), 0, 3, 12);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/InnerBottomRight"), 0, 3, 13);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/DiagonalTL"), 0, 3, 14);
-            currentTileset.AddTileRef(Content.Load<Texture2D>("Tiles/Water/DiagonalTR"), 0, 3, 15);
-
-            return currentTileset;
         }
 
         private void DungeonsClicked(object sender, EventArgs eventArgs)

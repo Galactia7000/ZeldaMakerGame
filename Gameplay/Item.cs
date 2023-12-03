@@ -11,10 +11,11 @@ namespace ZeldaMakerGame.Gameplay
 {
     public class Item
     {
-        protected Texture2D Texture { get; set; }
+        public Texture2D Texture { get; set; }
         public Vector2 Position { get; set; }
         public string Name;
         public int Quantity;
+        private Item() { }
         public Item(Texture2D texture, string name, int amount)
         {
             Texture = texture;
@@ -38,6 +39,17 @@ namespace ZeldaMakerGame.Gameplay
         public virtual bool Use(Player player)
         {
             return false;
+        }
+
+        public Item Clone()
+        {
+            Item copy = new Item() 
+            { 
+                Position = this.Position,
+                Name = this.Name,
+                Quantity = this.Quantity
+            };
+            return copy;
         }
     }
 }

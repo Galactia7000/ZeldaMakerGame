@@ -30,6 +30,7 @@ namespace ZeldaMakerGame.Core
 
         public Entity(Texture2D texture, float speed)
         {
+            Position = Vector2.Zero;
             Texture = texture;
             Size = new Vector2(texture.Width, texture.Height);
             Velocity = Vector2.Zero;
@@ -39,6 +40,7 @@ namespace ZeldaMakerGame.Core
 
         public Entity(Dictionary<string, Animation> animations, float speed)
         {
+            Position = Vector2.Zero;
             this.animations = animations;
             LinearSpeed = speed;
             Velocity = Vector2.Zero;
@@ -66,10 +68,18 @@ namespace ZeldaMakerGame.Core
             // Physics
             Position += Velocity * LinearSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
-
+        public void DrawEditor(SpriteBatch spriteBatch)
+        {
+            if (animationManager is not null)
+            {
+                animationManager.Stop();
+                animationManager.Draw(spriteBatch, Color.Gray);
+            }
+            else spriteBatch.Draw(Texture, Edge, Color.Gray);
+        }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if(animationManager != null) animationManager.Draw(spriteBatch);
+            if(animationManager is not null) animationManager.Draw(spriteBatch, Color.White);
             else spriteBatch.Draw(Texture, Edge, Color.White);
         }
 
@@ -103,6 +113,29 @@ namespace ZeldaMakerGame.Core
         }
         public virtual void Activate(Dungeon dungeon)
         {
+        }
+
+        public virtual Entity Clone(Entity copy)
+        {
+            copy.Position = this.Position;
+            copy.direction = this.direction;
+            if (itemContents is not null) copy.animationManager = this.animationManager.Clone();
+            copy.animations = this.animations;
+            if(itemContents is not null) copy.itemContents = this.itemContents.Clone();
+            copy.Size = this.Size;
+            copy.Parent = this.Parent;
+            copy.Velocity = this.Velocity;
+            copy.Texture = this.Texture;
+            copy.IsSelected = this.IsSelected;
+            copy.LinearSpeed = this.LinearSpeed;
+            return copy;
+        }
+        public virtual Entity Clone()
+        {
+            Entity copy;
+            if (animationManager is not null) copy = new Entity(animations, LinearSpeed);
+            else copy = new Entity(Texture, LinearSpeed);
+            return Clone(copy);
         }
     }
 }

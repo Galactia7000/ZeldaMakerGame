@@ -12,6 +12,7 @@ namespace ZeldaMakerGame.UI
     public class Picture : Component
     {
         private Texture2D Texture;
+        private Texture2D childTexture;
 
         public Picture(Texture2D texture, Vector2 position, Vector2 size, Component parent = null)
         {
@@ -24,6 +25,12 @@ namespace ZeldaMakerGame.UI
                 Position += parent.Position;
             }
         }
+
+        public void ChangeIcon(Texture2D newIcon)
+        {
+            childTexture = newIcon;
+        }
+
         public override void Update(GameTime gameTime, List<Component> components)
         {
             
@@ -37,6 +44,7 @@ namespace ZeldaMakerGame.UI
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Texture, Edge, Color.White);
+            if (childTexture is not null) spriteBatch.Draw(childTexture, Edge, Color.White);
         }
     }
 }
