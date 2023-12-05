@@ -30,6 +30,10 @@ namespace ZeldaMakerGame.UI
         {
             childTexture = newIcon;
         }
+        public void DeleteIcon()
+        {
+            childTexture = null;
+        }
 
         public override void Update(GameTime gameTime, List<Component> components)
         {

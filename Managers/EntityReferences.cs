@@ -42,8 +42,8 @@ namespace ZeldaMakerGame.Managers
             SpriteAtlas.Add("UpLadder", content.Load<Texture2D>("Tiles/Ladder"));
             SpriteAtlas.Add("DownLadder", content.Load<Texture2D>("Tiles/DownLadder"));
             SpriteAtlas.Add("ItemHighlight", content.Load<Texture2D>("Textures/ItemHighlight"));
-            SpriteAtlas.Add("BombIcon", content.Load<Texture2D>("Textures/ItemHighlight"));
-            SpriteAtlas.Add("KeyIcon", content.Load<Texture2D>("Textures/BombSprite"));
+            SpriteAtlas.Add("BombIcon", content.Load<Texture2D>("Textures/BombSprite"));
+            SpriteAtlas.Add("KeyIcon", content.Load<Texture2D>("Textures/KeySprite.png"));
             SpriteAtlas.Add("ChestClosed", content.Load<Texture2D>("EntityAnimations/ChestClosed"));
             SpriteAtlas.Add("ChestOpen", content.Load<Texture2D>("EntityAnimations/ChestOpen"));
             #endregion

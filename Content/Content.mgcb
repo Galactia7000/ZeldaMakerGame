@@ -49,18 +49,6 @@
 /processorParam:TextureFormat=Color
 /build:EntityAnimations/ChestClosed.png
 
-#begin EntityAnimations/ChestClosed.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:EntityAnimations/ChestClosed.png
-
 #begin EntityAnimations/ChestOpen.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -290,6 +278,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/ItemHighlight.png
+
+#begin Textures/KeySprite.png.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/KeySprite.png.png
 
 #begin Textures/PanelTexture.png
 /importer:TextureImporter

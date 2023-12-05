@@ -118,6 +118,10 @@ namespace ZeldaMakerGame.World
                         selected.DeleteEntity();
                         break;
                     case ToolType.Item:
+                        if (selected.GetEntity() is not null)
+                        {
+                            selected.GetEntity().itemContents = null;
+                        }
                         break;
                 }
                 
