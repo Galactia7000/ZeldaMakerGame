@@ -41,6 +41,7 @@ namespace ZeldaMakerGame.Managers
             SpriteAtlas = new Dictionary<string, Texture2D>();
             SpriteAtlas.Add("UpLadder", content.Load<Texture2D>("Tiles/Ladder"));
             SpriteAtlas.Add("DownLadder", content.Load<Texture2D>("Tiles/DownLadder"));
+            SpriteAtlas.Add("TileHighlight", content.Load<Texture2D>("Textures/TileHighlight"));
             SpriteAtlas.Add("ItemHighlight", content.Load<Texture2D>("Textures/ItemHighlight"));
             SpriteAtlas.Add("BombIcon", content.Load<Texture2D>("Textures/BombSprite"));
             SpriteAtlas.Add("KeyIcon", content.Load<Texture2D>("Textures/KeySprite.png"));
@@ -59,6 +60,7 @@ namespace ZeldaMakerGame.Managers
                 {"WalkLeft", AllAnimations["OctoRockWalkingLeft"] },
                 {"WalkRight", AllAnimations["OctoRockWalkingRight"] },
             }, 50f));
+
 
             EntityDictionary.Add("Chu Chu", new Entity(new Dictionary<string, Animation>
             {

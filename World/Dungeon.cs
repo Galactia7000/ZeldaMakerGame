@@ -96,7 +96,7 @@ namespace ZeldaMakerGame.World
                         }
                         break;
                     case ToolType.Item:
-                        if(selected.GetEntity() is not null)
+                        if (selected.GetEntity() is not null)
                         {
                             selected.GetEntity().itemContents = EntityReferences.GetItemRef(currentAction.EquipedTool.tag);
                         }

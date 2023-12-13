@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace ZeldaMakerGame.World
 {
-    [Serializable]
     public class Tileset
     {
 

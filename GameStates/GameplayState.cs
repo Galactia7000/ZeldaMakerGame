@@ -11,6 +11,8 @@ using ZeldaMakerGame.Managers;
 using ZeldaMakerGame.Core;
 using System.Windows.Forms;
 using ZeldaMakerGame.UI;
+using SharpDX.Direct2D1.Effects;
+using ZeldaMakerGame.World;
 
 namespace ZeldaMakerGame.GameStates
 {
@@ -19,8 +21,10 @@ namespace ZeldaMakerGame.GameStates
         public GameplayState(ZeldaMaker game, ContentManager content) : base(game, content) { }
 
         private Player thePlayer;
-        private List<Component> entities;
+        private List<Component>[] entities;
         // private List<Component> uiComponents;
+
+        Camera gameCamera;
 
         private bool isGamePaused;
         public override void LoadContent()
@@ -32,32 +36,28 @@ namespace ZeldaMakerGame.GameStates
                 {"WalkLeft", EntityReferences.GetAnimation("WalkLeft") },
                 {"WalkRight", EntityReferences.GetAnimation("WalkRight") },
             };
-            var octoRockAnimations = new Dictionary<string, Animation>()
-            {
-                {"WalkDown" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/OctorockMovingDown"), 2, 0.05f, true)},
-                {"WalkUp" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/OctorockMovingUp"), 2, 0.05f, true)},
-                {"WalkLeft" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/OctorockMovingLeft"), 2, 0.05f, true)},
-                {"WalkRight" , new Animation(contentManager.Load<Texture2D>("EntityAnimations/OctorockMovingRight"), 2, 0.05f, true)},
-            };
-
 
             GameManager.Initialize();
+            gameCamera = new Camera();
+            gameCamera.ChangeZoom(5f);
 
             isGamePaused = false;
             thePlayer = new Player(playerAnimations, 100f);
 
-            entities = new List<Component>()
+            entities = new List<Component>[game.currentDungeon.floors];
+            for (int f = 0; f < game.currentDungeon.floors; f++)
             {
-                thePlayer,
-                new Enemy(octoRockAnimations, 50f),
-                new Enemy(octoRockAnimations, 60f),
-                new Entity(contentManager.Load<Texture2D>("EntityAnimations/BirdIdle"), 0f),
-                new Chest(contentManager.Load<Texture2D>("EntityAnimations/ChestClosed"), contentManager.Load<Texture2D>("EntityAnimations/ChestOpen"), new Vector2(64, 64)),
-            };
-
-            ((Enemy)entities[1]).SetTarget(thePlayer);
-            ((Enemy)entities[2]).SetTarget(thePlayer);
-            ((Chest)entities[4]).itemContents = new Item(contentManager.Load<Texture2D>("Textures/BombSprite"), "Bomb", 3);
+                for (int c = 0; c < game.currentDungeon.columns; c++)
+                {
+                    for (int r = 0; r < game.currentDungeon.rows; r++)
+                    {
+                        if (game.currentDungeon.tiles[f, c, r].GetEntity() is not null)
+                        {
+                            entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity().Clone());
+                        }
+                    }
+                }
+            }
         }
 
         public override void UnloadContent()
@@ -67,31 +67,35 @@ namespace ZeldaMakerGame.GameStates
 
         public override void Update(GameTime _gametime)
         {
-            if (isGamePaused)
+            gameCamera.Follow(thePlayer);
+
+            if (!isGamePaused)
             {
-                foreach (var entity in entities)
+                thePlayer.Update(_gametime, entities[game.currentDungeon.currentFloor]);
+                foreach (var entity in entities[game.currentDungeon.currentFloor])
                 {
-                    entity.Update(_gametime, entities);
+                    entity.Update(_gametime, entities[game.currentDungeon.currentFloor]);
                 }
             }
             if (InputManager.IsKeyPressed("Pause") || InputManager.IsButtonPressed("Pause")) isGamePaused = !isGamePaused;
         }
         public override void LateUpdate(GameTime _gametime)
         {
-            foreach(var entity in entities)
+            thePlayer.LateUpdate(_gametime);
+            foreach(var entity in entities[game.currentDungeon.currentFloor])
             {
                 entity.LateUpdate(_gametime);
             }
 
-            List<Component> newEntities = new List<Component>(entities);
+            List<Component> newEntities = new List<Component>(entities[game.currentDungeon.currentFloor]);
             GameManager.LateUpdate(newEntities);
-            entities = newEntities;
+            entities[game.currentDungeon.currentFloor] = newEntities;
         }
         public override void Draw(GameTime _gametime, SpriteBatch _spritebatch)
         {
-            _spritebatch.Begin();
+            _spritebatch.Begin(transformMatrix: gameCamera.Transform, samplerState: SamplerState.PointClamp);
             game.currentDungeon.Draw(_spritebatch);
-            foreach (var entity in entities)
+            foreach (var entity in entities[game.currentDungeon.currentFloor])
             {
                 entity.Draw(_spritebatch);
             }

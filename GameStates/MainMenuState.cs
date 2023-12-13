@@ -62,7 +62,7 @@ namespace ZeldaMakerGame.GameStates
             if (_components.Count == 0)
                 return;
 
-            _spritebatch.Begin();
+            _spritebatch.Begin(samplerState: SamplerState.PointClamp);
 
             foreach (var comp in _components)
                 comp.Draw(_spritebatch);

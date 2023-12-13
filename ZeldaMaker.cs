@@ -124,7 +124,6 @@ namespace ZeldaMakerGame
             UIManager.AddTexture("TextBox", Content.Load<Texture2D>("Textures/TextBoxTexture"));
             UIManager.AddTexture("TextBoxCursor", Content.Load<Texture2D>("Textures/TextBoxCursorTexture"));
             UIManager.AddTexture("Logo", Content.Load<Texture2D>("Textures/PlaceHolderLogo2"));
-            UIManager.AddTexture("ItemHighlight", Content.Load<Texture2D>("Textures/ItemHighlight"));
         }
 
         private void CreateUIPanels()
@@ -251,8 +250,6 @@ namespace ZeldaMakerGame
             floorPanel.AddChild("UpFloorBtn", new UI.Button(UIManager.GetTexture("Button"), new Vector2(75, 40), new Vector2(50, 50), floorPanel, @"/\", UIManager.GetFont("Button")));
             floorPanel.AddChild("FloorLbl", new UI.Label("F", UIManager.GetFont("Label"), new Vector2(40, 10), floorPanel));
             UIManager.CreateUIPreset(floorPanel, "FloorControls");
-
-            UIManager.CreateUIPreset(new Picture(UIManager.GetTexture("ItemHighlight"), Vector2.Zero, new Vector2(64, 64)), "ItemHighlight");
         }
 
         #region Main Menu Methods

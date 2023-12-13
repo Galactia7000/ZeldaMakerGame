@@ -157,12 +157,11 @@ namespace ZeldaMakerGame.Managers
             currentMouse = Mouse.GetState();
             mouseRectangle = new Rectangle(currentMouse.Position, new Point(1, 1));
 
-            KeyboardState keyboardState = Keyboard.GetState();
             foreach(var binding in keyboardBindings)
             {
                 binding.Value.previous = binding.Value.current;
-                binding.Value.current = keyboardState[binding.Value.binding];
-                if (keyboardState[binding.Value.binding] == KeyState.Down) isKeyBoardActive = true;
+                binding.Value.current = currentKeyboardState[binding.Value.binding];
+                if (currentKeyboardState[binding.Value.binding] == KeyState.Down) isKeyBoardActive = true;
                 if (binding.Value.previous != binding.Value.current) isKeyBoardActive = true;
             }
         }
