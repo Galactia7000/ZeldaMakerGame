@@ -92,7 +92,7 @@ namespace ZeldaMakerGame.World
                     case ToolType.Entity:
                         if (selected.isGround)
                         {
-                            selected.ChangeEntity(currentAction.EquipedTool.tag);
+                            selected.ChangeEntity(currentAction.EquipedTool.tag, currentFloor);
                         }
                         break;
                     case ToolType.Item:
@@ -177,7 +177,7 @@ namespace ZeldaMakerGame.World
             {
                 for (int r = 0; r < rows; r++)
                 {
-                    if (tiles[currentFloor, c, r] is not null) tiles[currentFloor, c, r].Draw(spriteBatch, tileset);
+                    if (tiles[currentFloor, c, r] is not null) tiles[currentFloor, c, r].Draw(spriteBatch, tileset, currentFloor);
                 }
             }
         }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZeldaMakerGame.Core;
+using ZeldaMakerGame.Gameplay;
 using ZeldaMakerGame.Managers;
 
 namespace ZeldaMakerGame.World
@@ -16,6 +17,7 @@ namespace ZeldaMakerGame.World
     public class Tile
     {
         private Entity thisEntity;
+        private string entityKey;
         public Vector2 Position { get; set; }
         public Rectangle Edge { get { return new Rectangle(Position.ToPoint(), new Point(tileSize, tileSize)); } } 
 
@@ -33,9 +35,15 @@ namespace ZeldaMakerGame.World
             else index = 46;
             thisEntity = null;
         }
-        public void ChangeEntity(string tag)
+        public void ChangeEntity(string tag, int thisFloor = 0)
         {
-            thisEntity = EntityReferences.GetEntityRef(tag).Clone();  
+            if (EntityReferences.GetEntityRef(tag) is PlayerSpawn)
+            {
+                thisEntity = EntityReferences.GetEntityRef(tag);
+                ((PlayerSpawn)thisEntity).floor = thisFloor;
+            }
+            else thisEntity = EntityReferences.GetEntityRef(tag).Clone();
+            entityKey = tag;
             thisEntity.Position = Position;
         }
         public void ChangeItem(string tag)
@@ -47,13 +55,19 @@ namespace ZeldaMakerGame.World
         public void DeleteEntity()
         {
             thisEntity = null;
+            entityKey = null;
         }
 
         public Entity GetEntity() => thisEntity;
-        public void Draw(SpriteBatch spriteBatch, Tileset tileset)
+        public void Draw(SpriteBatch spriteBatch, Tileset tileset, int currentFloor)
         {
             spriteBatch.Draw(tileset.tilesetTexture, Edge, tileset.GetSourceReectangle(index), Color.White);
-            if(thisEntity is not null) thisEntity.DrawEditor(spriteBatch);
+            if (thisEntity is not null) 
+            {
+                if (thisEntity is PlayerSpawn && ((PlayerSpawn)thisEntity).floor != currentFloor) return;
+                thisEntity.DrawEditor(spriteBatch);
+            }
+            
         }
 
         public void Serialize(BinaryWriter binaryWriter)
@@ -63,6 +77,13 @@ namespace ZeldaMakerGame.World
             binaryWriter.Write(tileSize);
             binaryWriter.Write(isGround);
             binaryWriter.Write(index);
+            if (thisEntity is not null)
+            {
+                binaryWriter.Write(true);
+                binaryWriter.Write(entityKey);
+            }
+            else binaryWriter.Write(false);
+            
         }
         public static Tile Deserialize(BinaryReader binaryReader)
         {
@@ -70,12 +91,23 @@ namespace ZeldaMakerGame.World
             int size = binaryReader.ReadInt32();
             bool ground = binaryReader.ReadBoolean();
             int tIndex = binaryReader.ReadInt32();
+            Entity entity = null;
+            string key = null;
+            if (binaryReader.ReadBoolean()) 
+            {
+                key = binaryReader.ReadString();
+                entity = EntityReferences.GetEntityRef(key);
+                entity.Position = new Vector2(x, y);
+            }
+
             Tile tile = new Tile
             {
                 Position = new Vector2(x, y),
                 tileSize = size,
                 isGround = ground,
                 index = tIndex,
+                thisEntity = entity,
+                entityKey = key
             };
             return tile;
         }

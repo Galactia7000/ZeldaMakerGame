@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using SharpDX.DirectWrite;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ZeldaMakerGame.Gameplay;
 using ZeldaMakerGame.GameStates;
@@ -136,6 +137,15 @@ namespace ZeldaMakerGame.Core
             if (animationManager is not null) copy = new Entity(animations, LinearSpeed);
             else copy = new Entity(Texture, LinearSpeed);
             return Clone(copy);
+        }
+
+        public void Serialize(BinaryWriter writer)
+        {
+
+        }
+        public void Deserialize(BinaryReader reader)
+        {
+
         }
     }
 }

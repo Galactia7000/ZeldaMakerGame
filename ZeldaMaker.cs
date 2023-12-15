@@ -206,6 +206,8 @@ namespace ZeldaMakerGame
             terrainPanel.AddChild("FloorBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), terrainPanel, "Floor", UIManager.GetFont("Button"), new Tool("Floor", ToolType.Terrain)));
             terrainPanel.AddChild("UpLadderBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), terrainPanel, "UpLadder", UIManager.GetFont("Button"), new Tool("UpLadder", ToolType.Ladder)));
             terrainPanel.AddChild("DownLadderBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 100), new Vector2(50, 50), terrainPanel, "DownLadder", UIManager.GetFont("Button"), new Tool("DownLadder", ToolType.Pit)));
+            terrainPanel.AddChild("SpawnBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 150), new Vector2(50, 50), terrainPanel, "Start", UIManager.GetFont("Button"), new Tool("Spawn", ToolType.Entity)));
+
             UIManager.CreateUIPreset(terrainPanel, "Terrain");
 
             // EnemyBar
