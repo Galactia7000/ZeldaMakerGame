@@ -38,8 +38,8 @@ namespace ZeldaMakerGame.GameStates
             };
 
             GameManager.Initialize();
-            gameCamera = new Camera();
-            gameCamera.ChangeZoom(5f);
+            gameCamera = new Camera(game.GraphicsDevice.Viewport);
+            gameCamera.ChangeZoom(1.5f);
 
             isGamePaused = false;
             thePlayer = new Player(playerAnimations, 100f);
@@ -59,13 +59,10 @@ namespace ZeldaMakerGame.GameStates
                     {
                         if (game.currentDungeon.tiles[f, c, r].GetEntity() is not null)
                         {
-                            if (game.currentDungeon.tiles[f, c, r].GetEntity() is PlayerSpawn)
+                            if (game.currentDungeon.tiles[f, c, r].GetEntity() is PlayerSpawn && ((PlayerSpawn)game.currentDungeon.tiles[f, c, r].GetEntity()).floor == f)
                             {
-                                if (((PlayerSpawn)game.currentDungeon.tiles[f, c, r].GetEntity()).floor == f)
-                                {
-                                    thePlayer.Position = game.currentDungeon.tiles[f, c, r].Position;
-                                    game.currentDungeon.currentFloor = f;
-                                }
+                                thePlayer.Position = game.currentDungeon.tiles[f, c, r].Position;
+                                game.currentDungeon.currentFloor = f;
                             }
                             else entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity().Clone());
                         }
@@ -81,7 +78,7 @@ namespace ZeldaMakerGame.GameStates
 
         public override void Update(GameTime _gametime)
         {
-            gameCamera.Follow(thePlayer);
+            gameCamera.Follow(thePlayer, game.currentDungeon.rows * game.currentDungeon.tileset.tileSize);
 
             if (!isGamePaused)
             {
@@ -113,6 +110,7 @@ namespace ZeldaMakerGame.GameStates
             {
                 entity.Draw(_spritebatch);
             }
+            thePlayer.Draw(_spritebatch);
             _spritebatch.End();
 
         }

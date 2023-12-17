@@ -18,6 +18,7 @@ namespace ZeldaMakerGame.World
     {
         private Entity thisEntity;
         private string entityKey;
+        private string itemKey;
         public Vector2 Position { get; set; }
         public Rectangle Edge { get { return new Rectangle(Position.ToPoint(), new Point(tileSize, tileSize)); } } 
 
@@ -44,10 +45,12 @@ namespace ZeldaMakerGame.World
             }
             else thisEntity = EntityReferences.GetEntityRef(tag).Clone();
             entityKey = tag;
+            itemKey = null;
             thisEntity.Position = Position;
         }
         public void ChangeItem(string tag)
         {
+            itemKey = tag;
             thisEntity.itemContents = EntityReferences.GetItemRef(tag).Clone();
             thisEntity.Position = Position;
         }
@@ -56,6 +59,7 @@ namespace ZeldaMakerGame.World
         {
             thisEntity = null;
             entityKey = null;
+            itemKey = null;
         }
 
         public Entity GetEntity() => thisEntity;
@@ -81,6 +85,8 @@ namespace ZeldaMakerGame.World
             {
                 binaryWriter.Write(true);
                 binaryWriter.Write(entityKey);
+                if (itemKey is not null) binaryWriter.Write(itemKey);
+                else binaryWriter.Write("");
             }
             else binaryWriter.Write(false);
             
@@ -93,11 +99,15 @@ namespace ZeldaMakerGame.World
             int tIndex = binaryReader.ReadInt32();
             Entity entity = null;
             string key = null;
+            string iKey = null;
             if (binaryReader.ReadBoolean()) 
             {
                 key = binaryReader.ReadString();
                 entity = EntityReferences.GetEntityRef(key);
                 entity.Position = new Vector2(x, y);
+                iKey = binaryReader.ReadString();
+                if (iKey == "") iKey = null;
+                else entity.itemContents = EntityReferences.GetItemRef(iKey).Clone();
             }
 
             Tile tile = new Tile
@@ -107,7 +117,8 @@ namespace ZeldaMakerGame.World
                 isGround = ground,
                 index = tIndex,
                 thisEntity = entity,
-                entityKey = key
+                entityKey = key,
+                itemKey = iKey
             };
             return tile;
         }

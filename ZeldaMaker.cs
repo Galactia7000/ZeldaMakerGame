@@ -30,7 +30,6 @@ namespace ZeldaMakerGame
         Tileset defaultTileset;
 
         public string DungeonsFilePath;
-        public GameWindow gameWindow;
 
         public void ChangeState(State potentialState)
         {
@@ -46,6 +45,11 @@ namespace ZeldaMakerGame
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            /*
+            _graphics.IsFullScreen = true;
+            _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            */
             DungeonsFilePath = Application.StartupPath + @"\SavedDungeons";
         }
 
@@ -57,7 +61,6 @@ namespace ZeldaMakerGame
             screenWidth = _graphics.PreferredBackBufferWidth;
             screenHeight = _graphics.PreferredBackBufferHeight;
 
-            gameWindow = Window;
             InputManager.Initialize();
             UIManager.Initialize();
             EntityReferences.Initialize(Content);
@@ -288,6 +291,12 @@ namespace ZeldaMakerGame
             Dungeon newDungeon = new Dungeon(defaultTileset, floors, size, size, name, DungeonsFilePath);
             newDungeon.SaveDungeon(sender, e);
             currentDungeon = newDungeon;
+
+            ((UI.Panel)UIManager.GetSpecificUI("Dungeons")).isActive = true;
+            ((UI.Button)UIManager.GetSpecificUI("BackToMainMenu")).isActive = true;
+            ((UI.Button)UIManager.GetSpecificUI("NewDungeon")).isActive = true;
+            ((UI.Button)UIManager.GetSpecificUI("NextPage")).isActive = true;
+            ((UI.Button)UIManager.GetSpecificUI("PreviousPage")).isActive = true;
             ChangeState(new EditorState(this, Content));
         }
 
