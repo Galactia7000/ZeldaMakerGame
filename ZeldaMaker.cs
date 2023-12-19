@@ -412,6 +412,8 @@ namespace ZeldaMakerGame
 
         private void QuitToMenuClicked(object sender, EventArgs e)
         {
+            ((MultiPageFlowPanel)UIManager.GetSpecificUIReference("Dungeons")).LoadValues(LoadDungeons());
+            ((MultiPageFlowPanel)UIManager.GetSpecificUIReference("Dungeons")).Start();
             ChangeState(new MainMenuState(this, Content));
         }
         #endregion

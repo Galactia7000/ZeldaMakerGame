@@ -24,7 +24,7 @@ namespace ZeldaMakerGame.GameStates
         private List<Component>[] entities;
         // private List<Component> uiComponents;
 
-        Camera gameCamera;
+        private Camera gameCamera;
 
         private bool isGamePaused;
         public override void LoadContent()
@@ -38,7 +38,7 @@ namespace ZeldaMakerGame.GameStates
             };
 
             GameManager.Initialize();
-            gameCamera = new Camera(game.GraphicsDevice.Viewport);
+            gameCamera = new Camera(game.screenWidth, game.screenHeight);
             gameCamera.ChangeZoom(1.5f);
 
             isGamePaused = false;
@@ -50,9 +50,9 @@ namespace ZeldaMakerGame.GameStates
         void RestartDungeon()
         {
             entities = new List<Component>[game.currentDungeon.floors];
-            for (int i = 0; i < game.currentDungeon.floors; i++) entities[i] = new List<Component>();
             for (int f = 0; f < game.currentDungeon.floors; f++)
             {
+                entities[f] = new List<Component>();
                 for (int c = 0; c < game.currentDungeon.columns; c++)
                 {
                     for (int r = 0; r < game.currentDungeon.rows; r++)

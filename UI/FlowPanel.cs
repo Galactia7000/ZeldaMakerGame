@@ -35,6 +35,7 @@ namespace ZeldaMakerGame.UI
 
         public void LoadValues(Dungeon[] dungeons)
         {
+            children.Clear();
             if (dungeons is null) return;
             foreach (Dungeon dungeon in dungeons)
             {

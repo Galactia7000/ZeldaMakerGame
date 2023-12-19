@@ -27,10 +27,10 @@ namespace ZeldaMakerGame.Core
         }
         public Matrix InverseTransform { get { return Matrix.Invert(Transform); } }
 
-        public Camera(Viewport vp)
+        public Camera(int width, int height)
         {
-            viewportWidth = vp.Width;
-            viewportHeight = vp.Height;
+            viewportWidth = width;
+            viewportHeight = height;
         }
 
         private Vector2 Position;
@@ -51,8 +51,8 @@ namespace ZeldaMakerGame.Core
 
         public void Follow(Entity target, int bound)
         {
-            Position = target.Position + target.Size/2;
-            Position = Vector2.Clamp(Position,  viewportCenter, new Vector2(bound, bound));
+            Position = (target.Position + target.Size / 2);
+            Position = Vector2.Clamp(Position, Vector2.Zero, new Vector2(bound, bound));
         }
 
         public Rectangle GetCameraBoundary()

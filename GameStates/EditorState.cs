@@ -51,7 +51,7 @@ namespace ZeldaMakerGame.GameStates
 
             UIManager.AddUI("CategorySelect");
 
-            editorCamera = new Camera(game.GraphicsDevice.Viewport);
+            editorCamera = new Camera(game.screenWidth, game.screenHeight);
         }
 
         public override void UnloadContent()

@@ -120,7 +120,7 @@ namespace ZeldaMakerGame.Core
         {
             copy.Position = this.Position;
             copy.direction = this.direction;
-            if (itemContents is not null) copy.animationManager = this.animationManager.Clone();
+            if (animationManager is not null) copy.animationManager = this.animationManager.Clone();
             copy.animations = this.animations;
             if(itemContents is not null) copy.itemContents = this.itemContents.Clone();
             copy.Size = this.Size;
