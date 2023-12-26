@@ -35,7 +35,7 @@ namespace ZeldaMakerGame.UI
             childTexture = null;
         }
 
-        public override void Update(GameTime gameTime, List<Component> components)
+        public override void Update(GameTime gameTime)
         {
             
         }

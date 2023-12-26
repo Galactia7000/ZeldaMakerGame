@@ -32,6 +32,7 @@ namespace ZeldaMakerGame.World
         {
             tileSize = size;
             Position = GridPos * size;
+            isGround = ground;
             if (ground) index = 94;
             else index = 46;
             thisEntity = null;

@@ -32,7 +32,7 @@ namespace ZeldaMakerGame.UI
         {
         }
 
-        public override void Update(GameTime gameTime, List<Component> gameComponents)
+        public override void Update(GameTime gameTime)
         {
         }
     }

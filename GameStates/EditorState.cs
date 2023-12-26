@@ -63,7 +63,7 @@ namespace ZeldaMakerGame.GameStates
         {
             uiComponents = UIManager.GetCurrentUI();
             ((Label)((Panel)UIManager.GetSpecificUI("FloorControls")).GetChildren()["FloorLbl"]).text = "F" + game.currentDungeon.currentFloor;
-            foreach (Component component in uiComponents) component.Update(_gametime, null);
+            foreach (Component component in uiComponents) component.Update(_gametime);
 
             if (isPaused) { displayItem = false; return; }
 

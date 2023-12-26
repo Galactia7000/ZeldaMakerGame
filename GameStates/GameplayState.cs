@@ -37,7 +37,7 @@ namespace ZeldaMakerGame.GameStates
                 {"WalkRight", EntityReferences.GetAnimation("PlayerWalkingRight") },
             };
 
-            GameManager.Initialize();
+            
             gameCamera = new Camera(game.screenWidth, game.screenHeight);
             gameCamera.ChangeZoom(1.5f);
 
@@ -49,6 +49,7 @@ namespace ZeldaMakerGame.GameStates
 
         void RestartDungeon()
         {
+            GameManager.Initialize(game.currentDungeon);
             entities = new List<Component>[game.currentDungeon.floors];
             for (int f = 0; f < game.currentDungeon.floors; f++)
             {
@@ -61,7 +62,7 @@ namespace ZeldaMakerGame.GameStates
                         {
                             if (game.currentDungeon.tiles[f, c, r].GetEntity() is PlayerSpawn && ((PlayerSpawn)game.currentDungeon.tiles[f, c, r].GetEntity()).floor == f)
                             {
-                                thePlayer.Position = game.currentDungeon.tiles[f, c, r].Position;
+                                thePlayer.Position = game.currentDungeon.tiles[f, c, r].Position - new Vector2(0, 7);
                                 game.currentDungeon.currentFloor = f;
                             }
                             else entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity().Clone());
@@ -69,6 +70,7 @@ namespace ZeldaMakerGame.GameStates
                     }
                 }
             }
+            GameManager.ChangeEntities(entities[game.currentDungeon.currentFloor]);
         }
 
         public override void UnloadContent()
@@ -82,10 +84,10 @@ namespace ZeldaMakerGame.GameStates
 
             if (!isGamePaused)
             {
-                thePlayer.Update(_gametime, entities[game.currentDungeon.currentFloor]);
+                thePlayer.Update(_gametime);
                 foreach (var entity in entities[game.currentDungeon.currentFloor])
                 {
-                    entity.Update(_gametime, entities[game.currentDungeon.currentFloor]);
+                    entity.Update(_gametime);
                 }
             }
             if (InputManager.IsKeyPressed("Pause") || InputManager.IsButtonPressed("Pause")) isGamePaused = !isGamePaused;
@@ -98,9 +100,8 @@ namespace ZeldaMakerGame.GameStates
                 entity.LateUpdate(_gametime);
             }
 
-            List<Component> newEntities = new List<Component>(entities[game.currentDungeon.currentFloor]);
-            GameManager.LateUpdate(newEntities);
-            entities[game.currentDungeon.currentFloor] = newEntities;
+            GameManager.LateUpdate();
+            entities[game.currentDungeon.currentFloor] = GameManager.GetEntities();
         }
         public override void Draw(GameTime _gametime, SpriteBatch _spritebatch)
         {

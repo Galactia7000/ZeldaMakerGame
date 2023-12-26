@@ -39,7 +39,7 @@ namespace ZeldaMakerGame.UI
             isActive = true;
         }
 
-        public override void Update(GameTime gameTime, List<Component> components)
+        public override void Update(GameTime gameTime)
         {
             if (!isActive) 
             { 

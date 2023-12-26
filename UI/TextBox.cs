@@ -45,7 +45,7 @@ namespace ZeldaMakerGame.UI
             CursorEdge = new Rectangle((int)Position.X + 2, (int)Position.Y + 2, 4, (int)Size.Y - 4);
             isActive = false;
         }
-        public override void Update(GameTime gameTime, List<Component> gameComponents)
+        public override void Update(GameTime gameTime)
         {
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             

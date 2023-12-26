@@ -11,6 +11,7 @@ namespace ZeldaMakerGame.Gameplay
     {
         public int Health { get; set; }
         List<Item> inventory;
+        private Rectangle ColliderEdge => new Rectangle(Position.ToPoint() + new Point(0, 8), new Point(15, 15));
 
         Item itemSlot1;
         Item itemSlot2;
@@ -57,48 +58,54 @@ namespace ZeldaMakerGame.Gameplay
             }
         }
 
-        public override void Update(GameTime gameTime, List<Component> components)
+        public override void Update(GameTime gameTime)
         {
             if (InputManager.isControllerActive)
             {
-                 this.Velocity = new Vector2(InputManager.joySticks.Left.X, -InputManager.joySticks.Left.Y);
-                 animationManager.animationSpeedModifier = InputManager.joySticks.Left.Length();
+                Velocity = new Vector2(InputManager.joySticks.Left.X, -InputManager.joySticks.Left.Y);
+                animationManager.animationSpeedModifier = InputManager.joySticks.Left.Length();
+                Vector2 unitV = Velocity / Velocity.Length();
+                Vector2[] unitDirections = new Vector2[] {
+                    new Vector2(-1, -1)/ (float)Math.Sqrt(2), new Vector2(0, -1), new Vector2(1, -1)/ (float)Math.Sqrt(2),
+                    new Vector2(-1, 0), new Vector2(1, 0),
+                    new Vector2(-1, 1)/ (float)Math.Sqrt(2), new Vector2(0, 1), new Vector2(1, 1) / (float)Math.Sqrt(2)
+                };
+                foreach (Vector2 v in unitDirections) if (Vector2.Dot(unitV, v) > 0.75f) Velocity = Velocity.Length() * v;
             }
             else
             {
-                 animationManager.animationSpeedModifier = 1;
-                 int X = 0, Y = 0;
-                 if (InputManager.IsKeyHeld("Up")) Y = -1;
-                 else if (InputManager.IsKeyHeld("Down")) Y = 1;
-                 if (InputManager.IsKeyHeld("Left")) X = -1;
-                 else if (InputManager.IsKeyHeld("Right")) X = 1;
-                 if (InputManager.IsKeyHeld("Up") && InputManager.IsKeyHeld("Down")) Y = 0;
-                 if (InputManager.IsKeyHeld("Left") && InputManager.IsKeyHeld("Right")) X = 0;
-                 Velocity = new Vector2(X, Y);
+                animationManager.animationSpeedModifier = 1;
+                int X = 0, Y = 0;
+                if (InputManager.IsKeyHeld("Up")) Y = -1;
+                else if (InputManager.IsKeyHeld("Down")) Y = 1;
+                if (InputManager.IsKeyHeld("Left")) X = -1;
+                else if (InputManager.IsKeyHeld("Right")) X = 1;
+                if (InputManager.IsKeyHeld("Up") && InputManager.IsKeyHeld("Down")) Y = 0;
+                if (InputManager.IsKeyHeld("Left") && InputManager.IsKeyHeld("Right")) X = 0;
+                Velocity = new Vector2(X, Y);
             }
-            base.Update(gameTime, components);
+            base.Update(gameTime);
             if (InputManager.IsButtonPressed("Action") || InputManager.IsKeyPressed("Action"))
             {
-                 Rectangle interactRect = Rectangle.Empty;
-                 switch (direction)
-                 {
-                     case Direction.Up:
-                         interactRect = new Rectangle((Position - new Vector2(0, Size.Y)).ToPoint(), Size.ToPoint());
-                         break;
-                     case Direction.Right:
-                         interactRect = new Rectangle((Position + new Vector2(Size.X, 0)).ToPoint(), Size.ToPoint());
-                         break;
-                     case Direction.Down:
-                         interactRect = new Rectangle((Position + new Vector2(0, Size.Y)).ToPoint(), Size.ToPoint());
-                         break;
-                     case Direction.Left:
-                         interactRect = new Rectangle((Position - new Vector2(Size.X, 0)).ToPoint(), Size.ToPoint());
-                         break;
-                 }
-                 foreach (var component in components)
-                 {
-                     if (interactRect.Intersects(component.Edge) && component is Entity) ((Entity)component).Activate(this);
-                 }
+                Rectangle interactRect = Rectangle.Empty;
+                switch (direction)
+                {
+                    case Direction.Up:
+                        interactRect = new Rectangle((Position - new Vector2(0, Size.Y)).ToPoint(), Size.ToPoint());
+                        break;
+                    case Direction.Right:
+                        interactRect = new Rectangle((Position + new Vector2(Size.X, 0)).ToPoint(), Size.ToPoint());
+                        break;
+                    case Direction.Down:
+                        interactRect = new Rectangle((Position + new Vector2(0, Size.Y)).ToPoint(), Size.ToPoint());
+                        break;
+                    case Direction.Left:
+                        interactRect = new Rectangle((Position - new Vector2(Size.X, 0)).ToPoint(), Size.ToPoint());
+                        break;
+
+                }
+                Component[] objects = GameManager.CheckCollisions(interactRect);
+                foreach (Component obj in objects) ((Entity)obj).Activate(this);
             }
             if (InputManager.IsButtonPressed("Item1") || InputManager.IsKeyPressed("Item1"))
             {
@@ -124,8 +131,10 @@ namespace ZeldaMakerGame.Gameplay
                     if (isConsumed) itemSlot3.Quantity--;
                 }
             }
-        }
 
+            if (GameManager.CheckTileCollisions(new Rectangle(ColliderEdge.X + (int)Velocity.X, ColliderEdge.Y, ColliderEdge.Width, ColliderEdge.Height))) Velocity = new Vector2(0, Velocity.Y);
+            if (GameManager.CheckTileCollisions(new Rectangle(ColliderEdge.X, ColliderEdge.Y + (int)Velocity.Y, ColliderEdge.Width, ColliderEdge.Height))) Velocity = new Vector2(Velocity.X, 0);
+        }
 
         public override void LateUpdate(GameTime gameTime)
         {

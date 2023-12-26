@@ -17,7 +17,7 @@ namespace ZeldaMakerGame.Core
 
         public bool IsSelected { get; set; }
 
-        public abstract void Update(GameTime gameTime, List<Component> gameComponents);
+        public abstract void Update(GameTime gameTime);
         public abstract void LateUpdate(GameTime gameTime);
         public abstract void Draw(SpriteBatch spriteBatch);
     }

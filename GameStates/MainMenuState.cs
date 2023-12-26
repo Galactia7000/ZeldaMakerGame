@@ -45,7 +45,7 @@ namespace ZeldaMakerGame.GameStates
                 return;
 
             foreach (var comp in _components)
-                comp.Update(_gametime, _components);
+                comp.Update(_gametime);
 
         }
         public override void LateUpdate(GameTime _gametime)

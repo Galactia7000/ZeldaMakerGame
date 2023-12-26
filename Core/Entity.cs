@@ -54,7 +54,7 @@ namespace ZeldaMakerGame.Core
         {
         }
 
-        public override void Update(GameTime gameTime, List<Component> components)
+        public override void Update(GameTime gameTime)
         {
             // Collisions
             if (animationManager != null)

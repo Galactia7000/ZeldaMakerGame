@@ -47,7 +47,7 @@ namespace ZeldaMakerGame.UI
             isMouseHeld = false;
         }
 
-        public override void Update(GameTime gameTime, List<Component> components)
+        public override void Update(GameTime gameTime)
         {
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             NodeColour = Color.White;

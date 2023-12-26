@@ -117,7 +117,7 @@ namespace ZeldaMakerGame.UI
             foreach (KeyValuePair<string, Component> child in children)
             {
                 if (pages[currentPage].Contains(child.Key))
-                    child.Value.Update(gameTime, children.Values.ToList());
+                    child.Value.Update(gameTime);
             }
         }
 

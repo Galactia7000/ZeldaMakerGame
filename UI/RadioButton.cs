@@ -15,9 +15,9 @@ namespace ZeldaMakerGame.UI
         {
         }
 
-        public override void Update(GameTime gameTime, List<Component> components)
+        public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime, components);
+            base.Update(gameTime);
             if (isClicked) parentPanel.activatedRadioBtn = this;
         }
 

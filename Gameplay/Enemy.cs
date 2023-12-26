@@ -34,7 +34,7 @@ namespace ZeldaMakerGame.Gameplay
             Target = target;
         }
 
-        public override void Update(GameTime gameTime, List<Component> components)
+        public override void Update(GameTime gameTime)
         {
             if(!IsAlive) GameManager.RemoveEntity(this);
             if(Target is not null)
@@ -47,7 +47,7 @@ namespace ZeldaMakerGame.Gameplay
                 else if (Target.Position.Y > Position.Y) Velocity = new Vector2(Velocity.X, 1);
                 else Velocity = new Vector2(Velocity.X, -1);
             }
-            base.Update(gameTime, components);
+            base.Update(gameTime);
         }
 
         public override void Activate(Player activator)

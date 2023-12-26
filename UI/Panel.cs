@@ -52,7 +52,7 @@ namespace ZeldaMakerGame.UI
 
 
 
-        public override void Update(GameTime gameTime, List<Component> components)
+        public override void Update(GameTime gameTime)
         {
             if (!isActive) return;
 
@@ -101,7 +101,7 @@ namespace ZeldaMakerGame.UI
         {
             foreach (var child in children)
             {
-                child.Value.Update(gameTime, children.Values.ToList());
+                child.Value.Update(gameTime);
             }
         }
 

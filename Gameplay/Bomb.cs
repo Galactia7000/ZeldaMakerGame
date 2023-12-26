@@ -36,7 +36,7 @@ namespace ZeldaMakerGame.Gameplay
         {
         }
 
-        public override void Update(GameTime gameTime, List<Component> gameComponents)
+        public override void Update(GameTime gameTime)
         {
             timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             animationManager.animationSpeedModifier = timer / timeToDetonate;
