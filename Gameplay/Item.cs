@@ -32,7 +32,7 @@ namespace ZeldaMakerGame.Gameplay
             Position = pos;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             if(Position != Vector2.Zero) spriteBatch.Draw(Texture, Position, Color.White);
         }

@@ -17,7 +17,7 @@ namespace ZeldaMakerGame.Core
 
         protected Vector2 Velocity { get; set; }
 
-        protected Direction direction;
+        public Direction direction;
 
         protected AnimationManager animationManager;
         protected Dictionary<string, Animation> animations;

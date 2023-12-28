@@ -42,13 +42,14 @@ namespace ZeldaMakerGame.GameStates
             gameCamera.ChangeZoom(1.5f);
 
             isGamePaused = false;
-            thePlayer = new Player(playerAnimations, 100f);
+            thePlayer = new Player(playerAnimations, 75f);
 
             RestartDungeon();
         }
 
         void RestartDungeon()
         {
+            thePlayer.Health = 6;
             GameManager.Initialize(game.currentDungeon);
             entities = new List<Component>[game.currentDungeon.floors];
             for (int f = 0; f < game.currentDungeon.floors; f++)
@@ -91,6 +92,7 @@ namespace ZeldaMakerGame.GameStates
                 }
             }
             if (InputManager.IsKeyPressed("Pause") || InputManager.IsButtonPressed("Pause")) isGamePaused = !isGamePaused;
+            if (thePlayer.Health <= 0) RestartDungeon();
         }
         public override void LateUpdate(GameTime _gametime)
         {

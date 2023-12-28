@@ -27,7 +27,7 @@ namespace ZeldaMakerGame.Managers
 
         public void Play(Animation _animation)
         {
-            if (_animation == currentAnimation) return;
+            if (_animation == currentAnimation && !paused) return;
             currentAnimation = _animation;
             currentAnimation.currentFrame = 0;
             timer = 0f;

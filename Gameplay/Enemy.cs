@@ -21,12 +21,15 @@ namespace ZeldaMakerGame.Gameplay
 
         Component Target;
 
-        public Enemy(Texture2D texture, float speed) : base(texture, speed)
+        public Enemy(Texture2D texture, float speed, int hp, int dmg) : base(texture, speed)
         {
+            Health = hp;
+            Damage = dmg;
         }
 
-        public Enemy(Dictionary<string, Animation> _animations, float speed) : base(_animations, speed)
+        public Enemy(Dictionary<string, Animation> _animations, float speed, int hp, int dmg) : base(_animations, speed)
         {
+            Health = hp; Damage = dmg;
         }
 
         public void SetTarget(Component target)
@@ -36,7 +39,7 @@ namespace ZeldaMakerGame.Gameplay
 
         public override void Update(GameTime gameTime)
         {
-            if(!IsAlive) GameManager.RemoveEntity(this);
+            if(Health == 0) GameManager.RemoveEntity(this);
             if(Target is not null)
             {
                 // TEMP PATHFINDING
@@ -58,8 +61,8 @@ namespace ZeldaMakerGame.Gameplay
         public override Entity Clone()
         {
             Enemy copy;
-            if (animationManager is not null) copy = new Enemy(animations, LinearSpeed);
-            else copy = new Enemy(Texture, LinearSpeed);
+            if (animationManager is not null) copy = new Enemy(animations, LinearSpeed, Health, Damage);
+            else copy = new Enemy(Texture, LinearSpeed, Health, Damage);
             copy.Health = Health;
             copy.Damage = Damage;
             copy.IsAlive = IsAlive;

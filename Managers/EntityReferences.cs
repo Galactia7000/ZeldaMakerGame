@@ -28,6 +28,10 @@ namespace ZeldaMakerGame.Managers
                 { "PlayerWalkingUp", new Animation(content.Load<Texture2D>("EntityAnimations/LinkWalkingUpAnimation"), 9, 0.05F, true) },
                 { "PlayerWalkingLeft", new Animation(content.Load<Texture2D>("EntityAnimations/LinkWalkingLeftAnimation"), 9, 0.05F, true) },
                 { "PlayerWalkingRight", new Animation(content.Load<Texture2D>("EntityAnimations/LinkWalkingRightAnimation"), 9, 0.05F, true) },
+                { "PlayerAttackingDown", new Animation(content.Load<Texture2D>("EntityAnimations/LinkAttackingDown"), 2, 0.25F, false) },
+                { "PlayerAttackingUp", new Animation(content.Load<Texture2D>("EntityAnimations/LinkAttackingUp"), 2, 0.25F, false) },
+                { "PlayerAttackingLeft", new Animation(content.Load<Texture2D>("EntityAnimations/LinkAttackingLeft"), 2, 0.25F, false) },
+                { "PlayerAttackingRight", new Animation(content.Load<Texture2D>("EntityAnimations/LinkAttackingRight"), 2, 0.25F, false) },
                 { "OctoRockWalkingDown", new Animation(content.Load<Texture2D>("EntityAnimations/OctorockMovingDown"), 2, 0.1f, true) },
                 { "OctoRockWalkingUp", new Animation(content.Load<Texture2D>("EntityAnimations/OctorockMovingUp"), 2, 0.1f, true) },
                 { "OctoRockWalkingLeft", new Animation(content.Load<Texture2D>("EntityAnimations/OctorockMovingLeft"), 2, 0.1f, true) },
@@ -48,7 +52,8 @@ namespace ZeldaMakerGame.Managers
                 { "KeyIcon", content.Load<Texture2D>("Textures/KeySprite.png") },
                 { "ChestClosed", content.Load<Texture2D>("EntityAnimations/ChestClosed") },
                 { "ChestOpen", content.Load<Texture2D>("EntityAnimations/ChestOpen") },
-                { "PlayerSpawn", content.Load<Texture2D>("Textures/Start.png") }
+                { "PlayerSpawn", content.Load<Texture2D>("Textures/Start.png") },
+                { "SwordIcon", content.Load<Texture2D>("Textures/SwordSprite") }
             };
             #endregion
 
@@ -59,27 +64,27 @@ namespace ZeldaMakerGame.Managers
                 { "DownLadder", new Entity(SpriteAtlas["DownLadder"], 0f) },
                 {
                     "Octorock",
-                    new Entity(new Dictionary<string, Animation>
+                    new Enemy(new Dictionary<string, Animation>
                     {
                         {"WalkDown", AllAnimations["OctoRockWalkingDown"] },
                         {"WalkUp", AllAnimations["OctoRockWalkingUp"] },
                         {"WalkLeft", AllAnimations["OctoRockWalkingLeft"] },
                         {"WalkRight", AllAnimations["OctoRockWalkingRight"] },
-                    }, 50f)
+                    }, 50f, 5, 1)
                 },
                 {
                     "Chu Chu",
-                    new Entity(new Dictionary<string, Animation>
+                    new Enemy(new Dictionary<string, Animation>
                     {
                         {"Moving", AllAnimations["ChuChuMoving"] },
-                    }, 75f)
+                    }, 75f, 3, 1)
                 },
                 {
                     "Sawblade",
-                    new Entity(new Dictionary<string, Animation>
+                    new Enemy(new Dictionary<string, Animation>
                     {
                         {"Moving", AllAnimations["SawBladeMoving"] },
-                    }, 110f)
+                    }, 110f, -1, 2)
                 },
                 { "Chest", new Chest(SpriteAtlas["ChestClosed"], SpriteAtlas["ChestOpen"], Vector2.Zero) },
                 { "Spawn", new PlayerSpawn(SpriteAtlas["PlayerSpawn"]) }
@@ -89,6 +94,7 @@ namespace ZeldaMakerGame.Managers
             {
                 {"Bomb", new Item(SpriteAtlas["BombIcon"], "Bomb", 1) },
                 {"Key", new Item(SpriteAtlas["KeyIcon"], "Key", 1) },
+                {"Sword", new Sword(SpriteAtlas["SwordIcon"], "Sword")}
             };
             #endregion
         }

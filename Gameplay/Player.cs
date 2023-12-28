@@ -11,18 +11,22 @@ namespace ZeldaMakerGame.Gameplay
     {
         public int Health { get; set; }
         List<Item> inventory;
+        public bool Attacking { get; set; }
+        float attackingTimer;
         private Rectangle ColliderEdge => new Rectangle(Position.ToPoint() + new Point(0, 8), new Point(15, 15));
 
-        Item itemSlot1;
-        Item itemSlot2;
-        Item itemSlot3;
-        public Player(Texture2D texture, float speed) : base(texture, speed)
-        {
-            inventory = new List<Item>();
-        }
+        public Item itemSlot1;
+        public Item itemSlot2;
+        public Item itemSlot3;
+
         public Player(Dictionary<string, Animation> _animations, float speed) : base(_animations, speed)
         {
             inventory = new List<Item>();
+            itemSlot1 = EntityReferences.GetItemRef("Sword");
+            inventory.Add(itemSlot1);
+            attackingTimer = 0;
+            Attacking = false;
+            Size = animationManager.Edge.Size.ToVector2();
         }
 
         public void AddItem(Item item)
@@ -60,31 +64,37 @@ namespace ZeldaMakerGame.Gameplay
 
         public override void Update(GameTime gameTime)
         {
-            if (InputManager.isControllerActive)
+            // Movement
+            if (!Attacking) 
             {
-                Velocity = new Vector2(InputManager.joySticks.Left.X, -InputManager.joySticks.Left.Y);
-                animationManager.animationSpeedModifier = InputManager.joySticks.Left.Length();
-                Vector2 unitV = Velocity / Velocity.Length();
-                Vector2[] unitDirections = new Vector2[] {
+                if (InputManager.isControllerActive)
+                {
+                    Velocity = new Vector2(InputManager.joySticks.Left.X, -InputManager.joySticks.Left.Y);
+                    animationManager.animationSpeedModifier = InputManager.joySticks.Left.Length();
+                    Vector2 unitV = Velocity / Velocity.Length();
+                    Vector2[] unitDirections = new Vector2[] {
                     new Vector2(-1, -1)/ (float)Math.Sqrt(2), new Vector2(0, -1), new Vector2(1, -1)/ (float)Math.Sqrt(2),
                     new Vector2(-1, 0), new Vector2(1, 0),
                     new Vector2(-1, 1)/ (float)Math.Sqrt(2), new Vector2(0, 1), new Vector2(1, 1) / (float)Math.Sqrt(2)
                 };
-                foreach (Vector2 v in unitDirections) if (Vector2.Dot(unitV, v) > 0.75f) Velocity = Velocity.Length() * v;
+                    foreach (Vector2 v in unitDirections) if (Vector2.Dot(unitV, v) > 0.75f) Velocity = Velocity.Length() * v;
+                }
+                else
+                {
+                    animationManager.animationSpeedModifier = 1;
+                    int X = 0, Y = 0;
+                    if (InputManager.IsKeyHeld("Up")) Y = -1;
+                    else if (InputManager.IsKeyHeld("Down")) Y = 1;
+                    if (InputManager.IsKeyHeld("Left")) X = -1;
+                    else if (InputManager.IsKeyHeld("Right")) X = 1;
+                    if (InputManager.IsKeyHeld("Up") && InputManager.IsKeyHeld("Down")) Y = 0;
+                    if (InputManager.IsKeyHeld("Left") && InputManager.IsKeyHeld("Right")) X = 0;
+                    Velocity = new Vector2(X, Y);
+                }
             }
-            else
-            {
-                animationManager.animationSpeedModifier = 1;
-                int X = 0, Y = 0;
-                if (InputManager.IsKeyHeld("Up")) Y = -1;
-                else if (InputManager.IsKeyHeld("Down")) Y = 1;
-                if (InputManager.IsKeyHeld("Left")) X = -1;
-                else if (InputManager.IsKeyHeld("Right")) X = 1;
-                if (InputManager.IsKeyHeld("Up") && InputManager.IsKeyHeld("Down")) Y = 0;
-                if (InputManager.IsKeyHeld("Left") && InputManager.IsKeyHeld("Right")) X = 0;
-                Velocity = new Vector2(X, Y);
-            }
+            
             base.Update(gameTime);
+
             if (InputManager.IsButtonPressed("Action") || InputManager.IsKeyPressed("Action"))
             {
                 Rectangle interactRect = Rectangle.Empty;
@@ -107,6 +117,7 @@ namespace ZeldaMakerGame.Gameplay
                 Component[] objects = GameManager.CheckCollisions(interactRect);
                 foreach (Component obj in objects) ((Entity)obj).Activate(this);
             }
+
             if (InputManager.IsButtonPressed("Item1") || InputManager.IsKeyPressed("Item1"))
             {
                 if (itemSlot1 is not null)
@@ -132,6 +143,66 @@ namespace ZeldaMakerGame.Gameplay
                 }
             }
 
+            if (Attacking)
+            {
+                switch (direction)
+                {
+                    case Direction.Left:
+                        animationManager.Play(EntityReferences.GetAnimation("PlayerAttackingLeft"));
+                        break;
+                    case Direction.Right:
+                        animationManager.Play(EntityReferences.GetAnimation("PlayerAttackingRight"));
+                        break;
+                    case Direction.Down:
+                        animationManager.Play(EntityReferences.GetAnimation("PlayerAttackingDown"));
+                        break;
+                    case Direction.Up:
+                        animationManager.Play(EntityReferences.GetAnimation("PlayerAttackingUp"));
+                        break;
+                }
+                attackingTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (attackingTimer > 0.5)
+                {
+                    Attacking = false;
+                    attackingTimer = 0f;
+                    switch (direction)
+                    {
+                        case Direction.Left:
+                            animationManager.Play(EntityReferences.GetAnimation("PlayerWalkingLeft"));
+                            break;
+                        case Direction.Right:
+                            animationManager.Play(EntityReferences.GetAnimation("PlayerWalkingRight"));
+                            break;
+                        case Direction.Down:
+                            animationManager.Play(EntityReferences.GetAnimation("PlayerWalkingDown"));
+                            break;
+                        case Direction.Up:
+                            animationManager.Play(EntityReferences.GetAnimation("PlayerWalkingUp"));
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                attackingTimer = 0f;
+            }
+
+            Component[] colliding = GameManager.CheckCollisions(ColliderEdge);
+            foreach (Component E in colliding) 
+            {
+                if (E is Enemy) 
+                {
+                    Health -= ((Enemy)E).Damage;
+                    Vector2 directionOfE = E.Position - Position;
+                    Vector2 Udirection = directionOfE / directionOfE.Length();
+                    Velocity = -Udirection * 10;
+                }
+                else
+                {
+                    // Chest stuff collision
+                }
+            }
+
             if (GameManager.CheckTileCollisions(new Rectangle(ColliderEdge.X + (int)Velocity.X, ColliderEdge.Y, ColliderEdge.Width, ColliderEdge.Height))) Velocity = new Vector2(0, Velocity.Y);
             if (GameManager.CheckTileCollisions(new Rectangle(ColliderEdge.X, ColliderEdge.Y + (int)Velocity.Y, ColliderEdge.Width, ColliderEdge.Height))) Velocity = new Vector2(Velocity.X, 0);
         }
@@ -140,6 +211,17 @@ namespace ZeldaMakerGame.Gameplay
         {
             base.LateUpdate(gameTime);
             Velocity = Vector2.Zero;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (Attacking)
+            {
+                if (itemSlot1 is Sword) itemSlot1.Draw(spriteBatch);
+                else if (itemSlot2 is Sword) itemSlot2.Draw(spriteBatch);
+                else if (itemSlot3 is Sword) itemSlot3.Draw(spriteBatch);
+            }
+            base.Draw(spriteBatch);
         }
 
     }
