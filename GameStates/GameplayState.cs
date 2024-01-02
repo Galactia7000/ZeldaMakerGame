@@ -108,7 +108,7 @@ namespace ZeldaMakerGame.GameStates
         public override void Draw(GameTime _gametime, SpriteBatch _spritebatch)
         {
             _spritebatch.Begin(transformMatrix: gameCamera.Transform, samplerState: SamplerState.PointClamp);
-            game.currentDungeon.Draw(_spritebatch);
+            game.currentDungeon.Draw(_spritebatch, false);
             foreach (var entity in entities[game.currentDungeon.currentFloor])
             {
                 entity.Draw(_spritebatch);

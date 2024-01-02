@@ -37,7 +37,7 @@ namespace ZeldaMakerGame.Managers
                 { "OctoRockWalkingLeft", new Animation(content.Load<Texture2D>("EntityAnimations/OctorockMovingLeft"), 2, 0.1f, true) },
                 { "OctoRockWalkingRight", new Animation(content.Load<Texture2D>("EntityAnimations/OctorockMovingRight"), 2, 0.1f, true) },
                 { "ChuChuMoving", new Animation(content.Load<Texture2D>("EntityAnimations/ChuChuWalking"), 2, 0.1f, true) },
-                { "SawBladeMoving", new Animation(content.Load<Texture2D>("EntityAnimations/SawBladeAnimation"), 8, 0.1f, true) }
+                { "SawBladeMoving", new Animation(content.Load<Texture2D>("EntityAnimations/SawBladeAnimation"), 8, 0.2f, true) }
             };
             #endregion
 
@@ -81,10 +81,10 @@ namespace ZeldaMakerGame.Managers
                 },
                 {
                     "Sawblade",
-                    new Enemy(new Dictionary<string, Animation>
+                    new Sawblade(new Dictionary<string, Animation>
                     {
                         {"Moving", AllAnimations["SawBladeMoving"] },
-                    }, 110f, -1, 2)
+                    }, 100f, -1, 2)
                 },
                 { "Chest", new Chest(SpriteAtlas["ChestClosed"], SpriteAtlas["ChestOpen"], Vector2.Zero) },
                 { "Spawn", new PlayerSpawn(SpriteAtlas["PlayerSpawn"]) }

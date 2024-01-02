@@ -39,7 +39,7 @@ namespace ZeldaMakerGame.Gameplay
 
         public override void Update(GameTime gameTime)
         {
-            if(Health == 0) GameManager.RemoveEntity(this);
+            if(Health <= 0) GameManager.RemoveEntity(this);
             if(Target is not null)
             {
                 // TEMP PATHFINDING

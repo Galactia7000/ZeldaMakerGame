@@ -171,13 +171,13 @@ namespace ZeldaMakerGame.World
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, bool editor)
         {
             for (int c = 0; c < columns; c++)
             {
                 for (int r = 0; r < rows; r++)
                 {
-                    if (tiles[currentFloor, c, r] is not null) tiles[currentFloor, c, r].Draw(spriteBatch, tileset, currentFloor);
+                    if (tiles[currentFloor, c, r] is not null) tiles[currentFloor, c, r].Draw(spriteBatch, tileset, currentFloor, editor);
                 }
             }
         }

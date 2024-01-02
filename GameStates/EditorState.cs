@@ -130,7 +130,7 @@ namespace ZeldaMakerGame.GameStates
         public override void Draw(GameTime _gametime, SpriteBatch _spritebatch)
         {
             _spritebatch.Begin(transformMatrix: editorCamera.Transform, samplerState: SamplerState.PointClamp);
-            game.currentDungeon.Draw(_spritebatch);
+            game.currentDungeon.Draw(_spritebatch, true);
             if(highlightRect != Rectangle.Empty) _spritebatch.Draw(highlightTexture, highlightRect, Color.White);
             _spritebatch.End();
 

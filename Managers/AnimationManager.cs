@@ -22,7 +22,9 @@ namespace ZeldaMakerGame.Managers
         public AnimationManager(Animation animation)
         {
             currentAnimation = animation;
+            currentAnimation.currentFrame = 0;
             paused = false;
+            timer = 0f;
         }
 
         public void Play(Animation _animation)

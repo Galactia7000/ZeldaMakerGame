@@ -64,13 +64,13 @@ namespace ZeldaMakerGame.World
         }
 
         public Entity GetEntity() => thisEntity;
-        public void Draw(SpriteBatch spriteBatch, Tileset tileset, int currentFloor)
+        public void Draw(SpriteBatch spriteBatch, Tileset tileset, int currentFloor, bool editor)
         {
             spriteBatch.Draw(tileset.tilesetTexture, Edge, tileset.GetSourceReectangle(index), Color.White);
             if (thisEntity is not null) 
             {
                 if (thisEntity is PlayerSpawn && ((PlayerSpawn)thisEntity).floor != currentFloor) return;
-                thisEntity.DrawEditor(spriteBatch);
+                if (editor) thisEntity.DrawEditor(spriteBatch);
             }
             
         }

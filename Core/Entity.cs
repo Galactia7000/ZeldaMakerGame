@@ -56,18 +56,17 @@ namespace ZeldaMakerGame.Core
 
         public override void Update(GameTime gameTime)
         {
-            // Collisions
-            if (animationManager != null)
-            {
-                animationManager.LateUpdate(gameTime);
-                SetAnimations();
-            }
         }
 
         public override void LateUpdate(GameTime gameTime)
         {
             // Physics
             Position += Velocity * LinearSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (animationManager != null)
+            {
+                animationManager.LateUpdate(gameTime);
+                if (animations.ContainsKey("WalkDown")) SetAnimations();
+            }
         }
         public void DrawEditor(SpriteBatch spriteBatch)
         {
