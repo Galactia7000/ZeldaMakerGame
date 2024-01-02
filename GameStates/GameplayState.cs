@@ -66,7 +66,7 @@ namespace ZeldaMakerGame.GameStates
                                 thePlayer.Position = game.currentDungeon.tiles[f, c, r].Position - new Vector2(0, 7);
                                 game.currentDungeon.currentFloor = f;
                             }
-                            else entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity().Clone());
+                            else { entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity().Clone()); if (entities[f].Last() is Enemy) ((Enemy)entities[f].Last()).SetTarget(thePlayer); }
                         }
                     }
                 }
@@ -86,7 +86,7 @@ namespace ZeldaMakerGame.GameStates
             if (!isGamePaused)
             {
                 thePlayer.Update(_gametime);
-                foreach (var entity in entities[game.currentDungeon.currentFloor])
+                foreach (Component entity in entities[game.currentDungeon.currentFloor])
                 {
                     entity.Update(_gametime);
                 }

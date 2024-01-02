@@ -24,6 +24,8 @@ namespace ZeldaMakerGame.Gameplay
             inventory = new List<Item>();
             itemSlot1 = EntityReferences.GetItemRef("Sword");
             inventory.Add(itemSlot1);
+            itemSlot2 = EntityReferences.GetItemRef("Bomb");
+            inventory.Add(itemSlot2);
             attackingTimer = 0;
             Attacking = false;
             Size = animationManager.Edge.Size.ToVector2();
@@ -42,7 +44,7 @@ namespace ZeldaMakerGame.Gameplay
                     }
                 }
             }
-            inventory.Add(item);
+            else inventory.Add(item);
             if (itemSlot1 is null) itemSlot1 = item;
             else if (itemSlot2 is null) itemSlot2 = item;
             else if (itemSlot3 is null) itemSlot3 = item;

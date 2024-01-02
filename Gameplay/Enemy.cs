@@ -50,7 +50,6 @@ namespace ZeldaMakerGame.Gameplay
                 else if (Target.Position.Y > Position.Y) Velocity = new Vector2(Velocity.X, 1);
                 else Velocity = new Vector2(Velocity.X, -1);
             }
-            base.Update(gameTime);
         }
 
         public override void Activate(Player activator)
