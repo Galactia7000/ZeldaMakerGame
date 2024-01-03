@@ -40,16 +40,6 @@ namespace ZeldaMakerGame.Gameplay
         public override void Update(GameTime gameTime)
         {
             if(Health <= 0) GameManager.RemoveEntity(this);
-            if(Target is not null)
-            {
-                // TEMP PATHFINDING
-                if(Target.Position.X == Position.X) Velocity = new Vector2(0, 0);
-                else if (Target.Position.X > Position.X) Velocity =  new Vector2(1, 0);
-                else Velocity = new Vector2(-1, 0);
-                if (Target.Position.Y == Position.Y) Velocity = new Vector2(Velocity.X, 0);
-                else if (Target.Position.Y > Position.Y) Velocity = new Vector2(Velocity.X, 1);
-                else Velocity = new Vector2(Velocity.X, -1);
-            }
         }
 
         public override void Activate(Player activator)
