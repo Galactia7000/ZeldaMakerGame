@@ -50,6 +50,7 @@ namespace ZeldaMakerGame.Managers
                 { "ItemHighlight", content.Load<Texture2D>("Textures/ItemHighlight") },
                 { "BombIcon", content.Load<Texture2D>("Textures/BombSprite") },
                 { "KeyIcon", content.Load<Texture2D>("Textures/KeySprite.png") },
+                { "ArrowIcon", content.Load<Texture2D>("Textures/Arrow.png") },
                 { "ChestClosed", content.Load<Texture2D>("EntityAnimations/ChestClosed") },
                 { "ChestOpen", content.Load<Texture2D>("EntityAnimations/ChestOpen") },
                 { "PlayerSpawn", content.Load<Texture2D>("Textures/Start.png") },
@@ -92,7 +93,8 @@ namespace ZeldaMakerGame.Managers
 
             ItemDictionary = new Dictionary<string, Item>()
             {
-                {"Bomb", new Item(SpriteAtlas["BombIcon"], "Bomb", 1) },
+                {"Bomb", new BombItem(SpriteAtlas["BombIcon"], "Bomb", 1) },
+                {"Arrow", new Item(SpriteAtlas["ArrowIcon"], "Arrow", 1) },
                 {"Key", new Item(SpriteAtlas["KeyIcon"], "Key", 1) },
                 {"Sword", new Sword(SpriteAtlas["SwordIcon"], "Sword")}
             };

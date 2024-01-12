@@ -13,7 +13,7 @@ namespace ZeldaMakerGame.Gameplay
         {
         }
 
-        public override bool Use(Player player)
+        public override void Use(Player player)
         {
             Edge = new Rectangle();
             switch (player.direction) 
@@ -43,11 +43,16 @@ namespace ZeldaMakerGame.Gameplay
             Component[] colliding = GameManager.CheckCollisions(Edge);
             foreach (Component c in colliding) 
             {
-                if (c is Enemy) ((Enemy)c).Health--;
+                if (c is Enemy) 
+                { 
+                    ((Enemy)c).Health -= 1;
+                    Vector2 directionOfE = c.Position - Edge.Center.ToVector2();
+                    Vector2 Udirection = directionOfE / directionOfE.Length();
+                    ((Entity)c).Velocity = Udirection * 50;
+                }
             }
 
             player.Attacking = true;
-            return false;
         }
         public override void Draw(SpriteBatch batch)
         {

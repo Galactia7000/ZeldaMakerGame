@@ -86,18 +86,22 @@ namespace ZeldaMakerGame.GameStates
             if (!isGamePaused)
             {
                 thePlayer.Update(_gametime);
-                foreach (Component entity in entities[game.currentDungeon.currentFloor])
+                foreach (Component entity in GameManager.GetEntities())
                 {
                     entity.Update(_gametime);
                 }
             }
             if (InputManager.IsKeyPressed("Pause") || InputManager.IsButtonPressed("Pause")) isGamePaused = !isGamePaused;
+            foreach (Component entity in GameManager.GetEntities())
+            {
+                if (entity is Enemy && !((Enemy)entity).IsAlive) GameManager.RemoveEntity((Entity)entity);
+            }
             if (thePlayer.Health <= 0) RestartDungeon();
         }
         public override void LateUpdate(GameTime _gametime)
         {
             thePlayer.LateUpdate(_gametime);
-            foreach(var entity in entities[game.currentDungeon.currentFloor])
+            foreach(var entity in GameManager.GetEntities())
             {
                 entity.LateUpdate(_gametime);
             }

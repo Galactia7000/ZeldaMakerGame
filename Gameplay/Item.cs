@@ -36,9 +36,8 @@ namespace ZeldaMakerGame.Gameplay
         {
             if(Position != Vector2.Zero) spriteBatch.Draw(Texture, Position, Color.White);
         }
-        public virtual bool Use(Player player)
+        public virtual void Use(Player player)
         {
-            return false;
         }
 
         public Item Clone()

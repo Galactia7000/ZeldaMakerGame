@@ -15,7 +15,7 @@ namespace ZeldaMakerGame.Core
     public class Entity : Component
     {
 
-        protected Vector2 Velocity { get; set; }
+        public Vector2 Velocity { get; set; }
 
         public Direction direction;
 
@@ -61,12 +61,19 @@ namespace ZeldaMakerGame.Core
         public override void LateUpdate(GameTime gameTime)
         {
             // Physics
+            if (this is not Player)
+            {
+                if (GameManager.CheckTileCollisions(new Rectangle(Edge.X + (int)Velocity.X, Edge.Y, Edge.Width, Edge.Height))) Velocity = new Vector2(0, Velocity.Y);
+                if (GameManager.CheckTileCollisions(new Rectangle(Edge.X, Edge.Y + (int)Velocity.Y, Edge.Width, Edge.Height))) Velocity = new Vector2(Velocity.X, 0);
+            }
+
             Position += Velocity * LinearSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (animationManager != null)
             {
                 animationManager.LateUpdate(gameTime);
                 if (animations.ContainsKey("WalkDown")) SetAnimations();
             }
+            Velocity = Vector2.Zero;
         }
         public void DrawEditor(SpriteBatch spriteBatch)
         {

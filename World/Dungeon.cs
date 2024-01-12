@@ -98,7 +98,8 @@ namespace ZeldaMakerGame.World
                     case ToolType.Item:
                         if (selected.GetEntity() is not null)
                         {
-                            selected.GetEntity().itemContents = EntityReferences.GetItemRef(currentAction.EquipedTool.tag);
+                            if (selected.GetEntity().itemContents is not null && selected.GetEntity().itemContents.Name == currentAction.EquipedTool.tag) selected.GetEntity().itemContents.Quantity++;
+                            else selected.GetEntity().itemContents = EntityReferences.GetItemRef(currentAction.EquipedTool.tag).Clone();
                         }
                         break;
                 }

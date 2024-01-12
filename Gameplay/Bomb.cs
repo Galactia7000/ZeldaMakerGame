@@ -16,20 +16,20 @@ namespace ZeldaMakerGame.Gameplay
         {
         }
 
-        public override bool Use(Player player)
+        public override void Use(Player player)
         {
-            GameManager.AddEntity(new Bomb(EntityReferences.GetAnimation("BombExploding"), 0f));
-            return true;
+            GameManager.AddEntity(new Bomb(EntityReferences.GetAnimation("BombExploding"), 0f, player.Position));
         }
     }
     public class Bomb : Entity
     {
         float timer;
         float timeToDetonate;
-        public Bomb(Animation animation, float speed) : base(animation, speed)
+        public Bomb(Animation animation, float speed, Vector2 pos) : base(animation, speed)
         {
             timer = 0f;
             timeToDetonate = 5f;
+            Position = pos;
         }
 
         public override void LateUpdate(GameTime gameTime)

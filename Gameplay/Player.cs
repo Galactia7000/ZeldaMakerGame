@@ -10,22 +10,19 @@ namespace ZeldaMakerGame.Gameplay
     public class Player : Entity
     {
         public int Health { get; set; }
-        List<Item> inventory;
         public bool Attacking { get; set; }
         float attackingTimer;
         private Rectangle ColliderEdge => new Rectangle(Position.ToPoint() + new Point(0, 8), new Point(15, 15));
 
-        public Item itemSlot1;
-        public Item itemSlot2;
-        public Item itemSlot3;
+        public int bombs;
+        public int arrows;
+        public int keys;
 
         public Player(Dictionary<string, Animation> _animations, float speed) : base(_animations, speed)
         {
-            inventory = new List<Item>();
-            itemSlot1 = EntityReferences.GetItemRef("Sword");
-            inventory.Add(itemSlot1);
-            itemSlot2 = EntityReferences.GetItemRef("Bomb");
-            inventory.Add(itemSlot2);
+            bombs = 0;
+            arrows = 0;
+            keys = 0;
             attackingTimer = 0;
             Attacking = false;
             Size = animationManager.Edge.Size.ToVector2();
@@ -33,35 +30,19 @@ namespace ZeldaMakerGame.Gameplay
 
         public void AddItem(Item item)
         {
-            if(inventory.Count > 0)
+            switch (item.Name) 
             {
-                foreach (Item i in inventory)
-                {
-                    if (i.Name == item.Name)
-                    {
-                        i.Quantity += item.Quantity;
-                        return;
-                    }
-                }
+                case "Bomb":
+                    bombs += item.Quantity;
+                    break;
+                case "Key":
+                    keys += item.Quantity;
+                    break;
+                case "Arrow":
+                    arrows += item.Quantity;
+                    break;
             }
-            else inventory.Add(item);
-            if (itemSlot1 is null) itemSlot1 = item;
-            else if (itemSlot2 is null) itemSlot2 = item;
-            else if (itemSlot3 is null) itemSlot3 = item;
-        }
 
-        public void Equip(string name, int slot)
-        {
-            foreach (Item i in inventory)
-            {
-                if (i.Name == name)
-                {
-                    if (slot == 1) itemSlot1 = i;
-                    else if (slot == 2) itemSlot2 = i;
-                    else itemSlot3 = i;
-                    return;
-                }
-            }
         }
 
         public override void Update(GameTime gameTime)
@@ -122,26 +103,23 @@ namespace ZeldaMakerGame.Gameplay
 
             if (InputManager.IsButtonPressed("Item1") || InputManager.IsKeyPressed("Item1"))
             {
-                if (itemSlot1 is not null)
-                {
-                    bool isConsumed = itemSlot1.Use(this);
-                    if (isConsumed) itemSlot1.Quantity--;
-                }
+                if (!Attacking) EntityReferences.GetItemRef("Sword").Use(this);
             }
             if (InputManager.IsButtonPressed("Item2") || InputManager.IsKeyPressed("Item2"))
             {
-                if (itemSlot2 is not null)
+                if (!Attacking && bombs > 0) 
                 {
-                    bool isConsumed = itemSlot2.Use(this);
-                    if (isConsumed) itemSlot2.Quantity--;
+                    EntityReferences.GetItemRef("Bomb").Use(this);
+                    bombs--;
                 }
+
             }
             if (InputManager.IsButtonPressed("Item3") || InputManager.IsKeyPressed("Item3"))
             {
-                if (itemSlot3 is not null)
+                if (!Attacking && arrows > 0)
                 {
-                    bool isConsumed = itemSlot3.Use(this);
-                    if (isConsumed) itemSlot3.Quantity--;
+                    EntityReferences.GetItemRef("Arrow").Use(this);
+                    arrows--;
                 }
             }
 
@@ -209,20 +187,9 @@ namespace ZeldaMakerGame.Gameplay
             if (GameManager.CheckTileCollisions(new Rectangle(ColliderEdge.X, ColliderEdge.Y + (int)Velocity.Y, ColliderEdge.Width, ColliderEdge.Height))) Velocity = new Vector2(Velocity.X, 0);
         }
 
-        public override void LateUpdate(GameTime gameTime)
-        {
-            base.LateUpdate(gameTime);
-            Velocity = Vector2.Zero;
-        }
-
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (Attacking)
-            {
-                if (itemSlot1 is Sword) itemSlot1.Draw(spriteBatch);
-                else if (itemSlot2 is Sword) itemSlot2.Draw(spriteBatch);
-                else if (itemSlot3 is Sword) itemSlot3.Draw(spriteBatch);
-            }
+            if (Attacking) EntityReferences.GetItemRef("Sword").Draw(spriteBatch);
             base.Draw(spriteBatch);
         }
 

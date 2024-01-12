@@ -15,9 +15,9 @@ namespace ZeldaMakerGame.Gameplay
 {
     public class Enemy : Entity
     {
-        public int Health { get; set; }
-        public int Damage { get; set; }
-        public bool IsAlive { get; set; }
+        public int Health;
+        public int Damage;
+        public bool IsAlive;
 
         Component Target;
 
@@ -39,7 +39,7 @@ namespace ZeldaMakerGame.Gameplay
 
         public override void Update(GameTime gameTime)
         {
-            if(Health <= 0) GameManager.RemoveEntity(this);
+            if (Health <= 0) IsAlive = false;
         }
 
         public override void Activate(Player activator)
