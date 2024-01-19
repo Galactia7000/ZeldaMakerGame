@@ -42,8 +42,9 @@ namespace ZeldaMakerGame.Gameplay
 
         public Item Clone()
         {
-            Item copy = new Item() 
-            { 
+            Item copy = new Item()
+            {
+                Texture = this.Texture,
                 Position = this.Position,
                 Name = this.Name,
                 Quantity = this.Quantity

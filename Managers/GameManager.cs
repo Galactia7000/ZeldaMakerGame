@@ -40,7 +40,7 @@ namespace ZeldaMakerGame.Managers
         /// <param name="entity"></param>
         public static void RemoveEntity(Entity entity)
         {
-            entitiesToDelete.Remove(entity);
+            entitiesToDelete.Add(entity);
         }
 
         public static void ChangeEntities(List<Component> newEntities)

@@ -66,7 +66,11 @@ namespace ZeldaMakerGame.GameStates
                                 thePlayer.Position = game.currentDungeon.tiles[f, c, r].Position - new Vector2(0, 7);
                                 game.currentDungeon.currentFloor = f;
                             }
-                            else { entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity().Clone()); if (entities[f].Last() is Enemy) ((Enemy)entities[f].Last()).SetTarget(thePlayer); }
+                            else 
+                            { 
+                                entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity().Clone());
+                                if (entities[f].Last() is Enemy) ((Enemy)entities[f].Last()).SetTarget(thePlayer); 
+                            }
                         }
                     }
                 }
@@ -91,17 +95,14 @@ namespace ZeldaMakerGame.GameStates
                     entity.Update(_gametime);
                 }
             }
-            if (InputManager.IsKeyPressed("Pause") || InputManager.IsButtonPressed("Pause")) isGamePaused = !isGamePaused;
-            foreach (Component entity in GameManager.GetEntities())
-            {
-                if (entity is Enemy && !((Enemy)entity).IsAlive) GameManager.RemoveEntity((Entity)entity);
-            }
+            if (InputManager.IsKeyPressed("Pause") || InputManager.IsButtonPressed("Pause")) 
+                isGamePaused = !isGamePaused;
             if (thePlayer.Health <= 0) RestartDungeon();
         }
         public override void LateUpdate(GameTime _gametime)
         {
             thePlayer.LateUpdate(_gametime);
-            foreach(var entity in GameManager.GetEntities())
+            foreach(Component entity in GameManager.GetEntities())
             {
                 entity.LateUpdate(_gametime);
             }
@@ -113,7 +114,7 @@ namespace ZeldaMakerGame.GameStates
         {
             _spritebatch.Begin(transformMatrix: gameCamera.Transform, samplerState: SamplerState.PointClamp);
             game.currentDungeon.Draw(_spritebatch, false);
-            foreach (var entity in entities[game.currentDungeon.currentFloor])
+            foreach (Component entity in GameManager.GetEntities())
             {
                 entity.Draw(_spritebatch);
             }

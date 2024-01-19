@@ -33,5 +33,10 @@ namespace ZeldaMakerGame.Managers
             this.frameWidth = animationsTexture.Width / frameCount;
             this.frameHeight = animationsTexture.Height;
         }
+
+        public Animation Clone()
+        {
+            return new Animation(animationTexture, frameCount, frameSpeed, isLooping);
+        }
     }
 }

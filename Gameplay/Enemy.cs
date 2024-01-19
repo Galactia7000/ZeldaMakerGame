@@ -19,7 +19,7 @@ namespace ZeldaMakerGame.Gameplay
         public int Damage;
         public bool IsAlive;
 
-        Component Target;
+        protected Component Target;
 
         public Enemy(Texture2D texture, float speed, int hp, int dmg) : base(texture, speed)
         {
@@ -39,7 +39,7 @@ namespace ZeldaMakerGame.Gameplay
 
         public override void Update(GameTime gameTime)
         {
-            if (Health <= 0) IsAlive = false;
+            if (Health <= 0) GameManager.RemoveEntity(this);
         }
 
         public override void Activate(Player activator)
@@ -57,5 +57,6 @@ namespace ZeldaMakerGame.Gameplay
             copy.IsAlive = IsAlive;
             return Clone(copy);
         }
+
     }
 }

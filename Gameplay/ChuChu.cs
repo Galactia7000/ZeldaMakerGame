@@ -17,11 +17,17 @@ namespace ZeldaMakerGame.Gameplay
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
+            if(Target is not null)
+            {
+                Vector2 toPlayer = Target.Position - Position;
+                Velocity = toPlayer / toPlayer.Length();
+            }
         }
 
         public override Entity Clone()
         {
+            ChuChu copy = new ChuChu(animations, LinearSpeed, Health, Damage);
+            copy.IsAlive = IsAlive;
             return base.Clone();
         }
     }

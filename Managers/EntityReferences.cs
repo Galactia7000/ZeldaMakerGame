@@ -23,7 +23,7 @@ namespace ZeldaMakerGame.Managers
             #region Animations
             AllAnimations = new Dictionary<string, Animation>
             {
-                { "BombExploding", new Animation(content.Load<Texture2D>("EntityAnimations/BombAnimation"), 2, 1f, true) },
+                { "BombExploding", new Animation(content.Load<Texture2D>("EntityAnimations/BombAnimation"), 2, 0.1f, true) },
                 { "PlayerWalkingDown", new Animation(content.Load<Texture2D>("EntityAnimations/LinkWalkingDownAnimation"), 9, 0.05F, true) },
                 { "PlayerWalkingUp", new Animation(content.Load<Texture2D>("EntityAnimations/LinkWalkingUpAnimation"), 9, 0.05F, true) },
                 { "PlayerWalkingLeft", new Animation(content.Load<Texture2D>("EntityAnimations/LinkWalkingLeftAnimation"), 9, 0.05F, true) },
@@ -75,7 +75,7 @@ namespace ZeldaMakerGame.Managers
                 },
                 {
                     "Chu Chu",
-                    new Enemy(new Dictionary<string, Animation>
+                    new ChuChu(new Dictionary<string, Animation>
                     {
                         {"Moving", AllAnimations["ChuChuMoving"] },
                     }, 10f, 3, 1)

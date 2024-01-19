@@ -18,10 +18,6 @@ namespace ZeldaMakerGame.GameStates
         public MainMenuState(ZeldaMaker _game, ContentManager _contentManager) : base(_game, _contentManager) { }
 
         private List<Component> _components = new List<Component>();
-        private Texture2D _logoTexture;
-        Tileset defaultTileset;
-
-        private Panel currentMenuPanel;
 
         #region MainMethods
 

@@ -50,7 +50,7 @@ namespace ZeldaMakerGame.Core
             direction = Direction.Down;
         }
 
-        public Entity(Animation animation, float speed) : this(new Dictionary<string, Animation> { { "Idle", animation } }, speed)
+        public Entity(Animation animation, float speed) : this(new Dictionary<string, Animation> { { "Idle", animation.Clone() } }, speed)
         {
         }
 

@@ -18,7 +18,7 @@ namespace ZeldaMakerGame.Gameplay
 
         public override void Use(Player player)
         {
-            GameManager.AddEntity(new Bomb(EntityReferences.GetAnimation("BombExploding"), 0f, player.Position));
+            GameManager.AddEntity(new Bomb(EntityReferences.GetAnimation("BombExploding"), 0f, player.Position + new Vector2(0, 8)));
         }
     }
     public class Bomb : Entity
@@ -30,10 +30,6 @@ namespace ZeldaMakerGame.Gameplay
             timer = 0f;
             timeToDetonate = 5f;
             Position = pos;
-        }
-
-        public override void LateUpdate(GameTime gameTime)
-        {
         }
 
         public override void Update(GameTime gameTime)
