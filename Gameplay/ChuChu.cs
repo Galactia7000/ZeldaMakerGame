@@ -11,13 +11,21 @@ namespace ZeldaMakerGame.Gameplay
 {
     public class ChuChu : Enemy
     {
+        float timer;
         public ChuChu(Dictionary<string, Animation> _animations, float speed, int hp, int dmg) : base(_animations, speed, hp, dmg)
         {
+            timer = 0f;
         }
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            if(Target is not null)
+            if (IsStunned)
+            {
+                timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if(timer > 1f) IsStunned = false;
+            }
+            else timer = 0f;
+            if(Target is not null && !IsStunned)
             {
                 Vector2 toPlayer = Target.Position - Position;
                 Velocity = toPlayer / toPlayer.Length();
@@ -28,7 +36,7 @@ namespace ZeldaMakerGame.Gameplay
         {
             ChuChu copy = new ChuChu(animations, LinearSpeed, Health, Damage);
             copy.IsAlive = IsAlive;
-            return base.Clone();
+            return base.Clone(copy);
         }
     }
 }

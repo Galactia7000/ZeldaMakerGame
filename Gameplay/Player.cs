@@ -183,14 +183,14 @@ namespace ZeldaMakerGame.Gameplay
                 }
             }
 
-            if (GameManager.CheckTileCollisions(new Rectangle(ColliderEdge.X + (int)Velocity.X, ColliderEdge.Y, ColliderEdge.Width, ColliderEdge.Height))) Velocity = new Vector2(0, Velocity.Y);
-            if (GameManager.CheckTileCollisions(new Rectangle(ColliderEdge.X, ColliderEdge.Y + (int)Velocity.Y, ColliderEdge.Width, ColliderEdge.Height))) Velocity = new Vector2(Velocity.X, 0);
+            Velocity = GameManager.CheckTileCollisions(ColliderEdge, Velocity, "player");
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (Attacking) EntityReferences.GetItemRef("Sword").Draw(spriteBatch);
             base.Draw(spriteBatch);
+            //spriteBatch.Draw(EntityReferences.GetSprite("TileHighlight"), ColliderEdge, Color.White);
         }
 
     }

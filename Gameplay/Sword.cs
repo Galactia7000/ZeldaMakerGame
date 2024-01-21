@@ -48,7 +48,8 @@ namespace ZeldaMakerGame.Gameplay
                     ((Enemy)c).Health -= 1;
                     Vector2 directionOfE = c.Position - Edge.Center.ToVector2();
                     Vector2 Udirection = directionOfE / directionOfE.Length();
-                    ((Entity)c).Velocity = Udirection * 50;
+                    ((Entity)c).Velocity = Udirection * 20;
+                    ((Enemy)c).IsStunned = true;
                 }
             }
 

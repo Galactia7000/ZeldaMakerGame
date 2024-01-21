@@ -18,6 +18,7 @@ namespace ZeldaMakerGame.Gameplay
         public int Health;
         public int Damage;
         public bool IsAlive;
+        public bool IsStunned;
 
         protected Component Target;
 
@@ -25,11 +26,15 @@ namespace ZeldaMakerGame.Gameplay
         {
             Health = hp;
             Damage = dmg;
+            IsAlive = true;
+            IsStunned = false;
         }
 
         public Enemy(Dictionary<string, Animation> _animations, float speed, int hp, int dmg) : base(_animations, speed)
         {
             Health = hp; Damage = dmg;
+            IsAlive = true;
+            IsStunned = false;
         }
 
         public void SetTarget(Component target)

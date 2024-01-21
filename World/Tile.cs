@@ -67,6 +67,7 @@ namespace ZeldaMakerGame.World
         public void Draw(SpriteBatch spriteBatch, Tileset tileset, int currentFloor, bool editor)
         {
             spriteBatch.Draw(tileset.tilesetTexture, Edge, tileset.GetSourceReectangle(index), Color.White);
+            //if (!isGround) spriteBatch.Draw(EntityReferences.GetSprite("TileHighlight"), Edge, Color.White);
             if (thisEntity is not null) 
             {
                 if (thisEntity is PlayerSpawn && ((PlayerSpawn)thisEntity).floor != currentFloor) return;

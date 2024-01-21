@@ -42,7 +42,7 @@ namespace ZeldaMakerGame.GameStates
             gameCamera.ChangeZoom(1.5f);
 
             isGamePaused = false;
-            thePlayer = new Player(playerAnimations, 75f);
+            thePlayer = new Player(playerAnimations, 65f);
 
             RestartDungeon();
         }

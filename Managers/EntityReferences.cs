@@ -78,14 +78,14 @@ namespace ZeldaMakerGame.Managers
                     new ChuChu(new Dictionary<string, Animation>
                     {
                         {"Moving", AllAnimations["ChuChuMoving"] },
-                    }, 10f, 3, 1)
+                    }, 20f, 3, 1)
                 },
                 {
                     "Sawblade",
                     new Sawblade(new Dictionary<string, Animation>
                     {
                         {"Moving", AllAnimations["SawBladeMoving"] },
-                    }, 25f, -1, 2)
+                    }, 35f, -1, 2)
                 },
                 { "Chest", new Chest(SpriteAtlas["ChestClosed"], SpriteAtlas["ChestOpen"], Vector2.Zero) },
                 { "Spawn", new PlayerSpawn(SpriteAtlas["PlayerSpawn"]) }

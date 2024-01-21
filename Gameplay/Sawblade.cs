@@ -14,21 +14,15 @@ namespace ZeldaMakerGame.Gameplay
         public Sawblade(Dictionary<string, Animation> _animations, float speed, int hp, int dmg) : base(_animations, speed, hp, dmg)
         {
             Random rng = new Random();
-            Velocity = new Vector2((float)rng.Next(5), (float)rng.Next(10));
+            Velocity = new Vector2((float)rng.Next(-1, 2), (float)rng.Next(-1, 2));
+            Velocity /= Velocity.Length();
             animationManager.Play(_animations["Moving"]);
             animationManager.animationSpeedModifier = 1f;
         }
 
         public override void Update(GameTime gameTime)
         {
-            if (GameManager.CheckTileCollisions(new Rectangle((int)(Edge.X + (Velocity.X * LinearSpeed * gameTime.ElapsedGameTime.TotalSeconds)), Edge.Y, Edge.Width, Edge.Height)))
-            {
-                Velocity = new Vector2(-Velocity.X, Velocity.Y);
-            }
-            if (GameManager.CheckTileCollisions(new Rectangle(Edge.X, (int)(Edge.Y + (Velocity.Y * LinearSpeed * gameTime.ElapsedGameTime.TotalSeconds)), Edge.Width, Edge.Height)))
-            {
-                Velocity = new Vector2(Velocity.X, -Velocity.Y);
-            }
+            Velocity = GameManager.CheckTileCollisions(Edge, Velocity, "Saw", -1);
             
         }
         public override void LateUpdate(GameTime gameTime)
