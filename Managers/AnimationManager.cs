@@ -16,7 +16,7 @@ namespace ZeldaMakerGame.Managers
         private float timer;
         public Vector2 Position;
         public float animationSpeedModifier;
-        bool paused;
+        public bool paused;
         public Rectangle Edge { get => new Rectangle(Position.ToPoint(), new Point(currentAnimation.frameWidth, currentAnimation.frameHeight)); }
         private AnimationManager() { }
         public AnimationManager(Animation animation)

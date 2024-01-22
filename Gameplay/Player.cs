@@ -20,8 +20,8 @@ namespace ZeldaMakerGame.Gameplay
 
         public Player(Dictionary<string, Animation> _animations, float speed) : base(_animations, speed)
         {
-            bombs = 0;
-            arrows = 0;
+            bombs = 12;
+            arrows = 12;
             keys = 0;
             attackingTimer = 0;
             Attacking = false;
@@ -175,7 +175,7 @@ namespace ZeldaMakerGame.Gameplay
                     Health -= ((Enemy)E).Damage;
                     Vector2 directionOfE = E.Position - Position;
                     Vector2 Udirection = directionOfE / directionOfE.Length();
-                    Velocity = -Udirection * 10;
+                    ((Enemy)E).Velocity = -Udirection * 10;
                 }
                 else
                 {
@@ -183,7 +183,7 @@ namespace ZeldaMakerGame.Gameplay
                 }
             }
 
-            Velocity = GameManager.CheckTileCollisions(ColliderEdge, Velocity, "player");
+            Velocity = GameManager.CheckTileCollisions(ColliderEdge, Velocity);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

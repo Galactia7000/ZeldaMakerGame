@@ -50,7 +50,7 @@ namespace ZeldaMakerGame.GameStates
         void RestartDungeon()
         {
             thePlayer.Health = 6;
-            GameManager.Initialize(game.currentDungeon);
+            GameManager.Initialize(game.currentDungeon, thePlayer);
             entities = new List<Component>[game.currentDungeon.floors];
             for (int f = 0; f < game.currentDungeon.floors; f++)
             {

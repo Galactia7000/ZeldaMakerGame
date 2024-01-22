@@ -63,7 +63,7 @@ namespace ZeldaMakerGame.Core
             // Physics
             if (this is not Player)
             {
-                Velocity = GameManager.CheckTileCollisions(Edge, Velocity, "Enemy");
+                Velocity = GameManager.CheckTileCollisions(Edge, Velocity);
             }
 
             Position += Velocity * LinearSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;

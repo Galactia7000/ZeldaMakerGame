@@ -37,6 +37,18 @@
 /processorParam:TextureFormat=Color
 /build:EntityAnimations/BombAnimation.png
 
+#begin EntityAnimations/BombExploding.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:EntityAnimations/BombExploding.png
+
 #begin EntityAnimations/ChestClosed.png
 /importer:TextureImporter
 /processor:TextureProcessor

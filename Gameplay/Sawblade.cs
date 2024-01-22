@@ -22,7 +22,7 @@ namespace ZeldaMakerGame.Gameplay
 
         public override void Update(GameTime gameTime)
         {
-            Velocity = GameManager.CheckTileCollisions(Edge, Velocity, "Saw", -1);
+            Velocity = GameManager.CheckTileCollisions(Edge, Velocity, -1);
             
         }
         public override void LateUpdate(GameTime gameTime)

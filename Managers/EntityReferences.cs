@@ -23,15 +23,16 @@ namespace ZeldaMakerGame.Managers
             #region Animations
             AllAnimations = new Dictionary<string, Animation>
             {
-                { "BombExploding", new Animation(content.Load<Texture2D>("EntityAnimations/BombAnimation"), 2, 0.1f, true) },
+                { "BombOnFloor", new Animation(content.Load<Texture2D>("EntityAnimations/BombAnimation"), 2, 0.1f, true) },
+                { "BombExploding", new Animation(content.Load<Texture2D>("EntityAnimations/BombExploding"), 5, 0.2f, false) },
                 { "PlayerWalkingDown", new Animation(content.Load<Texture2D>("EntityAnimations/LinkWalkingDownAnimation"), 9, 0.05F, true) },
                 { "PlayerWalkingUp", new Animation(content.Load<Texture2D>("EntityAnimations/LinkWalkingUpAnimation"), 9, 0.05F, true) },
                 { "PlayerWalkingLeft", new Animation(content.Load<Texture2D>("EntityAnimations/LinkWalkingLeftAnimation"), 9, 0.05F, true) },
                 { "PlayerWalkingRight", new Animation(content.Load<Texture2D>("EntityAnimations/LinkWalkingRightAnimation"), 9, 0.05F, true) },
-                { "PlayerAttackingDown", new Animation(content.Load<Texture2D>("EntityAnimations/LinkAttackingDown"), 2, 0.25F, false) },
-                { "PlayerAttackingUp", new Animation(content.Load<Texture2D>("EntityAnimations/LinkAttackingUp"), 2, 0.25F, false) },
-                { "PlayerAttackingLeft", new Animation(content.Load<Texture2D>("EntityAnimations/LinkAttackingLeft"), 2, 0.25F, false) },
-                { "PlayerAttackingRight", new Animation(content.Load<Texture2D>("EntityAnimations/LinkAttackingRight"), 2, 0.25F, false) },
+                { "PlayerAttackingDown", new Animation(content.Load<Texture2D>("EntityAnimations/LinkAttackingDown"), 2, 0.5F, false) },
+                { "PlayerAttackingUp", new Animation(content.Load<Texture2D>("EntityAnimations/LinkAttackingUp"), 2, 0.5F, false) },
+                { "PlayerAttackingLeft", new Animation(content.Load<Texture2D>("EntityAnimations/LinkAttackingLeft"), 2, 0.5F, false) },
+                { "PlayerAttackingRight", new Animation(content.Load<Texture2D>("EntityAnimations/LinkAttackingRight"), 2, 0.5F, false) },
                 { "OctoRockWalkingDown", new Animation(content.Load<Texture2D>("EntityAnimations/OctorockMovingDown"), 2, 0.1f, true) },
                 { "OctoRockWalkingUp", new Animation(content.Load<Texture2D>("EntityAnimations/OctorockMovingUp"), 2, 0.1f, true) },
                 { "OctoRockWalkingLeft", new Animation(content.Load<Texture2D>("EntityAnimations/OctorockMovingLeft"), 2, 0.1f, true) },
@@ -94,7 +95,7 @@ namespace ZeldaMakerGame.Managers
             ItemDictionary = new Dictionary<string, Item>()
             {
                 {"Bomb", new BombItem(SpriteAtlas["BombIcon"], "Bomb", 1) },
-                {"Arrow", new Item(SpriteAtlas["ArrowIcon"], "Arrow", 1) },
+                {"Arrow", new ArrowItem(SpriteAtlas["ArrowIcon"], "Arrow", 1) },
                 {"Key", new Item(SpriteAtlas["KeyIcon"], "Key", 1) },
                 {"Sword", new Sword(SpriteAtlas["SwordIcon"], "Sword")}
             };

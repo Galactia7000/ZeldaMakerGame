@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ZeldaMakerGame.Core;
+using ZeldaMakerGame.Gameplay;
 using ZeldaMakerGame.GameStates;
 using ZeldaMakerGame.World;
 
@@ -16,13 +18,14 @@ namespace ZeldaMakerGame.Managers
         static List<Component> entitiesToDelete;
         static List<Component> existingEntities;
         static Dungeon thisDungeon;
-
-        public static void Initialize(Dungeon dung) 
+        static Player thePlayer;
+        public static void Initialize(Dungeon dung, Player play) 
         { 
             entitiesToAdd = new List<Component>(); 
             entitiesToDelete = new List<Component>(); 
             existingEntities = new List<Component>();
             thisDungeon = dung;
+            thePlayer = play;
         }
 
         /// <summary>
@@ -50,17 +53,18 @@ namespace ZeldaMakerGame.Managers
 
         public static List<Component> GetEntities() => existingEntities;
 
-        public static Component[] CheckCollisions(Rectangle collider)
+        public static Component[] CheckCollisions(Rectangle collider, bool includePlayer = false)
         {
             List<Component> hitEntities = new List<Component>();
             foreach (Entity entity in existingEntities)
             {
                 if(entity.Edge.Intersects(collider)) hitEntities.Add(entity);
             }
+            if (includePlayer && thePlayer.Edge.Intersects(collider)) hitEntities.Add(thePlayer);
             return hitEntities.ToArray();
         }
 
-        public static Vector2 CheckTileCollisions(Rectangle collider, Vector2 velocity, string tag, int collisionMultiplier = 0)
+        public static Vector2 CheckTileCollisions(Rectangle collider, Vector2 velocity, int collisionMultiplier = 0)
         {
             Vector2 TilePos = collider.Location.ToVector2() / thisDungeon.tileset.tileSize;
             for(int y = (int)TilePos.Y - 1; y <= (int)TilePos.Y + 1; y++)
@@ -74,6 +78,7 @@ namespace ZeldaMakerGame.Managers
             }
             return velocity;
         }
+        #region Collision
         private static bool IsCollidingLeft(Rectangle entityCollider, Vector2 velocity, Rectangle collider)
         {
             return entityCollider.Right + velocity.X > collider.Left &&
@@ -102,6 +107,7 @@ namespace ZeldaMakerGame.Managers
                    entityCollider.Right > collider.Left &&
                    entityCollider.Left < collider.Right;
         }
+        #endregion
 
         /// <summary>
         /// Updates the list of the entities
