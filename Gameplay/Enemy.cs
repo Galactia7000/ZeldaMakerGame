@@ -45,7 +45,6 @@ namespace ZeldaMakerGame.Gameplay
         public override void Update(GameTime gameTime)
         {
             if (Health <= 0) GameManager.RemoveEntity(this);
-            base.Update(gameTime);
         }
 
         public override void Activate(Player activator)

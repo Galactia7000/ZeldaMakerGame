@@ -14,7 +14,7 @@ namespace ZeldaMakerGame.Gameplay
 
         public override void Use(Player player)
         {
-            Bullet arrow = new Bullet(EntityReferences.GetSprite("ArrowIcon"), 60f, player.Position, player);
+            Bullet arrow = (Bullet)EntityReferences.GetEntityRef("Arrow").Clone();
             arrow.SetDirection(player.direction);
             GameManager.AddEntity(arrow);
         }
