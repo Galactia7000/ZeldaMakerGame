@@ -15,7 +15,8 @@ namespace ZeldaMakerGame.Gameplay
         public override void Use(Player player)
         {
             Bullet arrow = (Bullet)EntityReferences.GetEntityRef("Arrow").Clone();
-            arrow.SetDirection(player.direction);
+            arrow.SetBullet(player);
+            arrow.Position = player.Position;
             GameManager.AddEntity(arrow);
         }
     }
@@ -23,16 +24,17 @@ namespace ZeldaMakerGame.Gameplay
     {
         float rotation;
         Entity shooter;
-        public Bullet(Texture2D texture, float speed, Vector2 pos, Entity parent) : base(texture, speed)
+        public Bullet(Texture2D texture, float speed, Vector2 pos) : base(texture, speed)
         {
             Position = pos;
-            shooter = parent;
             rotation = 0f;
         }
 
-        public void SetDirection(Direction direction)
+        public void SetBullet(Entity parent)
         {
-            switch (direction)
+            Position = parent.Position;
+            shooter = parent;
+            switch (parent.direction)
             {
                 case Direction.Left:
                     Velocity = new Vector2(-1, 0);
@@ -85,7 +87,7 @@ namespace ZeldaMakerGame.Gameplay
         }
         public override Entity Clone()
         {
-            Bullet copy = new Bullet(Texture, LinearSpeed, Position, null);
+            Bullet copy = new Bullet(Texture, LinearSpeed, Position);
             return base.Clone(copy);
         }
     }

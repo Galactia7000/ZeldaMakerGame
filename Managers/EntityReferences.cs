@@ -52,6 +52,7 @@ namespace ZeldaMakerGame.Managers
                 { "BombIcon", content.Load<Texture2D>("Textures/BombSprite") },
                 { "KeyIcon", content.Load<Texture2D>("Textures/KeySprite.png") },
                 { "ArrowIcon", content.Load<Texture2D>("Textures/Arrow.png") },
+                { "RockIcon", content.Load<Texture2D>("Textures/Rock") },
                 { "ChestClosed", content.Load<Texture2D>("EntityAnimations/ChestClosed") },
                 { "ChestOpen", content.Load<Texture2D>("EntityAnimations/ChestOpen") },
                 { "PlayerSpawn", content.Load<Texture2D>("Textures/Start.png") },
@@ -66,20 +67,20 @@ namespace ZeldaMakerGame.Managers
                 { "DownLadder", new Entity(SpriteAtlas["DownLadder"], 0f) },
                 {
                     "Octorock",
-                    new Enemy(new Dictionary<string, Animation>
+                    new Octorock(new Dictionary<string, Animation>
                     {
                         {"WalkDown", AllAnimations["OctoRockWalkingDown"] },
                         {"WalkUp", AllAnimations["OctoRockWalkingUp"] },
                         {"WalkLeft", AllAnimations["OctoRockWalkingLeft"] },
                         {"WalkRight", AllAnimations["OctoRockWalkingRight"] },
-                    }, 50f, 5, 1)
+                    }, 20f, 5, 1)
                 },
                 {
                     "Chu Chu",
                     new ChuChu(new Dictionary<string, Animation>
                     {
                         {"Moving", AllAnimations["ChuChuMoving"] },
-                    }, 20f, 3, 1)
+                    }, 25f, 3, 1)
                 },
                 {
                     "Sawblade",
@@ -88,8 +89,8 @@ namespace ZeldaMakerGame.Managers
                         {"Moving", AllAnimations["SawBladeMoving"] },
                     }, 35f, -1, 2)
                 },
-                { "Arrow", new Bullet(SpriteAtlas["ArrowIcon"], 60f, Vector2.Zero, null) },
-                { "Rock", new Bullet(SpriteAtlas["ChestClosed"], 60f, Vector2.Zero, null) },
+                { "Arrow", new Bullet(SpriteAtlas["ArrowIcon"], 60f, Vector2.Zero) },
+                { "Rock", new Bullet(SpriteAtlas["RockIcon"], 60f, Vector2.Zero) },
                 { "Chest", new Chest(SpriteAtlas["ChestClosed"], SpriteAtlas["ChestOpen"], Vector2.Zero) },
                 { "Spawn", new PlayerSpawn(SpriteAtlas["PlayerSpawn"]) }
             };

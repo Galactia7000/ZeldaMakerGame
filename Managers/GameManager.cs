@@ -115,7 +115,11 @@ namespace ZeldaMakerGame.Managers
         /// <param name="existingEntities"></param>
         public static void LateUpdate()
         {
-            foreach (Component entity in entitiesToDelete) existingEntities.Remove(entity);
+            foreach (Component entity in entitiesToDelete) 
+            {
+                if (entity is Enemy && ((Entity)entity).itemContents is not null) thePlayer.AddItem(((Entity)entity).itemContents);
+                existingEntities.Remove(entity);
+            }
             foreach (Component entity in entitiesToAdd) existingEntities.Add(entity);
             entitiesToAdd.Clear();
             entitiesToDelete.Clear();

@@ -25,6 +25,18 @@
 /processorParam:TextureFormat=Color
 /build:EntityAnimations/BirdIdle.png
 
+#begin EntityAnimations/BlueBlocks.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:EntityAnimations/BlueBlocks.png
+
 #begin EntityAnimations/BombAnimation.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -181,6 +193,18 @@
 /processorParam:TextureFormat=Color
 /build:EntityAnimations/LinkWalkingUpAnimation.png
 
+#begin EntityAnimations/LockBlocks.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:EntityAnimations/LockBlocks.png
+
 #begin EntityAnimations/OctorockMovingDown.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -229,6 +253,18 @@
 /processorParam:TextureFormat=Color
 /build:EntityAnimations/OctorockMovingUp.png
 
+#begin EntityAnimations/RedBlocks.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:EntityAnimations/RedBlocks.png
+
 #begin EntityAnimations/SawBladeAnimation.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -240,6 +276,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:EntityAnimations/SawBladeAnimation.png
+
+#begin EntityAnimations/Triforce.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:EntityAnimations/Triforce.png
 
 #begin Fonts/Button.spritefont
 /importer:FontDescriptionImporter
@@ -290,6 +338,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/BombSprite.png
+
+#begin Textures/Boulder.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/Boulder.png
 
 #begin Textures/ButtonTexture.png
 /importer:TextureImporter
