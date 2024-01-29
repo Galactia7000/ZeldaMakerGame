@@ -12,6 +12,9 @@ namespace ZeldaMakerGame.Gameplay
         public int Health { get; set; }
         public bool Attacking { get; set; }
         float attackingTimer;
+        float damageTimer;
+        float invincibilityTime;
+        bool invincible;
         private Rectangle ColliderEdge => new Rectangle(Position.ToPoint() + new Point(0, 8), new Point(15, 15));
 
         public int bombs;
@@ -20,10 +23,13 @@ namespace ZeldaMakerGame.Gameplay
 
         public Player(Dictionary<string, Animation> _animations, float speed) : base(_animations, speed)
         {
-            bombs = 12;
-            arrows = 12;
+            bombs = 0;
+            arrows = 0;
             keys = 0;
             attackingTimer = 0;
+            damageTimer = 0;
+            invincibilityTime = 2.5f;
+            invincible = false;
             Attacking = false;
             Size = animationManager.Edge.Size.ToVector2();
         }
@@ -43,6 +49,15 @@ namespace ZeldaMakerGame.Gameplay
                     break;
             }
 
+        }
+
+        public void TakeDamage(int dmg)
+        {
+            if(!invincible)
+            {
+                Health -= dmg;
+                invincible = true;
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -77,6 +92,12 @@ namespace ZeldaMakerGame.Gameplay
             }
             
             base.Update(gameTime);
+            if (invincible) damageTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (damageTimer >= invincibilityTime) 
+            { 
+                invincible = false; 
+                damageTimer = 0; 
+            }
 
             if (InputManager.IsButtonPressed("Action") || InputManager.IsKeyPressed("Action"))
             {
@@ -172,14 +193,14 @@ namespace ZeldaMakerGame.Gameplay
             {
                 if (E is Enemy) 
                 {
-                    Health -= ((Enemy)E).Damage;
+                    TakeDamage(((Enemy)E).Damage);
                     Vector2 directionOfE = E.Position - Position;
                     Vector2 Udirection = directionOfE / directionOfE.Length();
-                    ((Enemy)E).Velocity = -Udirection * 10;
+                    Velocity = -Udirection * 10;
                 }
-                else
+                if(E is Triforce)
                 {
-                    // Chest stuff collision
+                    GameManager.Clear();
                 }
             }
 

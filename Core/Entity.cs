@@ -17,6 +17,8 @@ namespace ZeldaMakerGame.Core
 
         public Vector2 Velocity { get; set; }
 
+        public bool IsBlocking { get; set; }
+
         public Direction direction;
 
         protected AnimationManager animationManager;
@@ -29,7 +31,7 @@ namespace ZeldaMakerGame.Core
         public float LinearSpeed { get; set; }
         public Texture2D Texture { get; protected set; }
 
-        public Entity(Texture2D texture, float speed)
+        public Entity(Texture2D texture, float speed, bool blocks = false)
         {
             Position = Vector2.Zero;
             Texture = texture;
@@ -37,9 +39,10 @@ namespace ZeldaMakerGame.Core
             Velocity = Vector2.Zero;
             LinearSpeed = speed;
             direction = Direction.Down;
+            IsBlocking = blocks;
         }
 
-        public Entity(Dictionary<string, Animation> animations, float speed)
+        public Entity(Dictionary<string, Animation> animations, float speed, bool blocks = false)
         {
             Position = Vector2.Zero;
             this.animations = animations;
@@ -48,6 +51,7 @@ namespace ZeldaMakerGame.Core
             Size = new Vector2(animations[animations.First().Key].frameWidth, animations[animations.First().Key].frameHeight);
             animationManager = new AnimationManager(animations.First().Value);
             direction = Direction.Down;
+            IsBlocking = blocks;
         }
 
         public Entity(Animation animation, float speed) : this(new Dictionary<string, Animation> { { "Idle", animation.Clone() } }, speed)

@@ -19,6 +19,8 @@ namespace ZeldaMakerGame.Managers
         static List<Component> existingEntities;
         static Dungeon thisDungeon;
         static Player thePlayer;
+        static bool isClear;
+        public static int floorIncrement;
         public static void Initialize(Dungeon dung, Player play) 
         { 
             entitiesToAdd = new List<Component>(); 
@@ -26,6 +28,8 @@ namespace ZeldaMakerGame.Managers
             existingEntities = new List<Component>();
             thisDungeon = dung;
             thePlayer = play;
+            isClear = false;
+            floorIncrement = 0;
         }
 
         /// <summary>
@@ -71,7 +75,7 @@ namespace ZeldaMakerGame.Managers
             {
                 for (int x = (int)TilePos.X - 1; x <= (int)TilePos.X + 1; x++)
                 {
-                    if (x < 0 || x >= thisDungeon.columns || y >= thisDungeon.rows || y < 0 || thisDungeon.tiles[thisDungeon.currentFloor, x, y].isGround) continue;
+                    if (x < 0 || x >= thisDungeon.columns || y >= thisDungeon.rows || y < 0 || (thisDungeon.tiles[thisDungeon.currentFloor, x, y].isGround && thisDungeon.tiles[thisDungeon.currentFloor, x, y].GetEntity() is null) || (thisDungeon.tiles[thisDungeon.currentFloor, x, y].GetEntity() is not null && !thisDungeon.tiles[thisDungeon.currentFloor, x, y].GetEntity().IsBlocking)) continue;
                     if ((velocity.X > 0 && IsCollidingLeft(collider, velocity, thisDungeon.tiles[thisDungeon.currentFloor, x, y].Edge)) || (velocity.X < 0 && IsCollidingRight(collider, velocity, thisDungeon.tiles[thisDungeon.currentFloor, x, y].Edge))) velocity.X *= collisionMultiplier;
                     if ((velocity.Y > 0 && IsCollidingTop(collider, velocity, thisDungeon.tiles[thisDungeon.currentFloor, x, y].Edge)) || (velocity.Y < 0 && IsCollidingBottom(collider, velocity, thisDungeon.tiles[thisDungeon.currentFloor, x, y].Edge))) velocity.Y *= collisionMultiplier;
                 }
@@ -109,13 +113,18 @@ namespace ZeldaMakerGame.Managers
         }
         #endregion
 
+        public static bool MovingFloors() => floorIncrement != 0;
+        public static void ChangeFloors(int f) => floorIncrement = f;
+        public static bool IsCleared() => isClear;
+        public static void Clear() => isClear = true;
+
         /// <summary>
         /// Updates the list of the entities
         /// </summary>
         /// <param name="existingEntities"></param>
         public static void LateUpdate()
         {
-            foreach (Component entity in entitiesToDelete) 
+            foreach (Component entity in entitiesToDelete)
             {
                 if (entity is Enemy && ((Entity)entity).itemContents is not null) thePlayer.AddItem(((Entity)entity).itemContents);
                 existingEntities.Remove(entity);

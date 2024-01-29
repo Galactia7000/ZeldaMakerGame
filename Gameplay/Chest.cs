@@ -14,7 +14,7 @@ namespace ZeldaMakerGame.Gameplay
     public class Chest : Entity
     {
         Texture2D openTexture;
-        public Chest(Texture2D texture, Texture2D openTexture, Vector2 pos) : base(texture, 0f)
+        public Chest(Texture2D texture, Texture2D openTexture, Vector2 pos) : base(texture, 0f, true)
         {
             this.openTexture = openTexture;
             Position = pos;

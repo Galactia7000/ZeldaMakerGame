@@ -44,6 +44,11 @@ namespace ZeldaMakerGame.World
                 thisEntity = EntityReferences.GetEntityRef(tag);
                 ((PlayerSpawn)thisEntity).floor = thisFloor;
             }
+            else if (EntityReferences.GetEntityRef(tag) is Triforce)
+            {
+                thisEntity = EntityReferences.GetEntityRef(tag);
+                ((Triforce)thisEntity).floor = thisFloor;
+            }
             else thisEntity = EntityReferences.GetEntityRef(tag).Clone();
             entityKey = tag;
             itemKey = null;
@@ -71,6 +76,7 @@ namespace ZeldaMakerGame.World
             if (thisEntity is not null) 
             {
                 if (thisEntity is PlayerSpawn && ((PlayerSpawn)thisEntity).floor != currentFloor) return;
+                if (thisEntity is Triforce && ((Triforce)thisEntity).floor != currentFloor) return;
                 if (editor) thisEntity.DrawEditor(spriteBatch);
             }
             

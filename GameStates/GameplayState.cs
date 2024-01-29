@@ -66,10 +66,14 @@ namespace ZeldaMakerGame.GameStates
                                 thePlayer.Position = game.currentDungeon.tiles[f, c, r].Position - new Vector2(0, 7);
                                 game.currentDungeon.currentFloor = f;
                             }
-                            else 
-                            { 
+                            else if (game.currentDungeon.tiles[f, c, r].GetEntity() is Triforce)
+                            {
+                                if (((Triforce)game.currentDungeon.tiles[f, c, r].GetEntity()).floor == f) entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity());
+                            }
+                            else
+                            {
                                 entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity().Clone());
-                                if (entities[f].Last() is Enemy) ((Enemy)entities[f].Last()).SetTarget(thePlayer); 
+                                if (entities[f].Last() is Enemy) ((Enemy)entities[f].Last()).SetTarget(thePlayer);
                             }
                         }
                     }
@@ -85,6 +89,7 @@ namespace ZeldaMakerGame.GameStates
 
         public override void Update(GameTime _gametime)
         {
+            if (GameManager.IsCleared()) game.ChangeState(new MainMenuState(game, contentManager));
             gameCamera.Follow(thePlayer, game.currentDungeon.rows * game.currentDungeon.tileset.tileSize);
 
             if (!isGamePaused)
@@ -109,6 +114,14 @@ namespace ZeldaMakerGame.GameStates
 
             GameManager.LateUpdate();
             entities[game.currentDungeon.currentFloor] = GameManager.GetEntities();
+            if (GameManager.MovingFloors())
+            {
+                if (GameManager.floorIncrement > 0) game.currentDungeon.UpFloor(this, new EventArgs());
+                else game.currentDungeon.DownFloor(this, new EventArgs());
+                GameManager.ChangeEntities(entities[game.currentDungeon.currentFloor]);
+                GameManager.floorIncrement = 0;
+            }
+            
         }
         public override void Draw(GameTime _gametime, SpriteBatch _spritebatch)
         {

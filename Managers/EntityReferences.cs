@@ -23,6 +23,7 @@ namespace ZeldaMakerGame.Managers
             #region Animations
             AllAnimations = new Dictionary<string, Animation>
             {
+                { "TriforceShine", new Animation(content.Load<Texture2D>("EntityAnimations/Triforce"), 12, 2.5f, true) },
                 { "BombOnFloor", new Animation(content.Load<Texture2D>("EntityAnimations/BombAnimation"), 2, 0.1f, true) },
                 { "BombExploding", new Animation(content.Load<Texture2D>("EntityAnimations/BombExploding"), 5, 0.2f, false) },
                 { "PlayerWalkingDown", new Animation(content.Load<Texture2D>("EntityAnimations/LinkWalkingDownAnimation"), 9, 0.05F, true) },
@@ -63,8 +64,8 @@ namespace ZeldaMakerGame.Managers
             #region Entiies and Items
             EntityDictionary = new Dictionary<string, Entity>
             {
-                { "UpLadder", new Entity(SpriteAtlas["UpLadder"], 0f) },
-                { "DownLadder", new Entity(SpriteAtlas["DownLadder"], 0f) },
+                { "UpLadder", new Ladder(SpriteAtlas["UpLadder"], 1) },
+                { "DownLadder", new Ladder(SpriteAtlas["DownLadder"], -1) },
                 {
                     "Octorock",
                     new Octorock(new Dictionary<string, Animation>
@@ -92,7 +93,9 @@ namespace ZeldaMakerGame.Managers
                 { "Arrow", new Bullet(SpriteAtlas["ArrowIcon"], 60f, Vector2.Zero) },
                 { "Rock", new Bullet(SpriteAtlas["RockIcon"], 60f, Vector2.Zero) },
                 { "Chest", new Chest(SpriteAtlas["ChestClosed"], SpriteAtlas["ChestOpen"], Vector2.Zero) },
-                { "Spawn", new PlayerSpawn(SpriteAtlas["PlayerSpawn"]) }
+                { "Spawn", new PlayerSpawn(SpriteAtlas["PlayerSpawn"]) },
+                { "Triforce", new Triforce(AllAnimations["TriforceShine"]) }
+                
             };
 
             ItemDictionary = new Dictionary<string, Item>()

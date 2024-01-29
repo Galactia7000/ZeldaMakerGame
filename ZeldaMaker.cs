@@ -210,11 +210,12 @@ namespace ZeldaMakerGame
             UIManager.CreateUIPreset(categorySelectPanel, "CategorySelect");
 
             // TerrainBar
-            Panel terrainPanel = new Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 50, (screenHeight / 2) - 100), new Vector2(50, 200), true);
+            Panel terrainPanel = new Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 50, (screenHeight / 2) - 100), new Vector2(50, 250), true);
             terrainPanel.AddChild("FloorBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), terrainPanel, "Floor", UIManager.GetFont("Button"), new Tool("Floor", ToolType.Terrain)));
             terrainPanel.AddChild("UpLadderBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), terrainPanel, "UpLadder", UIManager.GetFont("Button"), new Tool("UpLadder", ToolType.Ladder)));
             terrainPanel.AddChild("DownLadderBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 100), new Vector2(50, 50), terrainPanel, "DownLadder", UIManager.GetFont("Button"), new Tool("DownLadder", ToolType.Pit)));
             terrainPanel.AddChild("SpawnBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 150), new Vector2(50, 50), terrainPanel, "Start", UIManager.GetFont("Button"), new Tool("Spawn", ToolType.Entity)));
+            terrainPanel.AddChild("TriforceBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 200), new Vector2(50, 50), terrainPanel, "Goal", UIManager.GetFont("Button"), new Tool("Triforce", ToolType.Entity)));
 
             UIManager.CreateUIPreset(terrainPanel, "Terrain");
 
@@ -229,14 +230,17 @@ namespace ZeldaMakerGame
             Panel itemPanel = new Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 50, (screenHeight / 2) - 100), new Vector2(50, 200), true);
             itemPanel.AddChild("KeyBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), itemPanel, "Key", UIManager.GetFont("Button"), new Tool("Key", ToolType.Item)));
             itemPanel.AddChild("BombBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), itemPanel, "Bomb", UIManager.GetFont("Button"), new Tool("Bomb", ToolType.Item)));
-            itemPanel.AddChild("ArrowsBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 100), new Vector2(50, 50), itemPanel, "Arrow", UIManager.GetFont("Button"), new Tool("Floor", ToolType.Terrain)));
+            itemPanel.AddChild("ArrowsBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 100), new Vector2(50, 50), itemPanel, "Arrow", UIManager.GetFont("Button"), new Tool("Arrow", ToolType.Terrain)));
             itemPanel.AddChild("ChestBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 150), new Vector2(50, 50), itemPanel, "Chest", UIManager.GetFont("Button"), new Tool("Chest", ToolType.Entity)));
             UIManager.CreateUIPreset(itemPanel, "Items");
 
             // PuzzleBar
             Panel puzzlePanel = new Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 50, (screenHeight / 2) - 100), new Vector2(50, 200), true);
-            puzzlePanel.AddChild("LeverBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), puzzlePanel, "Lever", UIManager.GetFont("Button"), new Tool("Floor", ToolType.Terrain)));
-            puzzlePanel.AddChild("ButtonBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), puzzlePanel, "Button", UIManager.GetFont("Button"), new Tool("Floor", ToolType.Terrain)));
+            puzzlePanel.AddChild("SwitchBn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), puzzlePanel, "Switch", UIManager.GetFont("Button"), new Tool("Floor", ToolType.Terrain)));
+            puzzlePanel.AddChild("RedBlockBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), puzzlePanel, "RBlock", UIManager.GetFont("Button"), new Tool("Floor", ToolType.Terrain)));
+            puzzlePanel.AddChild("BlueBlockBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), puzzlePanel, "BBlock", UIManager.GetFont("Button"), new Tool("Floor", ToolType.Terrain)));
+            puzzlePanel.AddChild("BoulderBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), puzzlePanel, "Boulder", UIManager.GetFont("Button"), new Tool("Floor", ToolType.Terrain)));
+            puzzlePanel.AddChild("LockedBlockBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), puzzlePanel, "Locked", UIManager.GetFont("Button"), new Tool("Floor", ToolType.Terrain)));
             UIManager.CreateUIPreset(puzzlePanel, "Puzzle");
 
             // Paused
