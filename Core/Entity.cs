@@ -121,9 +121,6 @@ namespace ZeldaMakerGame.Core
         public virtual void Activate(Player activator)
         {
         }
-        public virtual void Activate(Dungeon dungeon)
-        {
-        }
 
         public virtual Entity Clone(Entity copy)
         {
@@ -138,6 +135,7 @@ namespace ZeldaMakerGame.Core
             copy.Texture = this.Texture;
             copy.IsSelected = this.IsSelected;
             copy.LinearSpeed = this.LinearSpeed;
+            copy.IsBlocking = this.IsBlocking;
             return copy;
         }
         public virtual Entity Clone()

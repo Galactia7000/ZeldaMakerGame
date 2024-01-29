@@ -7,6 +7,7 @@ using ZeldaMakerGame.Core;
 using ZeldaMakerGame.Editor;
 using ZeldaMakerGame.Managers;
 using System.IO;
+using ZeldaMakerGame.Gameplay;
 
 namespace ZeldaMakerGame.World
 {
@@ -68,7 +69,7 @@ namespace ZeldaMakerGame.World
                         }
                         break;
                     case ToolType.Ladder:
-                        int nextFloor;
+                        int nextFloor; 
                         if (currentAction.GridPosition.Z == floors - 1) nextFloor = 0;
                         else nextFloor = (int)currentAction.GridPosition.Z + 1;
                         Tile above = tiles[nextFloor, (int)currentAction.GridPosition.X, (int)currentAction.GridPosition.Y];
@@ -114,7 +115,17 @@ namespace ZeldaMakerGame.World
                         selected.DeleteEntity();
                         break;
                     case ToolType.Ladder:
+                        int nextFloor = ((int)currentAction.GridPosition.Z + 1) % floors;
+                        Tile above = tiles[nextFloor, (int)currentAction.GridPosition.X, (int)currentAction.GridPosition.Y];
+                        if(above.GetEntity() is not null && above.GetEntity() is Ladder) above.DeleteEntity();
+                        selected.DeleteEntity();
+                        break;
                     case ToolType.Pit:
+                        int prevFloor = ((int)currentAction.GridPosition.Z - 1) % floors;
+                        Tile below = tiles[prevFloor, (int)currentAction.GridPosition.X, (int)currentAction.GridPosition.Y];
+                        if (below.GetEntity() is not null && below.GetEntity() is Ladder) below.DeleteEntity();
+                        selected.DeleteEntity();
+                        break;
                     case ToolType.Entity:
                         selected.DeleteEntity();
                         break;

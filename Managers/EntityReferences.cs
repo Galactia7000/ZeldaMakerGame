@@ -24,6 +24,9 @@ namespace ZeldaMakerGame.Managers
             AllAnimations = new Dictionary<string, Animation>
             {
                 { "TriforceShine", new Animation(content.Load<Texture2D>("EntityAnimations/Triforce"), 12, 2.5f, true) },
+                { "RBSwitch", new Animation(content.Load<Texture2D>("EntityAnimations/Switches"), 2, 0.1f, true) },
+                { "RedBlocks", new Animation(content.Load<Texture2D>("EntityAnimations/RedBlocks"), 2, 0.1f, true) },
+                { "BlueBlocks", new Animation(content.Load<Texture2D>("EntityAnimations/BlueBlocks"), 2, 0.1f, true) },
                 { "BombOnFloor", new Animation(content.Load<Texture2D>("EntityAnimations/BombAnimation"), 2, 0.1f, true) },
                 { "BombExploding", new Animation(content.Load<Texture2D>("EntityAnimations/BombExploding"), 5, 0.2f, false) },
                 { "PlayerWalkingDown", new Animation(content.Load<Texture2D>("EntityAnimations/LinkWalkingDownAnimation"), 9, 0.05F, true) },
@@ -93,6 +96,9 @@ namespace ZeldaMakerGame.Managers
                 { "Arrow", new Bullet(SpriteAtlas["ArrowIcon"], 60f, Vector2.Zero) },
                 { "Rock", new Bullet(SpriteAtlas["RockIcon"], 60f, Vector2.Zero) },
                 { "Chest", new Chest(SpriteAtlas["ChestClosed"], SpriteAtlas["ChestOpen"], Vector2.Zero) },
+                { "RedBlock", new ColourBlock(AllAnimations["RedBlocks"], true) },
+                { "BlueBlock", new ColourBlock(AllAnimations["BlueBlocks"], false) },
+                { "RBSwitch", new Switch(AllAnimations["RBSwitch"]) },
                 { "Spawn", new PlayerSpawn(SpriteAtlas["PlayerSpawn"]) },
                 { "Triforce", new Triforce(AllAnimations["TriforceShine"]) }
                 

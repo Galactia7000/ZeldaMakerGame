@@ -36,6 +36,8 @@ namespace ZeldaMakerGame.World
             if (ground) index = 94;
             else index = 46;
             thisEntity = null;
+            itemKey = null;
+            entityKey = null;
         }
         public void ChangeEntity(string tag, int thisFloor = 0)
         {
@@ -58,7 +60,7 @@ namespace ZeldaMakerGame.World
         {
             itemKey = tag;
             thisEntity.itemContents = EntityReferences.GetItemRef(tag).Clone();
-            thisEntity.Position = Position;
+            thisEntity.itemContents.Position = Position;
         }
 
         public void DeleteEntity()
@@ -94,7 +96,7 @@ namespace ZeldaMakerGame.World
                 binaryWriter.Write(true);
                 binaryWriter.Write(entityKey);
                 if (itemKey is not null) binaryWriter.Write(itemKey);
-                else binaryWriter.Write("");
+                else binaryWriter.Write("null");
             }
             else binaryWriter.Write(false);
             
@@ -111,10 +113,10 @@ namespace ZeldaMakerGame.World
             if (binaryReader.ReadBoolean()) 
             {
                 key = binaryReader.ReadString();
-                entity = EntityReferences.GetEntityRef(key);
+                entity = EntityReferences.GetEntityRef(key).Clone();
                 entity.Position = new Vector2(x, y);
                 iKey = binaryReader.ReadString();
-                if (iKey == "") iKey = null;
+                if (iKey == "null") iKey = null;
                 else entity.itemContents = EntityReferences.GetItemRef(iKey).Clone();
             }
 

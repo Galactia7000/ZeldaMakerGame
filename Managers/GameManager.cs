@@ -20,6 +20,7 @@ namespace ZeldaMakerGame.Managers
         static Dungeon thisDungeon;
         static Player thePlayer;
         static bool isClear;
+        public static bool RedSwitch { get; set; }
         public static int floorIncrement;
         public static void Initialize(Dungeon dung, Player play) 
         { 
@@ -30,6 +31,7 @@ namespace ZeldaMakerGame.Managers
             thePlayer = play;
             isClear = false;
             floorIncrement = 0;
+            RedSwitch = true;
         }
 
         /// <summary>

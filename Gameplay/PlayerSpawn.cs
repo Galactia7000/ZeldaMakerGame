@@ -15,5 +15,12 @@ namespace ZeldaMakerGame.Gameplay
         {
             floor = 0;
         }
+
+        public override Entity Clone()
+        {
+            PlayerSpawn copy = new PlayerSpawn(Texture);
+            copy.floor = floor;
+            return base.Clone(copy);
+        }
     }
 }

@@ -65,7 +65,11 @@ namespace ZeldaMakerGame.GameStates
             ((Label)((Panel)UIManager.GetSpecificUI("FloorControls")).GetChildren()["FloorLbl"]).text = "F" + game.currentDungeon.currentFloor;
             foreach (Component component in uiComponents) component.Update(_gametime);
 
-            if (isPaused) { displayItem = false; return; }
+            if (isPaused) 
+            { displayItem = false; return; }
+
+            if (InputManager.IsKeyPressed("Pause")) 
+                return;
 
             Vector2 cameraPos = Vector2.Zero;
 

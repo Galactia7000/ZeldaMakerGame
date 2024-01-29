@@ -12,7 +12,7 @@ namespace ZeldaMakerGame.Managers
 {
     public class AnimationManager
     {
-        private Animation currentAnimation;
+        public Animation currentAnimation;
         private float timer;
         public Vector2 Position;
         public float animationSpeedModifier;
@@ -25,6 +25,8 @@ namespace ZeldaMakerGame.Managers
             currentAnimation.currentFrame = 0;
             paused = false;
             timer = 0f;
+            animationSpeedModifier = 1f;
+
         }
 
         public void Play(Animation _animation)

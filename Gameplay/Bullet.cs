@@ -71,7 +71,8 @@ namespace ZeldaMakerGame.Gameplay
                     ((Player)C).Health--;
                     GameManager.RemoveEntity(this);
                     break;
-                } 
+                }
+                if (C is Switch && shooter is Player) ((Switch)C).Activate((Player)shooter);
             }
             Velocity = GameManager.CheckTileCollisions(Edge, Velocity);
             if (Velocity == Vector2.Zero) GameManager.RemoveEntity(this);

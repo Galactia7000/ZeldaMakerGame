@@ -49,6 +49,7 @@ namespace ZeldaMakerGame.Gameplay
                     if (C is not Enemy && C is not Player) continue;
                     if (C is Enemy) { ((Enemy)C).Health -= 2; ((Enemy)C).IsStunned = true; }
                     if (C is Player) ((Player)C).Health -= 2;
+                    if (C is Switch) ((Switch)C).Activate(null);
                     Vector2 directionOfE = C.Position - Edge.Center.ToVector2();
                     Vector2 Udirection = directionOfE / directionOfE.Length();
                     ((Entity)C).Velocity = -Udirection * 10;

@@ -16,7 +16,6 @@ namespace ZeldaMakerGame.Gameplay
         {
             timer = 0f;
             animationManager.Play(_animations["Moving"]);
-            animationManager.animationSpeedModifier = 1f;
         }
         public override void Update(GameTime gameTime)
         {

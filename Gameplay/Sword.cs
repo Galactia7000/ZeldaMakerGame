@@ -51,6 +51,7 @@ namespace ZeldaMakerGame.Gameplay
                     ((Entity)c).Velocity = Udirection * 20;
                     ((Enemy)c).IsStunned = true;
                 }
+                if (c is Switch) ((Switch)c).Activate(player);
             }
 
             player.Attacking = true;

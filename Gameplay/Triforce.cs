@@ -16,7 +16,14 @@ namespace ZeldaMakerGame.Gameplay
         {
             floor = 0;
             animationManager.Play(animation);
-            animationManager.animationSpeedModifier = 1f;
+        }
+
+        public override Entity Clone()
+        {
+            Triforce copy = new Triforce(animations["Idle"]);
+            copy.floor = floor;
+            return base.Clone(copy);
         }
     }
 }
+
