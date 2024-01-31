@@ -51,15 +51,6 @@ namespace ZeldaMakerGame.Gameplay
 
         }
 
-        public void TakeDamage(int dmg)
-        {
-            if(!invincible)
-            {
-                Health -= dmg;
-                invincible = true;
-            }
-        }
-
         public override void Update(GameTime gameTime)
         {
             // Movement
@@ -193,7 +184,9 @@ namespace ZeldaMakerGame.Gameplay
             {
                 if (E is Enemy) 
                 {
-                    TakeDamage(((Enemy)E).Damage);
+                    if (invincible) continue;
+                    Health -= ((Enemy)E).Damage;
+                    invincible = true;
                     Vector2 directionOfE = E.Position - Position;
                     Vector2 Udirection = directionOfE / directionOfE.Length();
                     Velocity = -Udirection * 10;
