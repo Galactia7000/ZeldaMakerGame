@@ -27,6 +27,7 @@ namespace ZeldaMakerGame.Managers
                 { "RBSwitch", new Animation(content.Load<Texture2D>("EntityAnimations/Switches"), 2, 0.1f, true) },
                 { "RedBlocks", new Animation(content.Load<Texture2D>("EntityAnimations/RedBlocks"), 2, 0.1f, true) },
                 { "BlueBlocks", new Animation(content.Load<Texture2D>("EntityAnimations/BlueBlocks"), 2, 0.1f, true) },
+                { "LockBlocks", new Animation(content.Load<Texture2D>("EntityAnimations/LockBlocks"), 2, 0.1f, false) },
                 { "BombOnFloor", new Animation(content.Load<Texture2D>("EntityAnimations/BombAnimation"), 2, 0.1f, true) },
                 { "BombExploding", new Animation(content.Load<Texture2D>("EntityAnimations/BombExploding"), 5, 0.2f, false) },
                 { "PlayerWalkingDown", new Animation(content.Load<Texture2D>("EntityAnimations/LinkWalkingDownAnimation"), 9, 0.05F, true) },
@@ -60,7 +61,8 @@ namespace ZeldaMakerGame.Managers
                 { "ChestClosed", content.Load<Texture2D>("EntityAnimations/ChestClosed") },
                 { "ChestOpen", content.Load<Texture2D>("EntityAnimations/ChestOpen") },
                 { "PlayerSpawn", content.Load<Texture2D>("Textures/Start.png") },
-                { "SwordIcon", content.Load<Texture2D>("Textures/SwordSprite") }
+                { "SwordIcon", content.Load<Texture2D>("Textures/SwordSprite") },
+                { "Boulder", content.Load<Texture2D>("Textures/Boulder") }
             };
             #endregion
 
@@ -96,6 +98,8 @@ namespace ZeldaMakerGame.Managers
                 { "Arrow", new Bullet(SpriteAtlas["ArrowIcon"], 60f, Vector2.Zero) },
                 { "Rock", new Bullet(SpriteAtlas["RockIcon"], 60f, Vector2.Zero) },
                 { "Chest", new Chest(SpriteAtlas["ChestClosed"], SpriteAtlas["ChestOpen"], Vector2.Zero) },
+                { "LockBlock", new LockedBlock(AllAnimations["LockBlocks"]) },
+                { "Boulder", new Boulder(SpriteAtlas["Boulder"]) },
                 { "RedBlock", new ColourBlock(AllAnimations["RedBlocks"], true) },
                 { "BlueBlock", new ColourBlock(AllAnimations["BlueBlocks"], false) },
                 { "RBSwitch", new Switch(AllAnimations["RBSwitch"]) },

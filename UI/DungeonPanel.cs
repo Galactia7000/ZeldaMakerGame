@@ -18,7 +18,7 @@ namespace ZeldaMakerGame.UI
 
         public Dungeon thisDungeon;
 
-        public DungeonPanel(ContentManager contentM, ZeldaMaker game, Dungeon dungeon, Texture2D texture, Vector2 pos, Vector2 size, bool active = false, Component parent = null) : base(texture, pos, size, active, parent)
+        public DungeonPanel(ContentManager contentM, ZeldaMaker game, Dungeon dungeon, Texture2D texture, Vector2 pos, Vector2 size, Vector2 offset, bool active = false, Component parent = null) : base(texture, pos, size, offset, active, parent)
         {
             thisDungeon = dungeon;
             contentManager = contentM;

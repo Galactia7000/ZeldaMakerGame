@@ -40,7 +40,7 @@ namespace ZeldaMakerGame.Gameplay
                     break;
             }
 
-            Component[] colliding = GameManager.CheckCollisions(Edge);
+            Component[] colliding = GameManager.CheckCollisions(Edge, Vector2.Zero);
             foreach (Component c in colliding) 
             {
                 if (c is Enemy) 

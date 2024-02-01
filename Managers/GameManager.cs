@@ -59,12 +59,12 @@ namespace ZeldaMakerGame.Managers
 
         public static List<Component> GetEntities() => existingEntities;
 
-        public static Component[] CheckCollisions(Rectangle collider, bool includePlayer = false)
+        public static Component[] CheckCollisions(Rectangle collider, Vector2 Velocity, bool includePlayer = false)
         {
             List<Component> hitEntities = new List<Component>();
             foreach (Entity entity in existingEntities)
             {
-                if(entity.Edge.Intersects(collider)) hitEntities.Add(entity);
+                if(entity.Edge.Intersects(new Rectangle(collider.Location + Velocity.ToPoint(), collider.Size))) hitEntities.Add(entity);
             }
             if (includePlayer && thePlayer.Edge.Intersects(collider)) hitEntities.Add(thePlayer);
             return hitEntities.ToArray();

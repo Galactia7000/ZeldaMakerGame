@@ -25,7 +25,7 @@ namespace ZeldaMakerGame.Gameplay
         {
             bombs = 5;
             arrows = 5;
-            keys = 0;
+            keys = 1;
             attackingTimer = 0;
             damageTimer = 0;
             invincibilityTime = 2.5f;
@@ -109,7 +109,7 @@ namespace ZeldaMakerGame.Gameplay
                         break;
 
                 }
-                Component[] objects = GameManager.CheckCollisions(interactRect);
+                Component[] objects = GameManager.CheckCollisions(interactRect, Vector2.Zero);
                 foreach (Component obj in objects) ((Entity)obj).Activate(this);
             }
 
@@ -179,7 +179,7 @@ namespace ZeldaMakerGame.Gameplay
                 attackingTimer = 0f;
             }
 
-            Component[] colliding = GameManager.CheckCollisions(ColliderEdge);
+            Component[] colliding = GameManager.CheckCollisions(ColliderEdge, Velocity);
             foreach (Component E in colliding) 
             {
                 if (E is Enemy) 

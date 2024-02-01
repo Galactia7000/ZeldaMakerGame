@@ -24,9 +24,9 @@ namespace ZeldaMakerGame.UI
 
         public RadioButton activatedRadioBtn { get; set; }
 
-        public Panel(Texture2D texture, Vector2 pos, Vector2 size, bool active = false, Component parent = null)
+        public Panel(Texture2D texture, Vector2 pos, Vector2 size, Vector2 offset, bool active = false, Component parent = null)
         {
-            Texture = new UITexture(texture, new Vector2(8, 8), false, false);
+            Texture = new UITexture(texture, offset, false, false);
             Position = pos;
             Parent = parent;
             if (Parent is not null) Position += Parent.Position;

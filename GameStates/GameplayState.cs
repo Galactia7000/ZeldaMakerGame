@@ -11,8 +11,8 @@ using ZeldaMakerGame.Managers;
 using ZeldaMakerGame.Core;
 using System.Windows.Forms;
 using ZeldaMakerGame.UI;
-using SharpDX.Direct2D1.Effects;
-using ZeldaMakerGame.World;
+using Button = ZeldaMakerGame.UI.Button;
+using Panel = ZeldaMakerGame.UI.Panel;
 
 namespace ZeldaMakerGame.GameStates
 {
@@ -29,6 +29,18 @@ namespace ZeldaMakerGame.GameStates
         private bool isGamePaused;
         public override void LoadContent()
         {
+            UIManager.AddUI("PauseButton");
+            ((Button)UIManager.GetSpecificUI("PauseButton")).OnClick += Pause;
+            var children2 = ((Panel)UIManager.GetSpecificUIReference("PauseScreen")).GetChildren();
+            ((Button)children2["ResumeBtn"]).OnClick += UnPause;
+
+            UIManager.AddUI("HealthPanel");
+
+            gameCamera = new Camera(game.screenWidth, game.screenHeight);
+            gameCamera.ChangeZoom(1.5f);
+
+            isGamePaused = false;
+
             var playerAnimations = new Dictionary<string, Animation>()
             {
                 {"WalkDown", EntityReferences.GetAnimation("PlayerWalkingDown") },
@@ -36,12 +48,6 @@ namespace ZeldaMakerGame.GameStates
                 {"WalkLeft", EntityReferences.GetAnimation("PlayerWalkingLeft") },
                 {"WalkRight", EntityReferences.GetAnimation("PlayerWalkingRight") },
             };
-
-            
-            gameCamera = new Camera(game.screenWidth, game.screenHeight);
-            gameCamera.ChangeZoom(1.5f);
-
-            isGamePaused = false;
             thePlayer = new Player(playerAnimations, 65f);
 
             RestartDungeon();
@@ -50,6 +56,11 @@ namespace ZeldaMakerGame.GameStates
         void RestartDungeon()
         {
             thePlayer.Health = 6;
+            ((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).Clear();
+            for (int i = 0; i < thePlayer.Health; i++)
+            {
+                ((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).AddPic();
+            }
             GameManager.Initialize(game.currentDungeon, thePlayer);
             entities = new List<Component>[game.currentDungeon.floors];
             for (int f = 0; f < game.currentDungeon.floors; f++)
@@ -72,7 +83,7 @@ namespace ZeldaMakerGame.GameStates
                             }
                             else
                             {
-                                entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity().Clone());
+                                entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity());
                                 if (entities[f].Last() is Enemy) ((Enemy)entities[f].Last()).SetTarget(thePlayer);
                             }
                         }
@@ -100,14 +111,26 @@ namespace ZeldaMakerGame.GameStates
                     entity.Update(_gametime);
                 }
             }
-            if (InputManager.IsKeyPressed("Pause") || InputManager.IsButtonPressed("Pause")) 
+
+            if (InputManager.IsKeyPressed("Pause") || InputManager.IsButtonPressed("Pause"))
+            {
                 isGamePaused = !isGamePaused;
+                if (isGamePaused) Pause(null, new EventArgs());
+                else UnPause(null, new EventArgs());
+            }
+
+            foreach (Component comp in UIManager.GetCurrentUI()) comp.Update(_gametime);
+            
             if (thePlayer.Health <= 0) RestartDungeon();
         }
         public override void LateUpdate(GameTime _gametime)
         {
+            if (isGamePaused) return;
             thePlayer.LateUpdate(_gametime);
-            foreach(Component entity in GameManager.GetEntities())
+
+            while (((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).GetChildren().Count > thePlayer.Health) ((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).RemovePic();
+            while (((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).GetChildren().Count < thePlayer.Health) ((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).AddPic();
+            foreach (Component entity in GameManager.GetEntities())
             {
                 entity.LateUpdate(_gametime);
             }
@@ -134,6 +157,25 @@ namespace ZeldaMakerGame.GameStates
             thePlayer.Draw(_spritebatch);
             _spritebatch.End();
 
+            _spritebatch.Begin(samplerState: SamplerState.PointClamp);
+            foreach(Component comp in UIManager.GetCurrentUI())
+            {
+                comp.Draw(_spritebatch);
+            }
+            _spritebatch.End();
+
+        }
+
+        public void Pause(object sender, EventArgs e)
+        {
+            isGamePaused = true;
+            UIManager.AddUI("PauseScreen");
+        }
+
+        public void UnPause(object sender, EventArgs e)
+        {
+            isGamePaused = false;
+            UIManager.RemoveUI("PauseScreen");
         }
     }
 }

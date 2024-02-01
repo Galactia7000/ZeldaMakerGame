@@ -16,7 +16,6 @@ namespace ZeldaMakerGame.Gameplay
         {
             Bullet arrow = (Bullet)EntityReferences.GetEntityRef("Arrow").Clone();
             arrow.SetBullet(player);
-            arrow.Position = player.Position;
             GameManager.AddEntity(arrow);
         }
     }
@@ -37,17 +36,21 @@ namespace ZeldaMakerGame.Gameplay
             switch (parent.direction)
             {
                 case Direction.Left:
+                    Position += new Vector2(0, parent.Size.Y / 2);
                     Velocity = new Vector2(-1, 0);
                     rotation = MathHelper.ToRadians(180);
                     break;
                 case Direction.Right:
+                    Position += new Vector2(parent.Size.X, parent.Size.Y / 2);
                     Velocity = new Vector2(1, 0);
                     break;
                 case Direction.Up:
+                    Position += new Vector2(parent.Size.X / 2, 0);
                     Velocity = new Vector2(0, -1);
                     rotation = MathHelper.ToRadians(270);
                     break;
                 case Direction.Down:
+                    Position += new Vector2(parent.Size.X / 2, parent.Size.Y);
                     Velocity = new Vector2(0, 1);
                     rotation = MathHelper.ToRadians(90);
                     break;
@@ -56,10 +59,10 @@ namespace ZeldaMakerGame.Gameplay
 
         public override void Update(GameTime gameTime)
         {
-            Component[] colliding = GameManager.CheckCollisions(Edge, true);
+            Component[] colliding = GameManager.CheckCollisions(Edge, Velocity, true);
             foreach (Component C in colliding)
             {
-                if (C == shooter) continue;
+                if (C == shooter || C == this) continue;
                 if (C is Enemy)
                 {
                     ((Enemy)C).Health--;
@@ -72,7 +75,8 @@ namespace ZeldaMakerGame.Gameplay
                     GameManager.RemoveEntity(this);
                     break;
                 }
-                if (C is Switch && shooter is Player) ((Switch)C).Activate((Player)shooter);
+                if (C is Switch && shooter is Player) 
+                    ((Switch)C).Activate((Player)shooter);
             }
             Velocity = GameManager.CheckTileCollisions(Edge, Velocity);
             if (Velocity == Vector2.Zero) GameManager.RemoveEntity(this);

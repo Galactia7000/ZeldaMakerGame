@@ -38,15 +38,15 @@ namespace ZeldaMakerGame.GameStates
             isPaused = false;
             displayItem = false;
 
-            UIManager.AddUI("PauseButton");
+            UIManager.AddUI("PauseEditorButton");
             UIManager.AddUI("FloorControls");
 
-            ((Button)UIManager.GetSpecificUI("PauseButton")).OnClick += Pause;
+            ((Button)UIManager.GetSpecificUI("PauseEditorButton")).OnClick += Pause;
             var children = ((Panel)UIManager.GetSpecificUI("FloorControls")).GetChildren();
             ((Button)children["UpFloorBtn"]).OnClick += game.currentDungeon.UpFloor;
             ((Button)children["DownFloorBtn"]).OnClick += game.currentDungeon.DownFloor;
 
-            var children2 = ((Panel)UIManager.GetSpecificUIReference("PauseScreen")).GetChildren();
+            var children2 = ((Panel)UIManager.GetSpecificUIReference("PauseEditorScreen")).GetChildren();
             ((Button)children2["ResumeBtn"]).OnClick += UnPause;
 
             UIManager.AddUI("CategorySelect");
@@ -151,13 +151,13 @@ namespace ZeldaMakerGame.GameStates
         public void Pause(object sender, EventArgs e)
         {
             isPaused = true;
-            UIManager.AddUI("PauseScreen");
+            UIManager.AddUI("PauseEditorScreen");
         }
 
         public void UnPause(object sender, EventArgs e)
         {
             isPaused = false;
-            UIManager.RemoveUI("PauseScreen");
+            UIManager.RemoveUI("PauseEditorScreen");
         }
     }
 }

@@ -17,6 +17,7 @@ namespace ZeldaMakerGame.World
     public class Tile
     {
         private Entity thisEntity;
+        private Entity entityBlueprint;
         private string entityKey;
         private string itemKey;
         public Vector2 Position { get; set; }
@@ -43,33 +44,35 @@ namespace ZeldaMakerGame.World
         {
             if (EntityReferences.GetEntityRef(tag) is PlayerSpawn)
             {
-                thisEntity = EntityReferences.GetEntityRef(tag);
-                ((PlayerSpawn)thisEntity).floor = thisFloor;
+                entityBlueprint = EntityReferences.GetEntityRef(tag);
+                ((PlayerSpawn)entityBlueprint).floor = thisFloor;
             }
             else if (EntityReferences.GetEntityRef(tag) is Triforce)
             {
-                thisEntity = EntityReferences.GetEntityRef(tag);
-                ((Triforce)thisEntity).floor = thisFloor;
+                entityBlueprint = EntityReferences.GetEntityRef(tag);
+                ((Triforce)entityBlueprint).floor = thisFloor;
             }
-            else thisEntity = EntityReferences.GetEntityRef(tag).Clone();
+            else entityBlueprint = EntityReferences.GetEntityRef(tag).Clone();
             entityKey = tag;
             itemKey = null;
-            thisEntity.Position = Position;
+            entityBlueprint.Position = Position;
+            thisEntity = entityBlueprint.Clone();
         }
         public void ChangeItem(string tag)
         {
             itemKey = tag;
-            thisEntity.itemContents = EntityReferences.GetItemRef(tag).Clone();
-            thisEntity.itemContents.Position = Position;
+            entityBlueprint.itemContents = EntityReferences.GetItemRef(tag).Clone();
+            entityBlueprint.itemContents.Position = Position;
+            thisEntity.itemContents = entityBlueprint.itemContents.Clone();
         }
 
         public void DeleteEntity()
         {
+            entityBlueprint = null;
             thisEntity = null;
             entityKey = null;
             itemKey = null;
         }
-
         public Entity GetEntity() => thisEntity;
         public void Draw(SpriteBatch spriteBatch, Tileset tileset, int currentFloor, bool editor)
         {
@@ -91,7 +94,7 @@ namespace ZeldaMakerGame.World
             binaryWriter.Write(tileSize);
             binaryWriter.Write(isGround);
             binaryWriter.Write(index);
-            if (thisEntity is not null)
+            if (entityBlueprint is not null)
             {
                 binaryWriter.Write(true);
                 binaryWriter.Write(entityKey);
@@ -126,10 +129,11 @@ namespace ZeldaMakerGame.World
                 tileSize = size,
                 isGround = ground,
                 index = tIndex,
-                thisEntity = entity,
+                entityBlueprint = entity,
                 entityKey = key,
                 itemKey = iKey
             };
+            if (entity is not null) tile.thisEntity = entity.Clone();
             return tile;
         }
     }

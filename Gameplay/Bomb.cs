@@ -43,13 +43,18 @@ namespace ZeldaMakerGame.Gameplay
             if (timer >= timeToDetonate) 
             {
                 Rectangle Collider = new Rectangle(Position.ToPoint() - new Point(16, 16), new Point(48, 48));
-                Component[] colliding = GameManager.CheckCollisions(Collider, true);
+                Component[] colliding = GameManager.CheckCollisions(Collider, Vector2.Zero, true);
                 foreach(Component C in colliding)
                 {
-                    if (C is not Enemy && C is not Player) continue;
+                    if (C is not Enemy && C is not Player && C is not Switch && C is not Boulder) continue;
                     if (C is Enemy) { ((Enemy)C).Health -= 2; ((Enemy)C).IsStunned = true; }
                     if (C is Player) ((Player)C).Health -= 2;
                     if (C is Switch) ((Switch)C).Activate(null);
+                    if (C is Boulder)
+                    {
+                        ((Entity)C).IsBlocking = false;
+                        GameManager.RemoveEntity((Entity)C);
+                    }
                     Vector2 directionOfE = C.Position - Edge.Center.ToVector2();
                     Vector2 Udirection = directionOfE / directionOfE.Length();
                     ((Entity)C).Velocity = -Udirection * 10;

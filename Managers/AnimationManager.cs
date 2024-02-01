@@ -68,7 +68,7 @@ namespace ZeldaMakerGame.Managers
         {
             AnimationManager copy = new AnimationManager()
             {
-                currentAnimation = currentAnimation,
+                currentAnimation = currentAnimation.Clone(),
                 paused = paused,
                 timer = timer,
                 animationSpeedModifier = animationSpeedModifier,
