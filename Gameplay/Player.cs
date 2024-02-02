@@ -191,7 +191,7 @@ namespace ZeldaMakerGame.Gameplay
                     Vector2 Udirection = directionOfE / directionOfE.Length();
                     Velocity = -Udirection * 10;
                 }
-                if(E is Triforce)
+                if(EntityReferences.GetEntityKey((Entity)E) == "Triforce")
                 {
                     GameManager.Clear();
                 }

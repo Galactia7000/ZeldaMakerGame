@@ -33,7 +33,7 @@ namespace ZeldaMakerGame.UI
             pages = new List<List<string>>();
             contentManager = contentM;
             dungTexture = dungeonTexture;
-            dungeonPanelSize = new Vector2(100, 150);
+            dungeonPanelSize = new Vector2(120, 150);
             this.game = game;
             this.spacing = spacing;
         }
@@ -53,33 +53,6 @@ namespace ZeldaMakerGame.UI
             {
                 children.Add(dungeon.name + "Pnl", new DungeonPanel(contentManager, game, dungeon, UIManager.GetTexture("DungeonPanel"), Vector2.Zero, dungeonPanelSize, new Vector2(8, 8), true, this));
             }
-        }
-
-        public void AddValue(Dungeon dungeon)
-        {
-            Vector2 currPosition;
-            if (children.Count > 0)
-            {
-                Component lastPanel = children.Values.Last();
-                currPosition = new Vector2(lastPanel.Position.X + lastPanel.Size.X, lastPanel.Position.Y);
-            }
-            else currPosition = Position;
-            DungeonPanel newPanel = new DungeonPanel(contentManager, game, dungeon, UIManager.GetTexture("DungeonPanel"), Vector2.Zero, dungeonPanelSize, new Vector2(8, 8), true, this);
-            if (currPosition.X + newPanel.Size.X < Position.X + Size.X)
-            {
-                newPanel.Position = currPosition;
-                pages.Last().Add(dungeon.name + "Pnl");
-            }
-            else
-            {
-                currPosition = new Vector2(Position.X, currPosition.Y + newPanel.Size.Y);
-                if (currPosition.Y + newPanel.Size.Y > Position.Y + Size.Y)
-                {
-                    newPanel.Position = Position;
-                    pages.Add(new List<string> { dungeon.name + "Pnl" });
-                }
-            }
-            children.Add(dungeon.name + "Pnl", newPanel);
         }
 
         public void RemoveValue(DungeonPanel dungeon)
@@ -112,7 +85,7 @@ namespace ZeldaMakerGame.UI
                 }
                 return;
             }
-            Vector2 current = Position;
+            Vector2 current = Position + spacing;
             currentPage = 0;
             pages.Add(new List<string>());
             foreach(KeyValuePair<string, Component> child in children)
@@ -120,24 +93,24 @@ namespace ZeldaMakerGame.UI
                 if (current.X + child.Value.Size.X < Position.X + Size.X)
                 {
                     child.Value.Position = current;
-                    current.X += child.Value.Size.X;
+                    current.X += child.Value.Size.X + spacing.X;
                     pages[currentPage].Add(child.Key);
                 }
                 else
                 {
-                    current = new Vector2(Position.X, current.Y + child.Value.Size.Y);
+                    current = new Vector2(Position.X + spacing.X, current.Y + child.Value.Size.Y + spacing.Y);
                     if(current.Y > Position.Y + Size.Y)
                     {
-                        current = Position;
+                        current = Position + spacing;
                         child.Value.Position = current;
-                        current.X += child.Value.Size.X;
+                        current.X += child.Value.Size.X + spacing.X;
                         pages.Add(new List<string> { child.Key });
                         currentPage++;
                     }
                     else
                     {
                         child.Value.Position = current;
-                        current.X += child.Value.Size.X;
+                        current.X += child.Value.Size.X + spacing.X;
                         pages[currentPage].Add(child.Key);
                     }
                 }

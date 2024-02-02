@@ -18,8 +18,9 @@ namespace ZeldaMakerGame.GameStates
 {
     public class GameplayState : State
     {
-        public GameplayState(ZeldaMaker game, ContentManager content) : base(game, content) { }
+        public GameplayState(ZeldaMaker game, ContentManager content, bool playTest = false) : base(game, content) { isPlayTest = playTest; }
 
+        private bool isPlayTest;
         private Player thePlayer;
         private List<Component>[] entities;
         // private List<Component> uiComponents;
@@ -48,7 +49,7 @@ namespace ZeldaMakerGame.GameStates
                 {"WalkLeft", EntityReferences.GetAnimation("PlayerWalkingLeft") },
                 {"WalkRight", EntityReferences.GetAnimation("PlayerWalkingRight") },
             };
-            thePlayer = new Player(playerAnimations, 65f);
+            thePlayer = new Player(playerAnimations, 55f);
 
             RestartDungeon();
         }
@@ -72,16 +73,17 @@ namespace ZeldaMakerGame.GameStates
                     {
                         if (game.currentDungeon.tiles[f, c, r].GetEntity() is not null)
                         {
-                            if (game.currentDungeon.tiles[f, c, r].GetEntity() is PlayerSpawn && ((PlayerSpawn)game.currentDungeon.tiles[f, c, r].GetEntity()).floor == f)
+                            if (game.currentDungeon.tiles[f, c, r].entityKey == "Spawn" && game.currentDungeon.startFloor == f)
                             {
                                 thePlayer.Position = game.currentDungeon.tiles[f, c, r].Position - new Vector2(0, 7);
                                 game.currentDungeon.currentFloor = f;
+                                entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity());
                             }
-                            else if (game.currentDungeon.tiles[f, c, r].GetEntity() is Triforce)
+                            else if (game.currentDungeon.tiles[f, c, r].entityKey == "Triforce" && game.currentDungeon.endFloor == f)
                             {
-                                if (((Triforce)game.currentDungeon.tiles[f, c, r].GetEntity()).floor == f) entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity());
+                                entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity());
                             }
-                            else
+                            else if(game.currentDungeon.tiles[f, c, r].entityKey != "Spawn" && game.currentDungeon.tiles[f, c, r].entityKey != "Triforce")
                             {
                                 entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity());
                                 if (entities[f].Last() is Enemy) ((Enemy)entities[f].Last()).SetTarget(thePlayer);
@@ -95,12 +97,19 @@ namespace ZeldaMakerGame.GameStates
 
         public override void UnloadContent()
         {
-            
+            entities = null;
+            thePlayer = null;
+            gameCamera = null;
         }
 
         public override void Update(GameTime _gametime)
         {
-            if (GameManager.IsCleared()) game.ChangeState(new MainMenuState(game, contentManager));
+            if (GameManager.IsCleared())
+            {
+                if (isPlayTest) game.ChangeState(new EditorState(game, contentManager));
+                else game.ChangeState(new MainMenuState(game, contentManager));
+                return;
+            }
             gameCamera.Follow(thePlayer, game.currentDungeon.rows * game.currentDungeon.tileset.tileSize);
 
             if (!isGamePaused)
@@ -120,16 +129,23 @@ namespace ZeldaMakerGame.GameStates
             }
 
             foreach (Component comp in UIManager.GetCurrentUI()) comp.Update(_gametime);
-            
-            if (thePlayer.Health <= 0) RestartDungeon();
+
+            if (thePlayer.Health <= 0)
+            {
+                if (isPlayTest) game.ChangeState(new EditorState(game, contentManager));
+                else RestartDungeon();
+            }
         }
         public override void LateUpdate(GameTime _gametime)
         {
             if (isGamePaused) return;
             thePlayer.LateUpdate(_gametime);
-
-            while (((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).GetChildren().Count > thePlayer.Health) ((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).RemovePic();
-            while (((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).GetChildren().Count < thePlayer.Health) ((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).AddPic();
+            if((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel") is not null)
+            {
+                while (((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).GetChildren().Count > thePlayer.Health && thePlayer.Health > 0) ((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).RemovePic();
+                while (((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).GetChildren().Count < thePlayer.Health) ((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).AddPic();
+            }
+            
             foreach (Component entity in GameManager.GetEntities())
             {
                 entity.LateUpdate(_gametime);
@@ -168,8 +184,12 @@ namespace ZeldaMakerGame.GameStates
 
         public void Pause(object sender, EventArgs e)
         {
-            isGamePaused = true;
-            UIManager.AddUI("PauseScreen");
+            if (isPlayTest) game.ChangeState(new EditorState(game, contentManager));
+            else
+            {
+                isGamePaused = true;
+                UIManager.AddUI("PauseScreen");
+            }
         }
 
         public void UnPause(object sender, EventArgs e)

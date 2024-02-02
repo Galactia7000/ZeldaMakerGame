@@ -18,7 +18,7 @@ namespace ZeldaMakerGame.World
     {
         private Entity thisEntity;
         private Entity entityBlueprint;
-        private string entityKey;
+        public string entityKey;
         private string itemKey;
         public Vector2 Position { get; set; }
         public Rectangle Edge { get { return new Rectangle(Position.ToPoint(), new Point(tileSize, tileSize)); } } 
@@ -42,21 +42,20 @@ namespace ZeldaMakerGame.World
         }
         public void ChangeEntity(string tag, int thisFloor = 0)
         {
-            if (EntityReferences.GetEntityRef(tag) is PlayerSpawn)
+            if (tag == "Spawn")
             {
                 entityBlueprint = EntityReferences.GetEntityRef(tag);
-                ((PlayerSpawn)entityBlueprint).floor = thisFloor;
             }
-            else if (EntityReferences.GetEntityRef(tag) is Triforce)
+            else if (tag == "Triforce")
             {
                 entityBlueprint = EntityReferences.GetEntityRef(tag);
-                ((Triforce)entityBlueprint).floor = thisFloor;
             }
             else entityBlueprint = EntityReferences.GetEntityRef(tag).Clone();
             entityKey = tag;
             itemKey = null;
             entityBlueprint.Position = Position;
-            thisEntity = entityBlueprint.Clone();
+            if(tag != "Spawn" && tag != "Triforce") thisEntity = entityBlueprint.Clone();
+            else thisEntity = entityBlueprint;
         }
         public void ChangeItem(string tag)
         {
@@ -74,15 +73,14 @@ namespace ZeldaMakerGame.World
             itemKey = null;
         }
         public Entity GetEntity() => thisEntity;
-        public void Draw(SpriteBatch spriteBatch, Tileset tileset, int currentFloor, bool editor)
+        public void Draw(SpriteBatch spriteBatch, Tileset tileset, bool displayGoalStart, bool editor)
         {
             spriteBatch.Draw(tileset.tilesetTexture, Edge, tileset.GetSourceReectangle(index), Color.White);
             //if (!isGround) spriteBatch.Draw(EntityReferences.GetSprite("TileHighlight"), Edge, Color.White);
             if (thisEntity is not null) 
             {
-                if (thisEntity is PlayerSpawn && ((PlayerSpawn)thisEntity).floor != currentFloor) return;
-                if (thisEntity is Triforce && ((Triforce)thisEntity).floor != currentFloor) return;
-                if (editor) thisEntity.DrawEditor(spriteBatch);
+                if ((entityKey == "Spawn" || entityKey == "Triforce") && !displayGoalStart) return;
+                if (editor) entityBlueprint.DrawEditor(spriteBatch);
             }
             
         }
@@ -106,6 +104,7 @@ namespace ZeldaMakerGame.World
         }
         public static Tile Deserialize(BinaryReader binaryReader)
         {
+            
             float x = binaryReader.ReadSingle(); float y = binaryReader.ReadSingle();
             int size = binaryReader.ReadInt32();
             bool ground = binaryReader.ReadBoolean();
@@ -133,7 +132,11 @@ namespace ZeldaMakerGame.World
                 entityKey = key,
                 itemKey = iKey
             };
-            if (entity is not null) tile.thisEntity = entity.Clone();
+            if (entity is not null)
+            {
+                if (key == "Spawn" || key == "Triforce") tile.thisEntity = entity;
+                else tile.thisEntity = entity.Clone();
+            }
             return tile;
         }
     }

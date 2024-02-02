@@ -109,7 +109,7 @@ namespace ZeldaMakerGame
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.DimGray);
+            GraphicsDevice.Clear(Color.Black);
 
             currentState.Draw(gameTime, _spriteBatch);
 
@@ -124,14 +124,16 @@ namespace ZeldaMakerGame
 
         private void CreateUITextures()
         {
-            UIManager.AddTexture("DungeonPanel", Content.Load<Texture2D>("Textures/DungeonPanelTexture"));
+            UIManager.AddTexture("DungeonPanel", Content.Load<Texture2D>("Textures/DungeonPanel"));
+            UIManager.AddTexture("DungeonPanelBtn", Content.Load<Texture2D>("Textures/DungeonPanelBtn"));
             UIManager.AddTexture("Panel", Content.Load<Texture2D>("Textures/PanelTexture3"));
             UIManager.AddTexture("Button", Content.Load<Texture2D>("Textures/ButtonTexture3"));
             UIManager.AddTexture("SliderNode", Content.Load<Texture2D>("Textures/SliderNodeTexture2"));
             UIManager.AddTexture("SliderBack", Content.Load<Texture2D>("Textures/SliderBackTexture2"));
             UIManager.AddTexture("TextBox", Content.Load<Texture2D>("Textures/TextBoxTexture"));
             UIManager.AddTexture("TextBoxCursor", Content.Load<Texture2D>("Textures/TextBoxCursorTexture"));
-            UIManager.AddTexture("Logo", Content.Load<Texture2D>("Textures/PlaceHolderLogo2"));
+            UIManager.AddTexture("Logo", Content.Load<Texture2D>("Textures/Logo"));
+            UIManager.AddTexture("TitleBG", Content.Load<Texture2D>("Textures/TitleScreen"));
             UIManager.AddTexture("HeartPanel", Content.Load<Texture2D>("Textures/HeartPanel"));
             UIManager.AddTexture("Heart", Content.Load<Texture2D>("Textures/Heart"));
         }
@@ -141,7 +143,7 @@ namespace ZeldaMakerGame
             // MAIN MENU STATE
             // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
             // Main Menu
-            Panel thisPanel = new Panel(UIManager.GetTexture("Panel"), new Vector2(3 * (screenWidth / 4) - 100, (screenHeight / 2) - 100), new Vector2(200, 200), new Vector2(8, 8), true);
+            Panel thisPanel = new Panel(UIManager.GetTexture("Panel"), new Vector2((screenWidth / 4) - 100, (screenHeight / 2) - 100), new Vector2(200, 200), new Vector2(8, 8), true);
             thisPanel.AddChild("DungeonsBtn", new Button(UIManager.GetTexture("Button"), new Vector2(10, 10), new Vector2(180, 50), thisPanel, "Dungeons", UIManager.GetFont("Button")));
             thisPanel.AddChild("SettingsBtn", new Button(UIManager.GetTexture("Button"), new Vector2(10, 70), new Vector2(180, 50), thisPanel, "Settings", UIManager.GetFont("Button")));
             thisPanel.AddChild("QuitBtn", new Button(UIManager.GetTexture("Button"), new Vector2(10, 130), new Vector2(180, 50), thisPanel, "Quit", UIManager.GetFont("Button")));
@@ -150,10 +152,10 @@ namespace ZeldaMakerGame
             ((Button)components["SettingsBtn"]).OnClick += SettingsClicked;
             ((Button)components["QuitBtn"]).OnClick += QuitClicked;
             UIManager.CreateUIPreset(thisPanel, "MainMenu");
-            UIManager.CreateUIPreset(new Picture(UIManager.GetTexture("Logo"), new Vector2(75, screenHeight / 4), new Vector2(screenWidth / 2, screenHeight / 2)), "Logo");
+            UIManager.CreateUIPreset(new Picture(UIManager.GetTexture("Logo"), new Vector2(screenWidth - 420, 0), new Vector2(screenWidth / 2, screenHeight / 2)), "Logo");
 
             // Dungeons Panel
-            MultiPageFlowPanel flowPanel = new MultiPageFlowPanel(Content, this, UIManager.GetTexture("Panel"), UIManager.GetTexture("DungeonPanel"), new Vector2(75, screenHeight / 4), new Vector2(screenWidth - 150, screenHeight - 150), Vector2.Zero, new Vector2(8, 8), true);
+            MultiPageFlowPanel flowPanel = new MultiPageFlowPanel(Content, this, UIManager.GetTexture("Panel"), UIManager.GetTexture("DungeonPanel"), new Vector2(75, screenHeight / 4), new Vector2(screenWidth - 150, screenHeight - 150), new Vector2(8, 8), new Vector2(8, 8), true);
             flowPanel.LoadValues(LoadDungeons());
             flowPanel.Start();
             Button backBtn = new Button(UIManager.GetTexture("Button"), new Vector2(75, 20), new Vector2(50, 50), null, "Back", UIManager.GetFont("Button"));
@@ -266,6 +268,11 @@ namespace ZeldaMakerGame
             floorPanel.AddChild("UpFloorBtn", new Button(UIManager.GetTexture("Button"), new Vector2(75, 40), new Vector2(50, 50), floorPanel, @"/\", UIManager.GetFont("Button")));
             floorPanel.AddChild("FloorLbl", new Label("F", UIManager.GetFont("Label"), new Vector2(40, 10), floorPanel));
             UIManager.CreateUIPreset(floorPanel, "FloorControls");
+
+            // Playtest btn
+            Button playTestBtn = new Button(UIManager.GetTexture("Button"), new Vector2(0, 0), new Vector2(50, 50), null, "=>", UIManager.GetFont("Button"));
+            playTestBtn.OnClick += PlayTestClicked;
+            UIManager.CreateUIPreset(playTestBtn, "PlaytestBtn");
 
             // GAMEPLAY STATE
             // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -454,6 +461,13 @@ namespace ZeldaMakerGame
             currentDungeon.SaveDungeon(sender, e);
             
         }
+
+        private void PlayTestClicked(object sender, EventArgs e)
+        {
+            UIManager.RemoveUI("PlaytestBtn");
+            ChangeState(new GameplayState(this, Content, true));
+        }
+
 
         private void QuitToMenuClicked(object sender, EventArgs e)
         {

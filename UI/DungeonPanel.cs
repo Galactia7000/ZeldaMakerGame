@@ -27,10 +27,10 @@ namespace ZeldaMakerGame.UI
 
         public void Start()
         {
-            children.Add("NameLbl", new Label(thisDungeon.name, UIManager.GetFont("Label"), Vector2.Zero, this));
-            children.Add("PlayBtn", new Button(Texture.baseTexture, new Vector2(0, 20), new Vector2(Size.X, 20), this, "Play", UIManager.GetFont("Button")));
-            children.Add("EditBtn", new Button(Texture.baseTexture, new Vector2(0, 50), new Vector2(Size.X, 20), this, "Edit", UIManager.GetFont("Button")));
-            children.Add("DeleteBtn", new Button(Texture.baseTexture, new Vector2(0, 80), new Vector2(Size.X, 20), this, "Delete", UIManager.GetFont("Button")));
+            children.Add("NameLbl", new Label(thisDungeon.name, UIManager.GetFont("Label"), new Vector2(8, 8), this));
+            children.Add("PlayBtn", new Button(UIManager.GetTexture("DungeonPanelBtn"), new Vector2(8, 45), new Vector2(Size.X - 16, 30), this, "Play", UIManager.GetFont("Button")));
+            children.Add("EditBtn", new Button(UIManager.GetTexture("DungeonPanelBtn"), new Vector2(8, 80), new Vector2(Size.X - 16, 30), this, "Edit", UIManager.GetFont("Button")));
+            children.Add("DeleteBtn", new Button(UIManager.GetTexture("DungeonPanelBtn"), new Vector2(8, 115), new Vector2(Size.X - 16, 30), this, "Delete", UIManager.GetFont("Button")));
             ((Button)children["PlayBtn"]).OnClick += PlayDungeon;
             ((Button)children["EditBtn"]).OnClick += EditDungeon;
             ((Button)children["DeleteBtn"]).OnClick += DeleteDungeon;

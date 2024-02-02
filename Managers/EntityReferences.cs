@@ -103,8 +103,8 @@ namespace ZeldaMakerGame.Managers
                 { "RedBlock", new ColourBlock(AllAnimations["RedBlocks"], true) },
                 { "BlueBlock", new ColourBlock(AllAnimations["BlueBlocks"], false) },
                 { "RBSwitch", new Switch(AllAnimations["RBSwitch"]) },
-                { "Spawn", new PlayerSpawn(SpriteAtlas["PlayerSpawn"]) },
-                { "Triforce", new Triforce(AllAnimations["TriforceShine"]) }
+                { "Spawn", new Entity(SpriteAtlas["PlayerSpawn"], 0f) },
+                { "Triforce", new Entity(AllAnimations["TriforceShine"], 0f) }
                 
             };
 

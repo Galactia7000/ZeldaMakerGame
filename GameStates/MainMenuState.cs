@@ -60,6 +60,8 @@ namespace ZeldaMakerGame.GameStates
 
             _spritebatch.Begin(samplerState: SamplerState.PointClamp);
 
+            _spritebatch.Draw(UIManager.GetTexture("TitleBG"), new Rectangle(0, 0, game.screenWidth, game.screenHeight), Color.White);
+
             foreach (var comp in _components)
                 comp.Draw(_spritebatch);
 

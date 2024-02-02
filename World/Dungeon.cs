@@ -24,6 +24,8 @@ namespace ZeldaMakerGame.World
         public int columns;
         public string name;
         public Tileset tileset;
+        public int startFloor;
+        public int endFloor;
         string filePath;
         public Dungeon(Tileset Tiles, int floors, int rows, int cols, string name, string path)
         {
@@ -33,6 +35,8 @@ namespace ZeldaMakerGame.World
             this.columns = cols;
             tileset = Tiles;
             currentFloor = 0;
+
+            startFloor = -1; endFloor = -1;
 
             for (int f = 0; f < floors; f++)
             {
@@ -47,11 +51,6 @@ namespace ZeldaMakerGame.World
             
             this.name = name;
             filePath = path;
-        }
-
-        public void Start()
-        {
-
         }
 
         public void UpdateEditor(Editor.Action currentAction)
@@ -93,6 +92,8 @@ namespace ZeldaMakerGame.World
                     case ToolType.Entity:
                         if (selected.isGround)
                         {
+                            if (currentAction.EquipedTool.tag == "Spawn") startFloor = (int)currentAction.GridPosition.Z;
+                            else if (currentAction.EquipedTool.tag == "Triforce") endFloor = (int)currentAction.GridPosition.Z;
                             selected.ChangeEntity(currentAction.EquipedTool.tag, currentFloor);
                         }
                         break;
@@ -100,7 +101,7 @@ namespace ZeldaMakerGame.World
                         if (selected.GetEntity() is not null)
                         {
                             if (selected.GetEntity().itemContents is not null && selected.GetEntity().itemContents.Name == currentAction.EquipedTool.tag) selected.GetEntity().itemContents.Quantity++;
-                            else selected.GetEntity().itemContents = EntityReferences.GetItemRef(currentAction.EquipedTool.tag).Clone();
+                            else selected.ChangeItem(currentAction.EquipedTool.tag);
                         }
                         break;
                 }
@@ -189,7 +190,10 @@ namespace ZeldaMakerGame.World
             {
                 for (int r = 0; r < rows; r++)
                 {
-                    if (tiles[currentFloor, c, r] is not null) tiles[currentFloor, c, r].Draw(spriteBatch, tileset, currentFloor, editor);
+                    bool isFloor = true;
+                    if (tiles[currentFloor, c, r].entityKey == "Spawn") isFloor = currentFloor == startFloor;
+                    if (tiles[currentFloor, c, r].entityKey == "Triforce") isFloor = currentFloor == endFloor;
+                    tiles[currentFloor, c, r].Draw(spriteBatch, tileset, isFloor, editor);
                 }
             }
         }
@@ -216,6 +220,8 @@ namespace ZeldaMakerGame.World
             binaryWriter.Write(rows);
             binaryWriter.Write(name);
             binaryWriter.Write(filePath);
+            binaryWriter.Write(startFloor);
+            binaryWriter.Write(endFloor);
 
             for(int f = 0; f < floors; f++)
             {
@@ -244,7 +250,9 @@ namespace ZeldaMakerGame.World
             int rows = binaryReader.ReadInt32();
             int cols = rows;
             string name = binaryReader.ReadString();
-            string filePath = binaryReader.ReadString();        
+            string filePath = binaryReader.ReadString();
+            int start = binaryReader.ReadInt32();
+            int end = binaryReader.ReadInt32();
 
             Dungeon newDung = new Dungeon(tSet, floors, rows, cols, name, filePath);
 
@@ -260,6 +268,8 @@ namespace ZeldaMakerGame.World
                 }
             }
 
+            newDung.startFloor = start;
+            newDung.endFloor = end;
             stream.Close();
             return newDung;
         }

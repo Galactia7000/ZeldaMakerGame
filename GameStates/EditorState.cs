@@ -40,6 +40,7 @@ namespace ZeldaMakerGame.GameStates
 
             UIManager.AddUI("PauseEditorButton");
             UIManager.AddUI("FloorControls");
+            UIManager.AddUI("PlaytestBtn");
 
             ((Button)UIManager.GetSpecificUI("PauseEditorButton")).OnClick += Pause;
             var children = ((Panel)UIManager.GetSpecificUI("FloorControls")).GetChildren();
