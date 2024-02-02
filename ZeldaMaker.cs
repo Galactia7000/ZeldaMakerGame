@@ -224,7 +224,7 @@ namespace ZeldaMakerGame
             UIManager.CreateUIPreset(terrainPanel, "Terrain");
 
             // EnemyBar
-            Panel enemyPanel = new Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 50, (screenHeight / 2) - 100), new Vector2(50, 200), new Vector2(8, 8), true);
+            Panel enemyPanel = new Panel(UIManager.GetTexture("Panel"), new Vector2(screenWidth - 50, (screenHeight / 2) - 75), new Vector2(50, 150), new Vector2(8, 8), true);
             enemyPanel.AddChild("ChuchuBtn", new ToolBtn(UIManager.GetTexture("Panel"), Vector2.Zero, new Vector2(50, 50), enemyPanel, "Chu Chu", UIManager.GetFont("Button"), new Tool("Chu Chu", ToolType.Entity)));
             enemyPanel.AddChild("OctorockBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 50), new Vector2(50, 50), enemyPanel, "Octorock", UIManager.GetFont("Button"), new Tool("Octorock", ToolType.Entity)));
             enemyPanel.AddChild("SawbladeBtn", new ToolBtn(UIManager.GetTexture("Panel"), new Vector2(0, 100), new Vector2(50, 50), enemyPanel, "Saw Blade", UIManager.GetFont("Button"), new Tool("Sawblade", ToolType.Entity)));

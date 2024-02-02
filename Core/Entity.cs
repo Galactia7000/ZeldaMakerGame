@@ -21,7 +21,7 @@ namespace ZeldaMakerGame.Core
 
         public Direction direction;
 
-        protected AnimationManager animationManager;
+        public AnimationManager animationManager;
         protected Dictionary<string, Animation> animations;
 
         public Item itemContents;
@@ -144,15 +144,6 @@ namespace ZeldaMakerGame.Core
             if (animationManager is not null) copy = new Entity(animations, LinearSpeed);
             else copy = new Entity(Texture, LinearSpeed);
             return Clone(copy);
-        }
-
-        public void Serialize(BinaryWriter writer)
-        {
-
-        }
-        public void Deserialize(BinaryReader reader)
-        {
-
         }
     }
 }

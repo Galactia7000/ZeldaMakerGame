@@ -23,9 +23,9 @@ namespace ZeldaMakerGame.Gameplay
 
         public Player(Dictionary<string, Animation> _animations, float speed) : base(_animations, speed)
         {
-            bombs = 5;
-            arrows = 5;
-            keys = 1;
+            bombs = 0;
+            arrows = 0;
+            keys = 0;
             attackingTimer = 0;
             damageTimer = 0;
             invincibilityTime = 2.5f;
