@@ -73,13 +73,13 @@ namespace ZeldaMakerGame.GameStates
                     {
                         if (game.currentDungeon.tiles[f, c, r].GetEntity() is not null)
                         {
-                            if (game.currentDungeon.tiles[f, c, r].entityKey == "Spawn" && game.currentDungeon.startFloor == f)
+                            if (game.currentDungeon.tiles[f, c, r].entityKey == "Spawn" && game.currentDungeon.startPos == new Vector3(f, c, r))
                             {
                                 thePlayer.Position = game.currentDungeon.tiles[f, c, r].Position - new Vector2(0, 7);
                                 game.currentDungeon.currentFloor = f;
                                 entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity());
                             }
-                            else if (game.currentDungeon.tiles[f, c, r].entityKey == "Triforce" && game.currentDungeon.endFloor == f)
+                            else if (game.currentDungeon.tiles[f, c, r].entityKey == "Triforce" && game.currentDungeon.endPos == new Vector3(f, c, r) )
                             {
                                 entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity());
                             }

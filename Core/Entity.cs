@@ -50,6 +50,7 @@ namespace ZeldaMakerGame.Core
             Velocity = Vector2.Zero;
             Size = new Vector2(animations[animations.First().Key].frameWidth, animations[animations.First().Key].frameHeight);
             animationManager = new AnimationManager(animations.First().Value);
+            animationManager.animationSpeedModifier = 1;
             direction = Direction.Down;
             IsBlocking = blocks;
         }

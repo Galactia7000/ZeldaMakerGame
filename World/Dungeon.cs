@@ -24,8 +24,8 @@ namespace ZeldaMakerGame.World
         public int columns;
         public string name;
         public Tileset tileset;
-        public int startFloor;
-        public int endFloor;
+        public Vector3 startPos;
+        public Vector3 endPos;
         string filePath;
         public Dungeon(Tileset Tiles, int floors, int rows, int cols, string name, string path)
         {
@@ -36,7 +36,7 @@ namespace ZeldaMakerGame.World
             tileset = Tiles;
             currentFloor = 0;
 
-            startFloor = -1; endFloor = -1;
+            startPos = Vector3.Zero; endPos = Vector3.Zero;
 
             for (int f = 0; f < floors; f++)
             {
@@ -92,9 +92,9 @@ namespace ZeldaMakerGame.World
                     case ToolType.Entity:
                         if (selected.isGround)
                         {
-                            if (currentAction.EquipedTool.tag == "Spawn") startFloor = (int)currentAction.GridPosition.Z;
-                            else if (currentAction.EquipedTool.tag == "Triforce") endFloor = (int)currentAction.GridPosition.Z;
-                            selected.ChangeEntity(currentAction.EquipedTool.tag, currentFloor);
+                            if (currentAction.EquipedTool.tag == "Spawn") startPos = new Vector3((int)currentAction.GridPosition.Z, (int)currentAction.GridPosition.X, (int)currentAction.GridPosition.Y);
+                            else if (currentAction.EquipedTool.tag == "Triforce") endPos = new Vector3((int)currentAction.GridPosition.Z, (int)currentAction.GridPosition.X, (int)currentAction.GridPosition.Y);
+                            selected.ChangeEntity(currentAction.EquipedTool.tag);
                         }
                         break;
                     case ToolType.Item:
@@ -128,6 +128,8 @@ namespace ZeldaMakerGame.World
                         selected.DeleteEntity();
                         break;
                     case ToolType.Entity:
+                        if (selected.entityKey == "Spawn") startPos = Vector3.Zero;
+                        if (selected.entityKey == "Triforce") endPos = Vector3.Zero;
                         selected.DeleteEntity();
                         break;
                     case ToolType.Item:
@@ -190,10 +192,10 @@ namespace ZeldaMakerGame.World
             {
                 for (int r = 0; r < rows; r++)
                 {
-                    bool isFloor = true;
-                    if (tiles[currentFloor, c, r].entityKey == "Spawn") isFloor = currentFloor == startFloor;
-                    if (tiles[currentFloor, c, r].entityKey == "Triforce") isFloor = currentFloor == endFloor;
-                    tiles[currentFloor, c, r].Draw(spriteBatch, tileset, isFloor, editor);
+                    bool isPos = true;
+                    if (tiles[currentFloor, c, r].entityKey == "Spawn") isPos = new Vector3(currentFloor, c, r) == startPos;
+                    if (tiles[currentFloor, c, r].entityKey == "Triforce") isPos = new Vector3(currentFloor, c, r) == endPos;
+                    tiles[currentFloor, c, r].Draw(spriteBatch, tileset, isPos, editor);
                 }
             }
         }
@@ -220,10 +222,10 @@ namespace ZeldaMakerGame.World
             binaryWriter.Write(rows);
             binaryWriter.Write(name);
             binaryWriter.Write(filePath);
-            binaryWriter.Write(startFloor);
-            binaryWriter.Write(endFloor);
+            binaryWriter.Write(startPos.X); binaryWriter.Write(startPos.Y); binaryWriter.Write(startPos.Z);
+            binaryWriter.Write(endPos.X); binaryWriter.Write(endPos.Y); binaryWriter.Write(endPos.Z);
 
-            for(int f = 0; f < floors; f++)
+            for (int f = 0; f < floors; f++)
             {
                 for(int c = 0; c < columns; c++)
                 {
@@ -251,8 +253,8 @@ namespace ZeldaMakerGame.World
             int cols = rows;
             string name = binaryReader.ReadString();
             string filePath = binaryReader.ReadString();
-            int start = binaryReader.ReadInt32();
-            int end = binaryReader.ReadInt32();
+            Vector3 start = new Vector3(binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle());
+            Vector3 end = new Vector3(binaryReader.ReadSingle(), binaryReader.ReadSingle(), binaryReader.ReadSingle());
 
             Dungeon newDung = new Dungeon(tSet, floors, rows, cols, name, filePath);
 
@@ -268,8 +270,8 @@ namespace ZeldaMakerGame.World
                 }
             }
 
-            newDung.startFloor = start;
-            newDung.endFloor = end;
+            newDung.startPos = start;
+            newDung.endPos = end;
             stream.Close();
             return newDung;
         }

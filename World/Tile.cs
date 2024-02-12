@@ -40,13 +40,9 @@ namespace ZeldaMakerGame.World
             itemKey = null;
             entityKey = null;
         }
-        public void ChangeEntity(string tag, int thisFloor = 0)
+        public void ChangeEntity(string tag)
         {
-            if (tag == "Spawn")
-            {
-                entityBlueprint = EntityReferences.GetEntityRef(tag);
-            }
-            else if (tag == "Triforce")
+            if (tag == "Spawn" || tag == "Triforce")
             {
                 entityBlueprint = EntityReferences.GetEntityRef(tag);
             }
