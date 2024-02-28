@@ -24,6 +24,7 @@ namespace ZeldaMakerGame.Gameplay
         {
             Texture = openTexture;
             if(itemContents is not null) activator.AddItem(itemContents);
+            itemContents = null;
         }
         public override Entity Clone()
         {

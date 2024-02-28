@@ -291,8 +291,18 @@ namespace ZeldaMakerGame
             UIManager.CreateUIPreset(pauseBtn, "PauseButton");
 
             // Health Display
-            MultiPageFlowPanel healthPanel = new MultiPageFlowPanel(UIManager.GetTexture("HeartPanel"), UIManager.GetTexture("Heart"), new Vector2(42, 39), new Vector2(10, 10), new Vector2(150, 100), new Vector2(6, 6), new Vector2(8, 8), true);
+            MultiPageFlowPanel healthPanel = new MultiPageFlowPanel(UIManager.GetTexture("HeartPanel"), UIManager.GetTexture("Heart"), new Vector2(42, 39), new Vector2(5, 5), new Vector2(150, 100), new Vector2(6, 6), new Vector2(8, 8), true);
             UIManager.CreateUIPreset(healthPanel, "HealthPanel");
+
+            // Items Display
+            Panel itemsPanel = new Panel(UIManager.GetTexture("HeartPanel"), new Vector2(5, 110), new Vector2(100, 120), new Vector2(8, 8), true);
+            itemsPanel.AddChild("BombPic", new Picture(EntityReferences.GetSprite("BombIcon"), new Vector2(5, 4), new Vector2(32, 32), itemsPanel));
+            itemsPanel.AddChild("ArrowPic", new Picture(EntityReferences.GetSprite("ArrowIcon"), new Vector2(5, 40), new Vector2(32, 32), itemsPanel));
+            itemsPanel.AddChild("KeyPic", new Picture(EntityReferences.GetSprite("KeyIcon"), new Vector2(5, 76), new Vector2(32, 32), itemsPanel));
+            itemsPanel.AddChild("BombCount", new Label("x00", UIManager.GetFont("Label"), new Vector2(40, 4), itemsPanel));
+            itemsPanel.AddChild("ArrowCount", new Label("x00", UIManager.GetFont("Label"), new Vector2(40, 40), itemsPanel));
+            itemsPanel.AddChild("KeyCount", new Label("x00", UIManager.GetFont("Label"), new Vector2(40, 76), itemsPanel));
+            UIManager.CreateUIPreset(itemsPanel, "ItemsPanel");
         }
 
         #region Main Menu Methods

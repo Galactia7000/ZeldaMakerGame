@@ -23,7 +23,7 @@ namespace ZeldaMakerGame.Managers
             #region Animations
             AllAnimations = new Dictionary<string, Animation>
             {
-                { "TriforceShine", new Animation(content.Load<Texture2D>("EntityAnimations/Triforce"), 12, 2.5f, true) },
+                { "TriforceShine", new Animation(content.Load<Texture2D>("EntityAnimations/GoalAnimation"), 6, 0.4f, true) },
                 { "RBSwitch", new Animation(content.Load<Texture2D>("EntityAnimations/Switches"), 2, 0.1f, true) },
                 { "RedBlocks", new Animation(content.Load<Texture2D>("EntityAnimations/RedBlocks"), 2, 0.1f, true) },
                 { "BlueBlocks", new Animation(content.Load<Texture2D>("EntityAnimations/BlueBlocks"), 2, 0.1f, true) },

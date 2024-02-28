@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using ZeldaMakerGame.UI;
 using Button = ZeldaMakerGame.UI.Button;
 using Panel = ZeldaMakerGame.UI.Panel;
+using Label = ZeldaMakerGame.UI.Label;
 
 namespace ZeldaMakerGame.GameStates
 {
@@ -36,6 +37,7 @@ namespace ZeldaMakerGame.GameStates
             ((Button)children2["ResumeBtn"]).OnClick += UnPause;
 
             UIManager.AddUI("HealthPanel");
+            UIManager.AddUI("ItemsPanel");
 
             gameCamera = new Camera(game.screenWidth, game.screenHeight);
             gameCamera.ChangeZoom(1.5f);
@@ -86,6 +88,7 @@ namespace ZeldaMakerGame.GameStates
                             else if(game.currentDungeon.tiles[f, c, r].entityKey != "Spawn" && game.currentDungeon.tiles[f, c, r].entityKey != "Triforce")
                             {
                                 entities[f].Add(game.currentDungeon.tiles[f, c, r].GetEntity());
+                                entities[f].Last().Position = game.currentDungeon.tiles[f, c, r].Position;
                                 if (entities[f].Last() is Enemy) ((Enemy)entities[f].Last()).SetTarget(thePlayer);
                             }
                         }
@@ -145,7 +148,15 @@ namespace ZeldaMakerGame.GameStates
                 while (((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).GetChildren().Count > thePlayer.Health && thePlayer.Health > 0) ((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).RemovePic();
                 while (((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).GetChildren().Count < thePlayer.Health) ((MultiPageFlowPanel)UIManager.GetSpecificUI("HealthPanel")).AddPic();
             }
-            
+            if ((Panel)UIManager.GetSpecificUI("ItemsPanel") is not null)
+            {
+                var itemComps = ((Panel)UIManager.GetSpecificUI("ItemsPanel")).GetChildren();
+                ((Label)itemComps["BombCount"]).text = $"x{thePlayer.bombs.ToString("00")}";
+                ((Label)itemComps["ArrowCount"]).text = $"x{thePlayer.arrows.ToString("00")}";
+                ((Label)itemComps["KeyCount"]).text = $"x{thePlayer.keys.ToString("00")}";
+            }
+
+
             foreach (Component entity in GameManager.GetEntities())
             {
                 entity.LateUpdate(_gametime);

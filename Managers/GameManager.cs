@@ -17,7 +17,7 @@ namespace ZeldaMakerGame.Managers
         static List<Component> entitiesToAdd;
         static List<Component> entitiesToDelete;
         static List<Component> existingEntities;
-        static Dungeon thisDungeon;
+        public static Dungeon thisDungeon;
         static Player thePlayer;
         static bool isClear;
         public static bool RedSwitch { get; set; }
