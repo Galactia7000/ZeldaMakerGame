@@ -10,7 +10,6 @@ namespace ZeldaMakerGame.Editor
     public class Tool
     {
         public string tag;
-        public Entity entity;
         public ToolType type;
 
         public Tool(string t, ToolType tool)
