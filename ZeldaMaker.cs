@@ -191,8 +191,10 @@ namespace ZeldaMakerGame
             // Settings Panel
             Panel settingsPanel = new Panel(UIManager.GetTexture("Panel"), new Vector2((screenWidth / 2) - 250, (screenHeight / 2) - 150), new Vector2(500, 300), new Vector2(8, 8), true);
             settingsPanel.AddChild("BackBtn", new UI.Button(UIManager.GetTexture("Button"), new Vector2(10, 10), new Vector2(180, 50), settingsPanel, "Back", UIManager.GetFont("Button")));
+            settingsPanel.AddChild("VolumeLbl", new Label("Volume", UIManager.GetFont("Label"), new Vector2(10, 110), settingsPanel));
             settingsPanel.AddChild("VolumeSlder", new Slider(UIManager.GetTexture("SliderBack"), UIManager.GetTexture("SliderNode"), new Vector2(10, 70), new Vector2(100, 30), settingsPanel, 0, 100, 50, 0));
-            settingsPanel.AddChild("SpeedSlder", new Slider(UIManager.GetTexture("SliderBack"), UIManager.GetTexture("SliderNode"), new Vector2(10, 150), new Vector2(200, 50), settingsPanel, 3, 18, 11, 0.1f));
+            settingsPanel.AddChild("SFXLbl", new Label("SFX", UIManager.GetFont("Label"), new Vector2(10, 220), settingsPanel));
+            settingsPanel.AddChild("SFXSlder", new Slider(UIManager.GetTexture("SliderBack"), UIManager.GetTexture("SliderNode"), new Vector2(10, 160), new Vector2(200, 50), settingsPanel, 3, 18, 11, 0.1f));
             var settingComponents = settingsPanel.GetChildren();
             ((Button)settingComponents["BackBtn"]).OnClick += BackClicked;
             UIManager.CreateUIPreset(settingsPanel, "Settings");
